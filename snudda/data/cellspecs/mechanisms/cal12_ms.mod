@@ -32,7 +32,8 @@ NEURON {
     SUFFIX cal12_ms
     USEION cal READ cali, calo WRITE ical VALENCE 2
     RANGE pbar, ical
-    RANGE damod, maxMod
+    RANGE maxMod
+    POINTER damod
 }
 
 PARAMETER {

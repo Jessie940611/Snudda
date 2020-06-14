@@ -56,6 +56,11 @@ class SnuddaSimulate(object):
                disableGapJunctions=True,
                simulationConfig=None):
 
+
+    ##
+    self.synapsesDA = list()
+    ##
+
     self.verbose = verbose
     self.logFile = logFile
 
@@ -1494,7 +1499,8 @@ class SnuddaSimulate(object):
   def run(self,t=1000.0,holdV=None):
 
     self.setupPrintSimTime(t)
-
+    import pdb
+    pdb.set_trace()
     startTime = timeit.default_timer()
 
     # If we want to use a non-default initialisation voltage, we need to
@@ -1516,6 +1522,7 @@ class SnuddaSimulate(object):
     self.writeLog("Running simulation for " + str(t/1000) + " s")
     # self.sim.psolve(t)
     self.sim.run(t,dt = 0.025)
+    
     self.pc.barrier()
     self.writeLog("Simulation done.")
 
@@ -1864,19 +1871,33 @@ class SnuddaSimulate(object):
                              'hcn12_ch','cap_ch'],
                     'lts':  ['na3_lts','hd_lts'] }
 
+    
+    
     for cellType in channelList:
       for seg in sec:
+        
+        syngpcr = self.sim.neuron.h.concDAfile(seg)
+                
         for mech in seg:
-          if(mech.name in channelList[cellType]):
+         
+          if(mech.name() in channelList[cellType]):
+            
             if(len(transientVector) == 0):
               mech.damod = 1
             else:
-              transientVector.play(mech._ref_damod,
-                                   self.sim.neuron.h.dt)
+              if "spn" in cellType:
+               
+                self.transientVector = self.sim.neuron.h.Vector()
+                self.transientVector.from_python(transientVector)
+                self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+                self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",getattr(seg,mech.name()))
+              
+                self.synapsesDA.append(syngpcr)
+                self.synapsesDA.append(self.transientVector)
 
   ############################################################################
 
-  def applyDopamine(self,cellID=None,transientVector=[]):
+  def applyDopamine(self,cellID=None,transientVector=None,transientType=None,simDur=None):
     
     if(cellID is None):
       cellID = self.neuronID
@@ -1884,10 +1905,23 @@ class SnuddaSimulate(object):
     cells = dict((k,self.neurons[k]) \
                  for k in cellID if not self.isVirtualNeuron[k])
 
+    
+    with open(transientVector,"r") as f:
+      
+      transientvector = json.load(f)
+    
+    if "time-series" in transientType:
+      transientvector = eval(transientvector["time-series"])
+
+    elif "alpha" in transientType:
+      transientvector = alpha(simDur, transientvector["alpha"]["tstart"],transientVector["alpha"]["tau"])
+
+  
+    
     for c in cells.values():
       for comp in [c.icell.dend, c.icell.axon, c.icell.soma]:
         for sec in comp:
-          self.setDopamineModulation(sec,transientVector)
+          self.setDopamineModulation(sec,transientvector)
 
   ############################################################################
 
@@ -1905,7 +1939,26 @@ def findLatestFile(fileMask):
   idx = np.argsort(modTime)
 
   return files[idx[-1]]
+# Addition from nm_merged and neuromodulation branch by Robert Lindroos
 
+def alpha(ht, tstart, tau):
+    ''' 
+    calc and returns a "magnitude" using an alpha function -> used for [DA].
+    
+    ht      = simulation time (h.t)
+    tstart  = time when triggering the function
+    tau     = time constant of alpha function
+    '''
+    
+    t   = (ht - tstart) / tau
+    e   = np.exp(1-t)
+    mag = t * e
+    
+    if mag < 0: mag = 0
+    return mag
+
+
+  
 ############################################################################
 
 #
@@ -1932,6 +1985,11 @@ if __name__ == "__main__":
   parser.add_argument("--voltOut","--voltout",
                       default=None,
                       help="Name of voltage output file (csv)")
+  
+  parser.add_argument("--daTransient","--daTransient",
+                      default=None,
+                      help="Name of the dopamine transient file (json)")
+  
   parser.add_argument("--disableGJ",action="store_true",
                       help="Disable gap junctions")
   parser.add_argument("--time",type=float,default=1.5,
@@ -1999,6 +2057,7 @@ if __name__ == "__main__":
   sim.addExternalInput()
   sim.checkMemoryStatus()
 
+    
   if(voltFile is not None):
     sim.addRecording(sideLen=None) # Side len let you record from a subset
     #sim.addRecordingOfType("dSPN",5) # Side len let you record from a subset
@@ -2009,7 +2068,11 @@ if __name__ == "__main__":
     #sim.addRecordingOfType("ChIN",2)
 
   tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-
+  import pdb
+  pdb.set_trace()
+  if(args.daTransient is not None):
+    sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim)
+        
   sim.checkMemoryStatus()
   print("Running simulation for " + str(tSim) + " ms.")
   sim.run(tSim) # In milliseconds

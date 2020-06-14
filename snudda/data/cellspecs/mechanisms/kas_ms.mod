@@ -22,7 +22,8 @@ NEURON {
     SUFFIX kas_ms
     USEION k READ ek WRITE ik
     RANGE gbar, gk, ik
-    RANGE damod, maxMod
+    RANGE maxMod
+    POINTER damod
 }
 
 UNITS {
