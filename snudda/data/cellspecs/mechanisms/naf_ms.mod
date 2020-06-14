@@ -21,7 +21,8 @@ NEURON {
     SUFFIX naf_ms
     USEION na READ ena WRITE ina
     RANGE gbar, gna, ina
-    RANGE damod, maxMod
+    RANGE maxMod
+    POINTER damod
 }
 
 UNITS {

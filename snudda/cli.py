@@ -27,6 +27,14 @@ def snudda_cli():
       parser.add_argument("--voltOut","--voltout",
                           default=None,
                           help="Name of voltage output file (csv)")
+
+      parser.add_argument("--daTransient","--daTransient",
+                      default=None,
+                      help="Name of the dopamine transient file (json)")
+  
+
+
+	
       parser.add_argument("--spikesOut","--spikesout",
                           default=None,
                           help="Name of spike output file (csv)")
