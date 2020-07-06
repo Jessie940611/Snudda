@@ -32,8 +32,6 @@ class NeuronModel(ephys.models.CellModel):
     params=self.define_parameters(param_file,parameterID)
     
     if(modulation_file is not None):
-      import pdb
-      pdb.set_trace()
       #Here is where modulation is added to parameters
       modParams = self.define_parameters(modulation_file,modulationID)
       params = params + modParams
