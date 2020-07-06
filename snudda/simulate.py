@@ -109,6 +109,17 @@ class SnuddaSimulate(object):
 
     self.virtualNeurons = {}
 
+
+    ######################## GPCR MODULATION ########################
+    self.gpcrModulation = {}
+
+    self.concAChrecording = {}
+
+    self.previousGPCRsection = None
+
+    #################################################################
+
+
     self.netConList = [] # Avoid premature garbage collection
     self.synapseList = []
     self.iStim = []
@@ -874,6 +885,222 @@ class SnuddaSimulate(object):
 
   ############################################################################
 
+
+  ############################# GPCR synapse Handling ########################
+
+
+  def addSynapseFinalise(self):
+
+    cellIDsource = None
+    dendCompartment = 'lastSynapse'
+    sectionDist = None
+    conductance = None
+    parameterID = list()
+    synapseTypeID = 4
+    axonDist=None
+
+    return self.addSynapseGPCR(cellIDsource,dendCompartment,\
+                               sectionDist,conductance,parameterID,synapseTypeID,axonDist=None)
+  
+
+  def PCbarrier(self):
+
+    print("Making all workers wait so the GPCR can be added to the final cells before continueing")
+
+    self.pc.barrier()
+
+  def addSynapseGPCR(self, cellIDsource, dendCompartment, sectionDist, conductance,parameterID,synapseTypeID,axonDist=None):
+
+    # Check if the synapse if lastSynapse or if the information about the synapse has to be extracted
+    
+    if 'lastSynapse' in dendCompartment:
+      print("Finish synapse")
+      print(self.gpcrModulation)
+      print(self.previousGPCRsection)
+      print(dendCompartment)
+      cellName=None
+
+    else:
+      
+      (channelModule,parData) = self.synapseParameters[synapseTypeID]
+
+      parID = parameterID % len(parData)
+
+      parSet = parData[parID]
+
+      
+
+      '''
+      Extracting the typ of concentration mechanisms e.g. concDA or concACh 
+      (name of the modfile which produces the conversion of spiking to neurotransmitter concentration)
+      '''
+      
+      neurotransmitter_release = parSet["GPCR"]["neurotransmitter"][0]
+      GPCR_type = parSet["GPCR"]["signalling"][0]
+      
+      cellName = str(dendCompartment).split(".")[0] # The cell which synapses are being added to - as the synapse file is ordedered after the individual cells.
+      
+      if(axonDist is not None):
+        # axon dist is in micrometer, want delay in ms
+        synapseDelay = (1e3*1e-6*axonDist)/self.axonSpeed + self.synapseDelay
+      else:
+        synapseDelay = self.synapseDelay
+
+      if(False):
+        self.writeLog("Synapse delay: " + str(synapseDelay) + " ms")
+
+
+      if(self.previousGPCRsection == cellName or len(self.gpcrModulation) is 0):
+
+        
+        self.previousGPCRsection = str(dendCompartment).split(".")[0]
+      
+     
+        if (len(self.gpcrModulation) is 0):
+
+          self.gpcrModulation.update({ neurotransmitter_release : {GPCR_type :{"GPCR_signalling" : [parSet, channelModule,conductance,synapseDelay], "section_dist_"+str(dendCompartment) : [sectionDist],"section" :[dendCompartment], "presynaptic_cell_" + str(dendCompartment) : [cellIDsource] }}})
+         
+      
+        elif(neurotransmitter_release in self.gpcrModulation.keys() and GPCR_type in self.gpcrModulation[neurotransmitter_release].keys()):
+
+            if(dendCompartment in self.gpcrModulation[neurotransmitter_release][GPCR_type]['section']):
+
+              self.gpcrModulation[neurotransmitter_release][GPCR_type]["section_dist_"+str(dendCompartment)].append(sectionDist)
+              self.gpcrModulation[neurotransmitter_release][GPCR_type]["presynaptic_cell_"+str(dendCompartment)].append(cellIDsource)
+        
+            elif (neurotransmitter_release in self.gpcrModulation.keys() and str(dendCompartment) not in self.gpcrModulation[neurotransmitter_release][GPCR_type]):
+
+              self.gpcrModulation[neurotransmitter_release][GPCR_type]["section"].append(dendCompartment)
+              self.gpcrModulation[neurotransmitter_release][GPCR_type].update({"section_dist_"+str(dendCompartment): [sectionDist]})
+              self.gpcrModulation[neurotransmitter_release][GPCR_type].update({"presynaptic_cell_"+str(dendCompartment) : [cellIDsource]})
+
+          
+        else:
+          self.gpcrModulation.update({ neurotransmitter_release : {GPCR_type :{"GPCR_signalling" : [parSet, channelModule,conductance,synapseDelay], "section_dist_"+str(dendCompartment) : [sectionDist],"section" :[dendCompartment], "presynaptic_cell_" + str(dendCompartment) : [cellIDsource] }}})
+
+          
+      else:
+        print('here in the putting')
+      
+        
+        self.previousGPCRsection = str(dendCompartment).split(".")[0]
+      
+        for gpcr_neurotransmitter, gpcr_receptor in self.gpcrModulation.items():
+          
+          for receptor_subtype, gpcr_signalling in gpcr_receptor.items():
+                      
+          
+            neurotransmitter = gpcr_signalling["GPCR_signalling"][0]['GPCR']["neurotransmitter"][0]
+            neurotransmitter_pointer =  gpcr_signalling["GPCR_signalling"][0]['GPCR']["neurotransmitter"][1]
+
+            if ("phenomenological" in gpcr_signalling["GPCR_signalling"][0]['GPCR']['signalling'][1]):
+              print("phenomenological")
+              GPC_receptor =  gpcr_signalling["GPCR_signalling"][0]['GPCR']['signalling'][0]
+             
+            else:
+              GPC_receptor =  gpcr_signalling["GPCR_signalling"][0]['GPCR']['signalling'][0]
+              
+            GPC_receptor_pointer =  gpcr_signalling["GPCR_signalling"][0]['GPCR']['signalling'][1]
+
+            ionchannel_modulation =  gpcr_signalling["GPCR_signalling"][0]['GPCR']['ion_channel']
+
+            neurotransmitter_release_mod = gpcr_signalling["GPCR_signalling"][1]
+
+            for modulated_section in gpcr_signalling['section']:
+              
+              name_section = str(modulated_section).replace("["," ").replace("."," ").split(" ")[-2]
+             
+              if name_section in ionchannel_modulation.keys():
+                
+                self.gpcrModulation[gpcr_neurotransmitter][receptor_subtype].update({ "synapse_location_"+str(modulated_section) : []})
+                for mod_ion_channel in ionchannel_modulation[name_section]:
+
+                   for seg in modulated_section:
+                     
+
+                     syn = neurotransmitter_release_mod(seg)
+
+                     self.gpcrModulation[gpcr_neurotransmitter][receptor_subtype]["synapse_location_"+str(modulated_section)].append(syn)
+                     
+                     self.synapseList.append(syn)
+                       
+                     neurotransmitter_concentration=syn._ref_concentration
+
+                     evalStrpointer = "self.sim.neuron.h.setpointer"
+
+                     Strpointer = eval(evalStrpointer)
+                   
+                      
+                     conductance_modulated_channel=getattr(seg,mod_ion_channel[0])
+                     #conductance_modulated_channel=0
+
+
+                     modulated_section.insert("_".join(mod_ion_channel[0].split("_")[1:])+"_mod")
+                       
+                     setattr(seg,mod_ion_channel[0]+'_mod',conductance_modulated_channel)
+                     setattr(seg,mod_ion_channel[0],0)
+
+
+                     if ("phenomenological" not in gpcr_signalling["GPCR_signalling"][0]['GPCR']['signalling'][1]):
+                      
+
+                       evalStr = "self.sim.neuron.h." + GPC_receptor
+                       
+                       GPCR_modfile = eval(evalStr)
+                       GPCR_synapse = GPCR_modfile(seg)
+                       Strpointer(neurotransmitter_concentration,neurotransmitter_pointer,GPCR_synapse)
+                       pointermodulation=getattr(GPCR_synapse,'_ref_' +GPC_receptor_pointer)
+                       self.synapseList.append(GPCR_synapse)
+
+                       Strpointer(pointermodulation,mod_ion_channel[1] ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'_mod'))
+
+                     else:
+
+
+                       Strpointer(neurotransmitter_concentration,neurotransmitter_pointer ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'mod'))
+
+
+                     
+                     
+        for gpcr_neurotransmitter, gpcr_receptor in self.gpcrModulation.items():
+
+          for receptor_subtype, gpcr_signalling in gpcr_receptor.items():
+          
+
+            for cell_section in gpcr_signalling['section']:
+
+              for connect_pre_post in zip(gpcr_signalling["section_dist_"+str(cell_section)], gpcr_signalling["presynaptic_cell_"+str(cell_section)]):
+
+                post_section_dist = connect_pre_post[0]
+                pre_cellIDsource = connect_pre_post[1]
+
+                section_position = int(cell_section.nseg*post_section_dist)
+                
+               
+                
+                syn_gpcr = gpcr_signalling["synapse_location_"+str(cell_section)][section_position]
+              
+                nc = self.pc.gid_connect(pre_cellIDsource, syn_gpcr)
+                nc.weight[0] = 1
+                nc.delay = gpcr_signalling['GPCR_signalling'][3]
+                nc.threshold = self.spikeThreshold
+
+                #acetyl_recording= self.sim.neuron.h.Vector()
+                #acetyl_recording.record(syn_gpcr._ref_concentration)
+                #self.concAChrecording.update({str(syn_gpcr) : acetyl_recording})
+
+                self.netConList.append(nc)
+                self.synapseList.append(syn_gpcr)
+
+      
+        del self.gpcrModulation[neurotransmitter][GPC_receptor]
+      
+        if 'Last_synapse' not in dendCompartment:
+       
+          self.gpcrModulation.update({ neurotransmitter_release : {GPCR_type :
+                                                         {"GPCR_signalling" : [parSet, channelModule,conductance,synapseDelay],"section_dist_"+str(dendCompartment) : [sectionDist],
+                                                          "section" :[dendCompartment],"presynaptic_cell_"+str(dendCompartment) : [cellIDsource] }}})
+  
   def addSynapse(self, cellIDsource, dendCompartment, sectionDist, conductance,
                  parameterID,synapseTypeID,axonDist=None):
 
@@ -886,31 +1113,43 @@ class SnuddaSimulate(object):
 
     (channelModule,parData) = self.synapseParameters[synapseTypeID]
 
-    syn = channelModule(dendCompartment(sectionDist))
+    if(parData is None):
+      syn = channelModule(dendCompartment(sectionDist))
 
-    if(parData is not None):
+    elif(parData is not None):
       # Picking one of the parameter sets stored in parData
       parID = parameterID % len(parData)
 
       parSet = parData[parID]
-      for par in parSet:
-        if(par == "expdata" or par == "cond"):
-          # expdata is not a parameter, and cond we take from synapse matrix
-          continue
 
-        try:
-          setattr(syn,par,parSet[par])
+      if('GPCR' in parSet):
+        
+        # The synapse is GPCR modulation and uses addSynapseGPCR
+        
+        return self.addSynapseGPCR(cellIDsource, dendCompartment, sectionDist,conductance,parameterID,synapseTypeID,axonDist)
+      
+      else:
 
-          #evalStr = "syn." + par + "=" + str(parSet[par])
-          # self.writeLog("Updating synapse: " + evalStr)
-          # !!! Can we avoid an eval here, it is soooo SLOW
-          #exec(evalStr)
-        except:
-          import traceback
-          tstr = traceback.format_exc()
-          print(tstr)
-          import pdb
-          pdb.set_trace()
+        syn = channelModule(dendCompartment(sectionDist))
+        
+        for par in parSet:
+          if(par == "expdata" or par == "cond"):
+            # expdata is not a parameter, and cond we take from synapse matrix
+            continue
+
+          try:
+            setattr(syn,par,parSet[par])
+
+            #evalStr = "syn." + par + "=" + str(parSet[par])
+            # self.writeLog("Updating synapse: " + evalStr)
+            # !!! Can we avoid an eval here, it is soooo SLOW
+            #exec(evalStr)
+          except:
+            import traceback
+            tstr = traceback.format_exc()
+            print(tstr)
+            import pdb
+            pdb.set_trace()
 
 
     # Just create a default expsyn for test, will need to create proper GABA
@@ -1897,6 +2136,129 @@ class SnuddaSimulate(object):
 
   ############################################################################
 
+   def setMuscarinicModulation(self,sec,transientVector=[]):
+
+    channelList = { 'spn':  ['naf_ms', 'kas_ms', 'kaf_ms', 'kir_ms',
+                             'cal12_ms', 'cal13_ms', 'can_ms', 'car_ms'],
+                    'fs':   ['kir_fs', 'kas_fs', 'kaf_fs', 'naf_fs'],
+                    'chin': ['na_ch','na2_ch','kv4_ch','kir2_ch',
+                             'hcn12_ch','cap_ch'],
+                    'lts':  ['na3_lts','hd_lts'] }
+    '''                                                                                                                                                                                                     
+    for cellType in channelList:                                                                                                                                                                            
+      for seg in sec:                                                                                                                                                                                       
+        for mech in seg:                                                                                                                                                                                    
+          if(mech.name in channelList[cellType]):                                                                                                                                                           
+            if(len(transientVector) == 0):                                                                                                                                                                  
+              mech.damod = 1                                                                                                                                                                                
+            else:                                                                                                                                                                                           
+              transientVector.play(mech._ref_damod,xW                                                                                                                                                       
+                                   self.sim.neuron.h.dt)                                                                                                                                                    
+    '''
+
+    for cellType in channelList:
+      for seg in sec:
+
+        syngpcr = self.sim.neuron.h.concDAfile(seg)
+        self.synapsesDA.append(syngpcr)
+
+        for mech in seg:
+
+          if(mech.name() in channelList[cellType]):
+
+            if(len(transientVector) == 0):
+              mech.damod = 1
+            else:
+
+              if "spn" in cellType:
+
+                transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+                self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",getattr(seg,mech.name()))
+
+
+  ############################################################################
+
+  def setGlutMod(self, transient=0):
+    '''
+    set modulation of glutamatergic input using stored data (dict of list of tuple)
+    '''  
+    # TODO: draw from rang instead of fixed? 
+    #       -> move parameters to json file
+    modulation = {  'iSPN': [0.8,0.8, '~a:-30-0%; ~n:-40-0%'],
+                    'dSPN': [1.2,1.3, '~a:+0-30%; ~n:+20-50% -> see Lindroos et al., 2018'],
+                    'ChIN': [1.0,1.0, 'no source, likely reduced trough presynaptic effect?'],
+                    'LTS':  [1.0,1.0, 'no source, likely reduced trough presynaptic effect?'],
+                    'FSN':  [1.0,1.0, 'no source, likely reduced trough presynaptic effect?']   
+                    }
+    
+    for neuronID,synlist in self.externalStim.items():
+        # get modulation (based on cell type)
+        nname = self.neurons[neuronID].name.split('_')[0]
+        
+        maxModA = modulation[nname][0]
+        maxModN = modulation[nname][1] 
+        
+        print(nname,maxModA,maxModN)
+        
+        # set modulation   
+        for syntuple in synlist: 
+            syn = syntuple[3]
+            seg_with_syn = syn.get_segment()
+            syngpcr = self.sim.neuron.h.concDAfile(seg_with_syn)
+            
+            syn.maxModAMPA  = maxModA
+            syn.maxModNMDA  = maxModN
+            syn.damod       = 1
+            if transient:
+              # play level parameter
+              transient.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+              self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
+
+              self.synapsesDA.append(syngpcr)
+
+                #transient.play(syn._ref_level, self.sim.neuron.h.dt)
+            else:
+                syn.level = 1   # constant, full modulation.
+            
+  ###########################################################################
+
+  def setGABAmod(self, transient=0):
+    '''
+    set modulation of sgabaergic input using stored data (list)
+    '''
+    # TODO: draw from rang instead of fixed? 
+    #       -> move parameters to json file
+    modulation = {  'iSPN': [1.0, 'no source. GABAb reduced ~60%'],
+                    'dSPN': [0.8, '~-15-30% -> see Lindroos et al., 2018'],
+                    'ChIN': [1.0, '~ -30% - +40%; D2R-type and D1R-type, respectively'],
+                    'LTS':  [1.0, 'no source, reduced?'],
+                    'FSN':  [0.6, '1 source ~ -40%']   
+                    }
+    
+    for neuronID,synlist in self.synapseDict.items():
+      for syn in synlist:
+        # get modualtion (based on cell type)
+        #maybe for syntuple
+        seg_with_syn = syn.get_segment()
+        syngpcr = self.sim.neuron.h.concDAfile(seg_with_syn)
+
+        nname       = self.neurons[neuronID].name.split('_')[0]
+        maxMod      = modulation[nname][0]
+        
+        # set modulation    
+        syn.maxMod  = maxMod
+        syn.damod   = 1
+        
+        if transient:
+          # play level parameter
+          transient.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+          self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
+
+        else:
+          syn.level = 1   # constant, full modulation.
+  
+  
+  ###########################################################################
   def applyDopamine(self,cellID=None,transientVector=None,transientType=None,simDur=None):
     
     if(cellID is None):
@@ -1922,6 +2284,55 @@ class SnuddaSimulate(object):
       for comp in [c.icell.dend, c.icell.axon, c.icell.soma]:
         for sec in comp:
           self.setDopamineModulation(sec,transientvector)
+    if (False):
+      self.setGlutMod(self.transientVector)
+      self.setGabaMod(self.transientVector)
+
+  ###########################################################################
+
+  def applyAcetylcholine(self,cellID=None,transientVector=None,transientType=None,simDur=None):
+    '''                                                                                                                                                                                                     
+    if(cellID is None):                                                                                                                                                                                     
+      cellID = self.neuronID                                                                                                                                                                                
+                                                                                                                                                                                                            
+    cells = dict((k,self.neurons[k]) \                                                                                                                                                                      
+                 for k in cellID if not self.isVirtualNeuron[k])                                                                                                                                            
+                                                                                                                                                                                                            
+    for c in cells.values():                                                                                                                                                                                
+      for comp in [c.icell.dend, c.icell.axon, c.icell.soma]:                                                                                                                                               
+        for sec in comp:                                                                                                                                                                                    
+        self.setDopamineModulation(sec,transientVector)                                                                                                                                                     
+    '''
+
+    if(cellID is None):
+      cellID = self.neuronID
+
+    cells = dict((k,self.neurons[k]) \
+                 for k in cellID if not self.isVirtualNeuron[k])
+
+
+    with open(transientVector,"r") as f:
+
+      transientvector = json.load(f)
+
+    if "time-series" in transientType:
+      transientvector = eval(transientvector["time-series"])
+
+    elif "alpha" in transientType:
+      transientvector = alpha(simDur, transientvector["alpha"]["tstart"],transientVector["alpha"]["tau"])
+
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transientvector)
+
+    for c in cells.values():
+      for comp in [c.icell.dend, c.icell.axon, c.icell.soma]:
+        for sec in comp:
+          self.setMuscarinicModulation(sec,self.transientVector)
+
+    if (False):
+      self.setGlutMod(self.transientVector)
+      self.setGabaMod(self.transientVector)
+
 
   ############################################################################
 
