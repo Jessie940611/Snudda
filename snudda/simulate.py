@@ -1738,8 +1738,6 @@ class SnuddaSimulate(object):
   def run(self,t=1000.0,holdV=None):
 
     self.setupPrintSimTime(t)
-    import pdb
-    pdb.set_trace()
     startTime = timeit.default_timer()
 
     # If we want to use a non-default initialisation voltage, we need to
