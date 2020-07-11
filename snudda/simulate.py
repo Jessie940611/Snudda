@@ -2136,7 +2136,7 @@ class SnuddaSimulate(object):
 
   ############################################################################
 
-   def setMuscarinicModulation(self,sec,transientVector=[]):
+  def setMuscarinicModulation(self,sec,transientVector=[]):
 
     channelList = { 'spn':  ['naf_ms', 'kas_ms', 'kaf_ms', 'kir_ms',
                              'cal12_ms', 'cal13_ms', 'can_ms', 'car_ms'],
