@@ -222,13 +222,18 @@ class ComparePlotTraces():
 
     assert self.networkInfo is not None, "You need to specify networkInfo file"
     
-    neuronTypes = [x["type"] for x in self.networkInfo.data["neurons"]]
+    neuronTypesOne = [x["type"] for x in self.networkInfoOne.data["neurons"]]
 
+    neuronTypesTwo = [x["type"] for x in self.networkInfoTwo.data["neurons"]]
     # Find numbers of the relevant neurons
     
-    traceID = [x[0] for x in enumerate(neuronTypes) if x[1] == neuronType]
+    traceIDOne = [x[0] for x in enumerate(neuronTypesOne) if x[1] == neuronType]
     
-    nTraces = min(len(traceID),nTraces)
+    traceIDTwo = [x[0] for x in enumerate(neuronTypesTwo) if x[1] == neuronType]
+
+    nTracesOne = min(len(traceIDOne),nTraces)
+
+    nTracesTwo = min(len(traceIDTwo),nTraces)
 
     if(nTraces <= 0):
       print("No traces of " + str(neuronType) + " to show")
@@ -236,6 +241,7 @@ class ComparePlotTraces():
     
     self.plotTraces(offset=offset,traceID=traceID[:nTraces],skipTime=skipTime,
                     title=self.neuronName(neuronType))
+
                                    
     time.sleep(1)
     
