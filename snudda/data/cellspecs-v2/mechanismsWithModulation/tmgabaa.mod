@@ -21,7 +21,8 @@ NEURON {
     POINT_PROCESS tmGabaA
     RANGE tau1, tau2, e, i, q
     RANGE tau, tauR, tauF, U, u0
-    RANGE failRate, damod, maxMod
+    RANGE failRate, maxMod
+    POINTER damod							
     NONSPECIFIC_CURRENT i
 }
 

@@ -28,8 +28,9 @@ NEURON {
     RANGE e, g, i, q, mg
     RANGE tau, tauR, tauF, U, u0
     RANGE ca_ratio_ampa, ca_ratio_nmda, mggate, use_stp
-    RANGE failRate, damod, maxModAMPA, maxModNMDA
+    RANGE failRate, maxModAMPA, maxModNMDA
     NONSPECIFIC_CURRENT i
+    POINTER damod
     USEION cal WRITE ical VALENCE 2
 }
 

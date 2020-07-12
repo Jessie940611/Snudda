@@ -2197,7 +2197,8 @@ class SnuddaSimulate(object):
         maxModN = modulation[nname][1] 
         
         print(nname,maxModA,maxModN)
-        
+        #import pdb
+        #pdb.set_trace
         # set modulation   
         for syntuple in synlist: 
             syn = syntuple[3]
@@ -2206,12 +2207,14 @@ class SnuddaSimulate(object):
             
             syn.maxModAMPA  = maxModA
             syn.maxModNMDA  = maxModN
-            syn.damod       = 1
+            
+            
             if transient:
               # play level parameter
-              transient.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+              transientVector = self.sim.neuron.h.Vector()
+              transientVector.from_python(transient)
+              transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
               self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
-
               self.synapsesDA.append(syngpcr)
 
                 #transient.play(syn._ref_level, self.sim.neuron.h.dt)
@@ -2220,7 +2223,7 @@ class SnuddaSimulate(object):
             
   ###########################################################################
 
-  def setGABAmod(self, transient=0):
+  def setGABAMod(self, transient=0):
     '''
     set modulation of sgabaergic input using stored data (list)
     '''
@@ -2233,31 +2236,35 @@ class SnuddaSimulate(object):
                     'FSN':  [0.6, '1 source ~ -40%']   
                     }
     
-    for neuronID,synlist in self.synapseDict.items():
-      for syn in synlist:
-        # get modualtion (based on cell type)
-        #maybe for syntuple
-        seg_with_syn = syn.get_segment()
-        syngpcr = self.sim.neuron.h.concDAfile(seg_with_syn)
+    
+    for syn in self.synapseList:
 
-        nname       = self.neurons[neuronID].name.split('_')[0]
-        maxMod      = modulation[nname][0]
-        
-        # set modulation    
-        syn.maxMod  = maxMod
-        syn.damod   = 1
-        
-        if transient:
-          # play level parameter
-          transient.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
-          self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
+      if "Gaba" in str(syn):
+          print(syn)
+          seg_with_syn = syn.get_segment()
+          syngpcr = self.sim.neuron.h.concDAfile(seg_with_syn)
 
-        else:
-          syn.level = 1   # constant, full modulation.
+          nname       = str(seg_with_syn).split("_")[0]
+          maxMod      = modulation[nname][0]
+
+          # set modulation    
+          syn.maxMod  = maxMod
+
+
+          if transient:
+            transientVector = self.sim.neuron.h.Vector()
+            transientVector.from_python(transient)
+            transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+            self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
+            self.synapsesDA.append(syngpcr)
+
+
+          else:
+            syn.level = 1   # constant, full modulation.
   
   
   ###########################################################################
-  def applyDopamine(self,cellID=None,transientVector=None,transientType=None,simDur=None):
+  def applyDopamine(self,cellID=None,transientVector=None,transientType=None,simDur=None,synapticModulation=False):
     
     if(cellID is None):
       cellID = self.neuronID
@@ -2282,9 +2289,9 @@ class SnuddaSimulate(object):
       for comp in [c.icell.dend, c.icell.axon, c.icell.soma]:
         for sec in comp:
           self.setDopamineModulation(sec,transientvector)
-    if (False):
-      self.setGlutMod(self.transientVector)
-      self.setGabaMod(self.transientVector)
+    if (synapticModulation):
+      self.setGlutMod(transientvector)
+      self.setGABAMod(transientvector)
 
   ###########################################################################
 

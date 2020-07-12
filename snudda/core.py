@@ -446,10 +446,10 @@ class Snudda(object):
       #sim.addRecordingOfType("dSPN",5) # Side len let you record from a subset
 
     tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-
+  
     if(args.daTransient is not None):
-      
-      sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim)
+
+      sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
 
     sim.checkMemoryStatus()  
     print("Running simulation for " + str(tSim) + " ms.")

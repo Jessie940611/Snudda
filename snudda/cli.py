@@ -28,11 +28,15 @@ def snudda_cli():
                           default=None,
                           help="Name of voltage output file (csv)")
 
+      ################ Dopamine Modulation ########################
       parser.add_argument("--daTransient","--daTransient",
                       default=None,
                       help="Name of the dopamine transient file (json)")
   
+      parser.add_argument("--synapticModulation",action="store_true",
+                          help="Adding modulation on synaptic models")
 
+      #############################################################
 
 	
       parser.add_argument("--spikesOut","--spikesout",
