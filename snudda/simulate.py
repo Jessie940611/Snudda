@@ -980,7 +980,7 @@ class SnuddaSimulate(object):
 
           
       else:
-        print('here in the putting')
+        print('Placing the modulation for Cell')
       
         
         self.previousGPCRsection = str(dendCompartment).split(".")[0]

@@ -440,7 +440,11 @@ class Snudda(object):
 
     sim.addExternalInput()
     sim.checkMemoryStatus()
+    sim.addSynapseFinalise()
+    sim.PCbarrier()
 
+    
+    
     if(voltFile is not None):
       sim.addRecording(sideLen=None) # Side len let you record from a subset
       #sim.addRecordingOfType("dSPN",5) # Side len let you record from a subset

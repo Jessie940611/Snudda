@@ -18,7 +18,7 @@ import json
 
 class SnuddaInit(object):
 
-  def __init__(self,structDef,configName,nChannels=1):
+  def __init__(self,structDef,configName,nChannels=1,MuscarinicLTS=False):
 
     print("CreateConfig")
 
@@ -499,7 +499,7 @@ class SnuddaInit(object):
                      sideLen=None,
                      sliceDepth=None,
                      cellSpecDir=None,
-                     neuronDensity=80500):
+                     neuronDensity=80500,MuscarinicLTS=False,NOChIN=False):
 
     getVal = lambda x : 0 if x is None else x
     if(nNeurons is None):
@@ -641,7 +641,10 @@ class SnuddaInit(object):
     # ChINaxonDensity = ("6*5000*1e12/3*np.exp(-d/60e-6)",350e-6)
 
     # func type, density function, max axon radius
-    ChINaxonDensity = ("r", "5000*1e12/3*np.exp(-r/120e-6)",350e-6)
+    #ChINaxonDensity = ("r", "5000*1e12/3*np.exp(-r/120e-6)",350e-6)
+
+    #Higher density for muscarinic modulation
+    ChINaxonDensity = ("r", "40000*1e12/3*np.exp(-r/120e-6)",350e-6)
     # !!! TEST
     #ChINaxonDensity = ("xyz", "2*5000*1e12/3*np.exp(-np.sqrt(x**2+y**2+z**2)/120e-6)",[-350e-6,350e-6,-350e-6,350e-6,-350e-6,350e-6])
 
@@ -964,7 +967,7 @@ class SnuddaInit(object):
     # Mamaligas, Ford 2016 -- connectivity, 2-5ChIN per MS (in slice)
 
     ChINgGABA = 1e-9 # If just one value given, then gSTD = 0
-    ChINgACh = 1e-9 # FIXME
+    ChINgACh = 1 # FIXME
 
     # Run 1142 -- No mu2
     # Run 1150 -- Mu2 2.4
@@ -1012,16 +1015,23 @@ class SnuddaInit(object):
     # We got an increasing connection distribution with distance, looks fishy
     # !!! Should be ACh, lets try set it to GABA and see if that changes things
     # --- trying same pruning as for ChIN to MSD2
-    if(False):
+    if(MuscarinicLTS):
       self.addNeuronTarget(neuronName="ChIN",
                            targetName="LTS",
-                           connectionType="ACh",
+                           connectionType="AChM",
                            distPruning=None,
-                           f1=0.5, softMax=None, mu2=10,a3=None, # SM 12
+                           f1=None, softMax=None, mu2=None,a3=None, # SM 12                          
                            conductance=ChINgACh,
                            parameterFile=pfChINLTS,
-                           modFile="ACh", # !!! DOES NOT YET EXIST --- FIXME
-                           channelParamDictionary=None)
+                           modFile="concACh", # !!! DOES NOT YET EXIST --- FIXME                     
+                           channelParamDictionary= {"GPCR": {
+                            "neurotransmitter": ("concACh", "conc_ACH"),
+                            "signalling": ("M4", "Ach_M4R"),
+                            "ion_channel": {
+                          "soma": [("gbar_kir23_lts", "muscarinic_modulation")],
+                          "dend": [("gbar_kir23_lts", "muscarinic_modulation")]
+                            },
+                             "input-generator": ("differential-equation", "gpcr-input/concACh_M1.txt")}})
 
 
     # !!! USE SAME PARAMS FOR FS AS FOR MS??
@@ -1072,12 +1082,21 @@ class SnuddaInit(object):
                          connectionType="GABA", # also NO, nitric oxide
                          distPruning=None,
                          f1=0.5, softMax=10, mu2=3, a3=0.4,
-                         conductance=LTSgGABA,
+                         conductance=1e-3,
                          parameterFile=pfLTSChIN,
                          modFile="tmGabaA",
                          channelParamDictionary=None)
 
-
+    if(NOChIN):
+      self.addNeuronTarget(neuronName="LTS",
+                         targetName="ChIN",
+                         connectionType="NO", # also NO, nitric oxide
+                         distPruning=None,
+                         f1=0.5, softMax=10, mu2=3, a3=0.4,
+                         conductance=1e-9,
+                         parameterFile=pfLTSChIN,
+                         modFile="NO",
+                         channelParamDictionary=None)
   ############################################################################
 
   def defineGPe(self,nNeurons):
