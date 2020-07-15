@@ -87,13 +87,25 @@ class Snudda(object):
       "You need to speicfy --size when initialising config for network2"
 
     from .init import SnuddaInit
-    structDef = { "Striatum" : args.size,
-                  "GPe" : 0,
-                  "GPi" : 0,
-                  "SNr" : 0,
-                  "STN" : 0,
-                  "Cortex" : 0,
-                  "Thalamus" : 0}
+
+    if (args.SNc):
+      structDef = { "Striatum" : args.size,
+                    "GPe" : 0,
+                    "GPi" : 0,
+                    "SNr" : 0,
+                    "STN" : 0,
+                    "SNc" : 3,
+                    "Cortex" : 0,
+                    "Thalamus" : 0}
+    else:
+      structDef = { "Striatum" : args.size,
+                    "GPe" : 0,
+                    "GPi" : 0,
+                    "SNr" : 0,
+                    "STN" : 0,
+                    "SNc" : 0,
+                    "Cortex" : 0,
+                    "Thalamus" : 0}
     # Cortex and thalamus axons disabled right now, set to 1 to include one
 
     if not args.overwrite:

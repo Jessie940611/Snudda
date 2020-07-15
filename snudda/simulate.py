@@ -388,13 +388,16 @@ class SnuddaSimulate(object):
       
       # Obs, neurons is a dictionary
       if(self.network_info["neurons"][ID]["virtualNeuron"]):
-
+        
         if(self.inputData is None):
           self.writeLog("Using " + self.inputFile + " for virtual neurons")
           self.inputData = h5py.File(self.getPath(self.inputFile),'r')
-
+          
           name = self.network_info["neurons"][ID]["name"]
-          spikes = self.inputData["input"][ID]["activity"]["spikes"][:,0]
+          if (True):
+            spikes = np.array([0])
+          else:
+            spikes = self.inputData["input"][ID]["activity"]["spikes"][:,0]
 
         # Creating NEURON VecStim and vector
         # https://www.neuron.yale.edu/phpBB/viewtopic.php?t=3125
@@ -1040,6 +1043,9 @@ class SnuddaSimulate(object):
                      setattr(seg,mod_ion_channel[0]+'_mod',conductance_modulated_channel)
                      setattr(seg,mod_ion_channel[0],0)
 
+                     channelMaxMod = getattr(seg,"maxMod_" + "_".join(mod_ion_channel[0].split("_")[1:]))
+                     setattr(seg, "maxMod_" + "_".join(mod_ion_channel[0].split("_")[1:]) + "_mod", channelMaxMod)
+
 
                      if ("phenomenological" not in gpcr_signalling["GPCR_signalling"][0]['GPCR']['signalling'][1]):
                       
@@ -1056,8 +1062,8 @@ class SnuddaSimulate(object):
 
                      else:
 
-
-                       Strpointer(neurotransmitter_concentration,neurotransmitter_pointer ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'mod'))
+                      
+                       Strpointer(neurotransmitter_concentration,neurotransmitter_pointer ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'_mod'))
 
 
                      
@@ -1079,18 +1085,37 @@ class SnuddaSimulate(object):
                
                 
                 syn_gpcr = gpcr_signalling["synapse_location_"+str(cell_section)][section_position]
-              
-                nc = self.pc.gid_connect(pre_cellIDsource, syn_gpcr)
-                nc.weight[0] = 1
-                nc.delay = gpcr_signalling['GPCR_signalling'][3]
-                nc.threshold = self.spikeThreshold
 
-                #acetyl_recording= self.sim.neuron.h.Vector()
-                #acetyl_recording.record(syn_gpcr._ref_concentration)
-                #self.concAChrecording.update({str(syn_gpcr) : acetyl_recording})
+               
+                if ("time-series" == gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][0]):
 
-                self.netConList.append(nc)
-                self.synapseList.append(syn_gpcr)
+                  VirtualAxonVector = gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][1]
+
+                  with open(VirtualAxonVector,"r") as f:
+                    VirtualVector = json.load(f)
+    
+                  TransientVirtualtVector = eval(VirtualVector["time-series"])
+                  seg_with_syn = syn_gpcr.get_segment()
+                  self.transientVector = self.sim.neuron.h.Vector()
+                  self.transientVector.from_python(TransientVirtualtVector)
+                  self.transientVector.play(syn_gpcr._ref_concentration,self.sim.neuron.h.dt)
+                  self.synapsesDA.append(syn_gpcr)
+                  self.synapsesDA.append(self.transientVector)                
+                  
+                  self.synapseList.append(syn_gpcr)
+                  
+                else:
+                  nc = self.pc.gid_connect(pre_cellIDsource, syn_gpcr)
+                  nc.weight[0] = 1
+                  nc.delay = gpcr_signalling['GPCR_signalling'][3]
+                  nc.threshold = self.spikeThreshold
+
+                  #acetyl_recording= self.sim.neuron.h.Vector()
+                  #acetyl_recording.record(syn_gpcr._ref_concentration)
+                  #self.concAChrecording.update({str(syn_gpcr) : acetyl_recording})
+
+                  self.netConList.append(nc)
+                  self.synapseList.append(syn_gpcr)
 
       
         del self.gpcrModulation[neurotransmitter][GPC_receptor]

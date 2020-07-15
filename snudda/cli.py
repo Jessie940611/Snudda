@@ -36,6 +36,8 @@ def snudda_cli():
       parser.add_argument("--synapticModulation",action="store_true",
                           help="Adding modulation on synaptic models")
 
+      parser.add_argument("--SNc",action="store_true",
+                          help="Adding modulation on synaptic models")
       #############################################################
 
 	

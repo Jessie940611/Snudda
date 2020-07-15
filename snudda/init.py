@@ -18,7 +18,7 @@ import json
 
 class SnuddaInit(object):
 
-  def __init__(self,structDef,configName,nChannels=1,MuscarinicLTS=False):
+  def __init__(self,structDef,configName,nChannels=1):
 
     print("CreateConfig")
 
@@ -53,6 +53,7 @@ class SnuddaInit(object):
                    "GPi" : self.defineGPi,
                    "STN" : self.defineSTN,
                    "SNr" : self.defineSNr,
+                   "SNc" : self.defineSNc,
                    "Cortex" : self.defineCortex,
                    "Thalamus" : self.defineThalamus }
 
@@ -1310,7 +1311,82 @@ class SnuddaInit(object):
                          modFile="tmGlut",
                          channelParamDictionary=None)
 
+  def defineSNc(self,nNeurons):
 
+    if(nNeurons <= 0):
+      # No neurons specified, skipping structure
+      return
+
+    # Neurons with corticostriatal axons
+    self.nSNc = nNeurons
+
+    self.nTotal += nNeurons
+
+
+    # Using start location of neuron  DOI: 10.25378/janelia.5521780 for centre
+    # !!! If we use a larger mesh for cortex, we will need to reduce
+    #     meshBinWidth to 1e-4 (or risk getting memory error)
+    self.defineStructure(structName="SNc",
+                         structMesh="cube",
+                         structCentre=np.array([3540e-6,4645e-6,5081e-6]),
+                         sideLen=200e-6,
+                         meshBinWidth=5e-5)
+
+
+    SNcDir = self.dataPath + "/InputAxons/SNc"
+
+    SNcaxonDensity = ("r", "60000*1e12/3*np.exp(-r/120e-6)",500e-6)
+
+    # Add Dopaminergic Axon
+
+    self.addNeurons("DopaminergicAxon",SNcDir, self.nSNc, \
+                    modelType="virtual",
+                    rotationMode="",
+                    axonDensity= SNcaxonDensity,
+                    volumeID="SNc")
+
+    # Define targets
+
+    DopaminergicCond = [1e-9,0.1e-9]
+
+    
+
+    self.addNeuronTarget(neuronName="DopaminergicAxon",
+                         targetName="dSPN",
+                         connectionType="Dopamine",
+                         distPruning=None,
+                         f1=None, softMax=None, mu2=None,a3=None,
+                         conductance=DopaminergicCond,
+                         parameterFile=None,
+                         modFile="concDAfile",
+                         channelParamDictionary={
+                           "GPCR": {
+                            "neurotransmitter": ("concDAfile", "damod"),
+                            "signalling": ("D1", "phenomenological"),
+                            "ion_channel": {
+                          "soma": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")],
+                          "dend": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")]
+                            },
+                            "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopamineTransient.json")
+                             }})
+    self.addNeuronTarget(neuronName="DopaminergicAxon",
+                         targetName="iSPN",
+                         connectionType="Dopamine",
+                         distPruning=None,
+                         f1=None, softMax=None, mu2=None,a3=None,
+                         conductance=DopaminergicCond,
+                         parameterFile=None,
+                         modFile="concDAfile",
+                         channelParamDictionary={
+                           "GPCR": {
+                            "neurotransmitter": ("concDAfile", "damod"),
+                            "signalling": ("D2", "phenomenological"),
+                            "ion_channel": {
+                          "soma": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")],
+                          "dend": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_car_ms", "damod")]
+                            },
+                            "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopamineTransient.json")
+                             }})
 
   ############################################################################
 
