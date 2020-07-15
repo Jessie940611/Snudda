@@ -2211,12 +2211,12 @@ class SnuddaSimulate(object):
             
             if transient:
               # play level parameter
-              transientVector = self.sim.neuron.h.Vector()
-              transientVector.from_python(transient)
-              transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+              self.transientVector = self.sim.neuron.h.Vector()
+              self.transientVector.from_python(transient)
+              self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
               self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
               self.synapsesDA.append(syngpcr)
-
+              self.synapsesDA.append(self.transientVector)
                 #transient.play(syn._ref_level, self.sim.neuron.h.dt)
             else:
                 syn.level = 1   # constant, full modulation.
@@ -2252,12 +2252,12 @@ class SnuddaSimulate(object):
 
 
           if transient:
-            transientVector = self.sim.neuron.h.Vector()
-            transientVector.from_python(transient)
-            transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
+            self.transientVector = self.sim.neuron.h.Vector()
+            self.transientVector.from_python(transient)
+            self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
             self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
             self.synapsesDA.append(syngpcr)
-
+            self.synapsesDA.append(self.transientVector)
 
           else:
             syn.level = 1   # constant, full modulation.
