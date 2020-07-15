@@ -91,7 +91,7 @@ class ComparePlotTraces():
                  title=None):
     import matplotlib.pyplot as plt
     fig = plt.figure()
-    chosenColor = [ 'b', 'r', 'g', 'purple']
+    chosenColor = [ 'r','b', 'g', 'purple']
     if(skipTime is not None):
       print("!!! Excluding first " + str(skipTime) + "s from the plot")
     
@@ -199,10 +199,10 @@ class ComparePlotTraces():
     
     if(len(typesInPlot) > 1):
       figName = figPath + '/Network-spikes-' + str(self.ID) \
-        + "-".join(typesInPlot) + "-colour.png"
+        + "-".join(typesInPlot) + "-colour.svg"
     else:
       figName = figPath + '/Network-spikes-' + str(self.ID) \
-        + "-" + typesInPlot.pop() + "-colour.png"
+        + "-" + typesInPlot.pop() + "-colour.svg"
       
     plt.savefig(figName,
                 dpi=300)
