@@ -1061,11 +1061,21 @@ class SnuddaSimulate(object):
                        Strpointer(pointermodulation,mod_ion_channel[1] ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'_mod'))
 
                      else:
-
-                      
+                       VirtualAxonVector = gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][1]
+                       with open(VirtualAxonVector,"r") as f:
+                         VirtualVector = json.load(f)
+                         
+                       TransientVirtualtVector = eval(VirtualVector["time-series"])
+                       
+                       self.transientVector = self.sim.neuron.h.Vector()
+                       self.transientVector.from_python(TransientVirtualtVector)
+                       self.transientVector.play(syn._ref_concentration,self.sim.neuron.h.dt)
+                       self.synapsesDA.append(syn)
+                       self.synapsesDA.append(self.transientVector)                
+                       self.synapseList.append(syn)
                        Strpointer(neurotransmitter_concentration,neurotransmitter_pointer ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'_mod'))
-
-
+                       #import pdb
+                       #pdb.set_trace()
                      
                      
         for gpcr_neurotransmitter, gpcr_receptor in self.gpcrModulation.items():
@@ -1089,20 +1099,7 @@ class SnuddaSimulate(object):
                
                 if ("time-series" == gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][0]):
 
-                  VirtualAxonVector = gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][1]
-
-                  with open(VirtualAxonVector,"r") as f:
-                    VirtualVector = json.load(f)
-    
-                  TransientVirtualtVector = eval(VirtualVector["time-series"])
-                  seg_with_syn = syn_gpcr.get_segment()
-                  self.transientVector = self.sim.neuron.h.Vector()
-                  self.transientVector.from_python(TransientVirtualtVector)
-                  self.transientVector.play(syn_gpcr._ref_concentration,self.sim.neuron.h.dt)
-                  self.synapsesDA.append(syn_gpcr)
-                  self.synapsesDA.append(self.transientVector)                
-                  
-                  self.synapseList.append(syn_gpcr)
+                  continue
                   
                 else:
                   nc = self.pc.gid_connect(pre_cellIDsource, syn_gpcr)
@@ -1115,7 +1112,8 @@ class SnuddaSimulate(object):
                   #self.concAChrecording.update({str(syn_gpcr) : acetyl_recording})
 
                   self.netConList.append(nc)
-                  self.synapseList.append(syn_gpcr)
+
+                self.synapseList.append(syn_gpcr)
 
       
         del self.gpcrModulation[neurotransmitter][GPC_receptor]

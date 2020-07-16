@@ -1335,7 +1335,7 @@ class SnuddaInit(object):
 
     SNcDir = self.dataPath + "/InputAxons/SNc"
 
-    SNcaxonDensity = ("r", "60000*1e12/3*np.exp(-r/120e-6)",500e-6)
+    SNcaxonDensity = ("r", "1000*1e12/3*np.exp(-r/120e-6)",500e-6)
 
     # Add Dopaminergic Axon
 
@@ -1365,7 +1365,7 @@ class SnuddaInit(object):
                             "signalling": ("D1", "phenomenological"),
                             "ion_channel": {
                           "soma": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")],
-                          "dend": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")]
+                          "dend": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_car_ms", "damod")]
                             },
                             "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopamineTransient.json")
                              }})

@@ -3,5 +3,5 @@
 	"tstart" : 1000,
 	"tau" : 500
     },
-    "time-series" : "[100 if (ht>0 and ht<1500) else 0 for ht in np.arange(0,2500,0.025)]"
+    "time-series" : "[1 if (ht>1000 and ht<1500) else 0 for ht in np.arange(0,2500,0.025)]"
 }
