@@ -437,7 +437,15 @@ class Snudda(object):
                          disableGapJunctions=disableGJ,
                          logFile=logFile,
                          verbose=args.verbose)
+    if(args.currentInjection != 0):
+      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = args.currentInjection,neuronType = 'dSPN')
+      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = args.currentInjection,neuronType = 'iSPN')
 
+    if (args.voltageClamp != 0):
+      
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True)
+      
     sim.addExternalInput()
     sim.checkMemoryStatus()
     sim.addSynapseFinalise()
@@ -458,6 +466,14 @@ class Snudda(object):
     sim.checkMemoryStatus()  
     print("Running simulation for " + str(tSim) + " ms.")
     sim.run(tSim) # In milliseconds
+
+    if (args.voltageClamp != 0):
+      import pdb
+      pdb.set_trace()
+      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
+        print(current)
+        print(sim.network_info["neurons"][cells]["name"])
+        
 
     print("Simulation done, saving output")
     if(spikesFile is not None):

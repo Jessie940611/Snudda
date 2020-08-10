@@ -1,4 +1,4 @@
-#
+e#
 # This code reads the network created by Network_connect.py and set it
 # up in memory
 #
@@ -116,6 +116,9 @@ class SnuddaSimulate(object):
     self.concAChrecording = {}
 
     self.previousGPCRsection = None
+
+    self.iSaveCurr = []
+    self.iKeyCurr = []
 
     #################################################################
 
@@ -1639,15 +1642,19 @@ class SnuddaSimulate(object):
 
   def addRecordingOfType(self,neuronType,nNeurons=None):
 
-    cellID = self.snuddaLoader.getCellIDofType(neuronType=neuronType,
+     cellID = self.snuddaLoader.getCellIDofType(neuronType=neuronType,
                                                nNeurons=nNeurons)
 
-    self.addRecording(cellID)
+     self.addRecording(cellID)
 
   ############################################################################
 
-  def addVoltageClamp(self,cellID,voltage,duration,res=1e-9,saveIflag=False):
+  def addVoltageClamp(self,cellID,voltage,duration,res=1e-9,saveIflag=False,neuronType=None):
 
+
+    if neuronType is not None:
+      cellIDs = self.snuddaLoader.getCellIDofType(neuronType=neuronType)
+    
     if(type(cellID) not in [list,np.ndarray]):
       cellID = [cellID]
 
@@ -1691,10 +1698,12 @@ class SnuddaSimulate(object):
       self.vClampList.append(vc)
 
       if(saveIflag):
+        import pdb
+        pdb.set_trace()
         cur = self.sim.neuron.h.Vector()
         cur.record(vc._ref_i)
-        self.iSave.append(cur)
-        self.iKey.append(cID)
+        self.iSaveCurr.append(cur)
+        self.iKeyCurr.append(cID)
 
   ############################################################################
 
@@ -2008,22 +2017,28 @@ class SnuddaSimulate(object):
 
 ############################################################################
 
-  def addCurrentInjection(self,neuronID,startTime,endTime,amplitude):
+  def addCurrentInjection(self,startTime,endTime,amplitude,neuronType,neuronID=None,):
 
-    if neuronID not in self.neuronID:
-      # The neuron ID does not exist on this worker
-      return
+    if neuronID is None:
+      neuronIDs = self.snuddaLoader.getCellIDofType(neuronType=neuronType)
+    else:
+      neuronIDs = [neuronID]
+    for neuronID in neuronIDs:
+      if neuronID not in self.neuronID:
+        # The neuron ID does not exist on this worker
+        return
 
-    assert endTime > startTime, \
-      "addCurrentInection: End time must be after start time"
+      assert endTime > startTime, \
+        "addCurrentInection: End time must be after start time"
 
-    curStim = self.sim.neuron.h.IClamp(0.5,
-                                       sec=self.neurons[neuronID].icell.soma[0])
-    curStim.delay = startTime*1e3
-    curStim.dur = (endTime-startTime)*1e3
-    curStim.amp = amplitude*1e9 # What is units of amp?? nA??
-
-    self.iStim.append(curStim)
+      curStim = self.sim.neuron.h.IClamp(0.5,
+                                         sec=self.neurons[neuronID].icell.soma[0])
+      curStim.delay = startTime*1e3
+      curStim.dur = (endTime-startTime)*1e3
+      #curStim.amp = amplitude*1e9 # What is units of amp?? nA??
+      curStim.amp = amplitude
+      
+      self.iStim.append(curStim)
 
   ############################################################################
 

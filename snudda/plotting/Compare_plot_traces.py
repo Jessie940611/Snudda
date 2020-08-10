@@ -15,7 +15,7 @@ class ComparePlotTraces():
 
   ############################################################################
   
-  def __init__(self,fileNames,networkFiles=None,labels=None):
+  def __init__(self,fileNames,networkFiles=None,labels=None,colours=None):
 
     self.fileNames = dict()
     self.time = dict()
@@ -24,7 +24,7 @@ class ComparePlotTraces():
     self.networkFiles = networkFiles
     self.time = dict()
     self.voltage = dict()
-
+    self.colours = colours
     self.neuronNameRemap = {"FSN" : "FS"}
 
     simulations_i = 0
@@ -91,7 +91,7 @@ class ComparePlotTraces():
                  title=None):
     import matplotlib.pyplot as plt
     fig = plt.figure()
-    chosenColor = [ 'r','b', 'g', 'purple']
+    chosenColor = self.colours
     if(skipTime is not None):
       print("!!! Excluding first " + str(skipTime) + "s from the plot")
     
