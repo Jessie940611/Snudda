@@ -1,0 +1,65 @@
+Starting log file
+Using SlurmID: 55No IPYTHON_PROFILE enviroment variable set, running in serialSetting random seed: None
+Using hdf5 driver sec2, latest version
+Opening work history file: SNcVirtualAxon/log/network-detect-worklog.hdf5
+Using default scratch path: SNcVirtualAxon//temp/
+Checking for merge file SNcVirtualAxon//network-putative-synapses-MERGED.hdf5
+Running merge in serial
+Doing bigMerge (lookup) for synapses
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-16.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-1.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-21.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-20.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-4.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-17.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-0.hdf5
+Opening voxel file: SNcVirtualAxon//voxels/network-putative-synapses-5.hdf5
+Setting up out file SNcVirtualAxon//network-putative-synapses-MERGED.hdf5
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150602_c1_D1-mWT-0728MSN01-v20190508/WT-0728MSN01-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150917_c6_D1-m21-6-DE-v20190503/21-6-DE-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150917_c10_D1-mWT-P270-20-v20190521/WT-P270-20-15ak-cor.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150917_c9_d1-mWT-1215MSN03-v20190521/WT-1215MSN03-cor-rep-ax2.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e150917_c11_D2-mWT-MSN1-v20190603/WT-MSN1-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e151123_c1_D2-mWT-P270-09-v20190527/WT-P270-09-15ak-cor.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e150908_c4_D2-m51-5-DE-v20190611/51-5-DE-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e160118_c10_D2-m46-3-DE-v20190529/46-3-DE-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/InputAxons/SNc/DopamineAxon1/DA1.swc
+maxAxonVoxelCtr = 5
+maxDendVoxelCtr = 4
+Synapses: 2/7978 (heap size: 7)
+Flushing SNcVirtualAxon//network-putative-synapses-MERGED.hdf5 data: network/synapses
+network/synapses new size (7978, 13)
+bigMergeLookup: done
+Doing bigMerge (lookup) for gapJunctions
+pruneSynapses called.
+pruneSynapses: synapseFile=<HDF5 file "network-putative-synapses-MERGED.hdf5" (mode None)>, outputFileName=None, rowRange=None (synapses)
+About to calculate block ranges (1 blocks)
+Find block ranges. From 0 to 7978 block size 7978
+synapseRange=[(0, 7978)]
+blockRanges=[(0, 7978)]
+Writing to SNcVirtualAxon//network-pruned-synapses.hdf5
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150602_c1_D1-mWT-0728MSN01-v20190508/WT-0728MSN01-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150917_c6_D1-m21-6-DE-v20190503/21-6-DE-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150917_c10_D1-mWT-P270-20-v20190521/WT-P270-20-15ak-cor.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/dspn/str-dspn-e150917_c9_d1-mWT-1215MSN03-v20190521/WT-1215MSN03-cor-rep-ax2.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e150917_c11_D2-mWT-MSN1-v20190603/WT-MSN1-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e151123_c1_D2-mWT-P270-09-v20190527/WT-P270-09-15ak-cor.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e150908_c4_D2-m51-5-DE-v20190611/51-5-DE-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/cellspecs-v2/ispn/str-ispn-e160118_c10_D2-m46-3-DE-v20190529/46-3-DE-cor-rep-ax.swc
+Saving morphology in HDF5 file: /home/jofrony/Documents/Github/Snudda/snudda/data/InputAxons/SNc/DopamineAxon1/DA1.swc
+Pruning range : (0, 7978)
+Number of synapses removed where synapse connection not allowed: 0
+Number of synapses removed due to distance dependent pruning: 1746
+Number of synapses removed randomly: 4410
+Number of synapses removed due to too many synapses between connected pair: 64
+Number of synapses removed due to too few synapses between connected pairs: 212
+Number of synapses removed where all synapses between pairs are removed: 0
+pruneSynapses called.
+pruneSynapses: No gapJunctions skipping pruning
+Voxel overflows: 0 (should be zero)
+Synapses before pruning: 7978
+Synapses after pruning: 1546 (19.38 % kept)
+No gap junctions to prune.
+Cleaning up old merge files
+Total duration: 0.18531535426154733
+Program run time: 0.22955943178385496End of log. Closing file.

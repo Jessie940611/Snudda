@@ -1335,7 +1335,7 @@ class SnuddaInit(object):
 
     SNcDir = self.dataPath + "/InputAxons/SNc"
 
-    SNcaxonDensity = ("r", "1000*1e12/3*np.exp(-r/120e-6)",500e-6)
+    SNcaxonDensity = ("r", "5000*1e12/3*np.exp(-r/120e-6)",500e-6)
 
     # Add Dopaminergic Axon
 

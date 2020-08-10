@@ -1,0 +1,46 @@
+Found old cache file (SNcVirtualAxon/mesh/Striatum-cube-mesh-6.286535491496336e-05.obj-62-cache.pickle), ignoring.
+Running in serial
+Voxel mask: 5x5x5
+Processing x = 0
+Processing x = 1
+Processing x = 2
+Processing x = 3
+Processing x = 4
+Fraction of border voxels: 0.0
+Saving mesh cache file SNcVirtualAxon/mesh/Striatum-cube-mesh-6.286535491496336e-05.obj-62-cache.pickle
+Calculation time: 0.007195398211479187 s
+Setup voxel list
+Setup place neurons
+Update padding mask
+Regenerating new random pool
+Setup done
+Inner voxel bin volume: 0.0 mm³
+Found old cache file (SNcVirtualAxon/mesh/SNc-cube-mesh-0.0002.obj-50-cache.pickle), ignoring.
+Running in serial
+Voxel mask: 8x9x9
+Processing x = 0
+Processing x = 1
+Processing x = 2
+Processing x = 3
+Processing x = 4
+Processing x = 5
+Processing x = 6
+Processing x = 7
+Fraction of border voxels: 0.0
+Saving mesh cache file SNcVirtualAxon/mesh/SNc-cube-mesh-0.0002.obj-50-cache.pickle
+Calculation time: 0.042859035078436136 s
+Setup voxel list
+Setup place neurons
+Update padding mask
+Regenerating new random pool
+Setup done
+Inner voxel bin volume: 0.0 mm³
+Placed 2 in 0.0013824310153722763 s
+Placed 3 in 0.005770121235400438 s
+Placed 3 in 0.0060267262160778046 s
+Placed 2 in 0.00592308584600687 s
+Placed 3 in 0.0032859588973224163 s
+Placed 3 in 0.006769012659788132 s
+Placed 2 in 0.012721868697553873 s
+Placed 2 in 0.009522922337055206 s
+Placed 3 in 0.001005874015390873 s
