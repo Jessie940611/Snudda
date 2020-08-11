@@ -12,7 +12,7 @@ import os
 import sys
 import json
 import pickle
-
+from snudda.load import SnuddaLoad
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches

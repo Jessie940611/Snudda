@@ -437,9 +437,13 @@ class Snudda(object):
                          disableGapJunctions=disableGJ,
                          logFile=logFile,
                          verbose=args.verbose)
-    if(args.currentInjection != 0):
-      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = args.currentInjection,neuronType = 'dSPN')
-      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = args.currentInjection,neuronType = 'iSPN')
+    if(args.currentInjection is not None):
+      currentInjection = eval(args.currentInjection)
+      
+      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = currentInjection["dSPN"][0],neuronType = 'dSPN')
+      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = currentInjection["iSPN"][0],neuronType = 'iSPN')
+      sim.addCurrentInjection(neuronID=None,startTime = 0.15, endTime = args.time, amplitude = currentInjection["dSPN"][1],neuronType = 'dSPN')
+      sim.addCurrentInjection(neuronID=None,startTime = 0.15, endTime = args.time, amplitude = currentInjection["iSPN"][1],neuronType = 'iSPN')
 
     if (args.voltageClamp != 0):
       

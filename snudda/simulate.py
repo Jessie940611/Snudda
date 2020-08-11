@@ -1,4 +1,4 @@
-e#
+#
 # This code reads the network created by Network_connect.py and set it
 # up in memory
 #
@@ -419,6 +419,7 @@ class SnuddaSimulate(object):
         # A real neuron (not a virtual neuron that just provides input)
         parameterID = self.network_info["neurons"][ID]["parameterID"]
         modulationID = self.network_info["neurons"][ID]["modulationID"]
+       
 
         self.neurons[ID] = NeuronModel(param_file=param,
                                        morph_file=morph,
