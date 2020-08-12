@@ -1652,6 +1652,7 @@ class SnuddaSimulate(object):
 
   def addVoltageClamp(self,cellID,voltage,duration,res=1e-9,saveIflag=False,neuronType=None):
 
+    
 
     if neuronType is not None:
       cellIDs = self.snuddaLoader.getCellIDofType(neuronType=neuronType)
@@ -1660,20 +1661,21 @@ class SnuddaSimulate(object):
       cellID = [cellID]
 
     if(type(voltage) not in [list,np.ndarray]):
-      voltage = [voltage for x in cellID]
+      voltage = [voltage for x in cellIDs]
 
     if(type(duration) not in [list,np.ndarray]):
-      duration = [duration for x in cellID]
+      duration = [duration for x in cellIDs]
 
     if(type(res) not in [list,np.ndarray]):
-      res = [res for x in cellID]
+      res = [res for x in cellIDs]
 
     if(saveIflag and (len(self.tSave) == 0 or self.tSave is None)):
       self.tSave = self.sim.neuron.h.Vector()
       self.tSave.record(self.sim.neuron.h._ref_t)
 
-    for cID,v,rs,dur in zip(cellID,voltage,res,duration):
-
+   
+    for cID,v,rs,dur in zip(cellIDs,voltage,res,duration):
+      
       try:
         if(not(cID in self.neuronID)):
           # Not in the list of neuronID on the worker, skip it
@@ -1690,17 +1692,16 @@ class SnuddaSimulate(object):
       s = self.neurons[cID].icell.soma[0]
       vc = neuron.h.SEClamp(s(0.5))
       vc.rs = rs
-      vc.amp1 = v*1e3
+      vc.amp1 = v
       vc.dur1 = dur*1e3
 
       self.writeLog("Resistance: " + str(rs) \
                     + ", voltage: " + str(vc.amp1) + "mV")
 
       self.vClampList.append(vc)
-
+      
       if(saveIflag):
-        import pdb
-        pdb.set_trace()
+        
         cur = self.sim.neuron.h.Vector()
         cur.record(vc._ref_i)
         self.iSaveCurr.append(cur)
@@ -2018,7 +2019,7 @@ class SnuddaSimulate(object):
 
 ############################################################################
 
-  def addCurrentInjection(self,startTime,endTime,amplitude,neuronType,neuronID=None,):
+  def addCurrentInjection(self,startTime,endTime,amplitude,neuronType=None,neuronID=None,):
 
     if neuronID is None:
       neuronIDs = self.snuddaLoader.getCellIDofType(neuronType=neuronType)

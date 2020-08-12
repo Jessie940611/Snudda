@@ -439,11 +439,16 @@ class Snudda(object):
                          verbose=args.verbose)
     if(args.currentInjection is not None):
       currentInjection = eval(args.currentInjection)
+
+      import json
+      with open('temp.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items():
+        
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
       
-      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = currentInjection["dSPN"][0],neuronType = 'dSPN')
-      sim.addCurrentInjection(neuronID=None,startTime = 0, endTime = args.time, amplitude = currentInjection["iSPN"][0],neuronType = 'iSPN')
-      sim.addCurrentInjection(neuronID=None,startTime = 0.15, endTime = args.time, amplitude = currentInjection["dSPN"][1],neuronType = 'dSPN')
-      sim.addCurrentInjection(neuronID=None,startTime = 0.15, endTime = args.time, amplitude = currentInjection["iSPN"][1],neuronType = 'iSPN')
+      sim.addCurrentInjection(neuronID=None,startTime = 0.2, endTime = args.time, amplitude = currentInjection["dSPN"][1],neuronType = 'dSPN')
+      sim.addCurrentInjection(neuronID=None,startTime = 0.2, endTime = args.time, amplitude = currentInjection["iSPN"][1],neuronType = 'iSPN')
 
     if (args.voltageClamp != 0):
       
@@ -472,11 +477,14 @@ class Snudda(object):
     sim.run(tSim) # In milliseconds
 
     if (args.voltageClamp != 0):
-      import pdb
-      pdb.set_trace()
+      holdingCurrentDict = dict()
+      import json
       for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
-        print(current)
-        print(sim.network_info["neurons"][cells]["name"])
+        holdingCurrentDict.update({str(cells) : list(current)[-1]})
+    
+    with open('temp.json','w') as CurrHoldFile:
+      json.dump(holdingCurrentDict,CurrHoldFile)
+
         
 
     print("Simulation done, saving output")

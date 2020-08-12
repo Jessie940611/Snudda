@@ -173,8 +173,6 @@ class NetworAnalyseTraces():
     plt.ion()
     plt.show()
     plt.draw()
-    import pdb
-    pdb.set_trace()
     plt.pause(0.001)
 
     #plt.savefig('figures/Network-spikes-' + str(self.ID) + "-colour.pdf")
