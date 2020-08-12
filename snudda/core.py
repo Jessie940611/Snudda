@@ -441,14 +441,15 @@ class Snudda(object):
       currentInjection = eval(args.currentInjection)
 
       import json
-      with open('temp.json') as json_file:
+      with open('tempHold.json') as json_file:
         data = json.load(json_file)
         for cellIDCurr, currentInj in data.items():
         
           sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
-      
-      sim.addCurrentInjection(neuronID=None,startTime = 0.2, endTime = args.time, amplitude = currentInjection["dSPN"][1],neuronType = 'dSPN')
-      sim.addCurrentInjection(neuronID=None,startTime = 0.2, endTime = args.time, amplitude = currentInjection["iSPN"][1],neuronType = 'iSPN')
+      with open('temp.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items(): 
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
 
     if (args.voltageClamp != 0):
       
@@ -481,9 +482,8 @@ class Snudda(object):
       import json
       for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
         holdingCurrentDict.update({str(cells) : list(current)[-1]})
-    
-    with open('temp.json','w') as CurrHoldFile:
-      json.dump(holdingCurrentDict,CurrHoldFile)
+      with open('temp.json','w') as CurrHoldFile:
+        json.dump(holdingCurrentDict,CurrHoldFile)
 
         
 
