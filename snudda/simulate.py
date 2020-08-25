@@ -2204,7 +2204,7 @@ class SnuddaSimulate(object):
 
   ############################################################################
 
-  def setGlutMod(self, transient=0):
+  def setGlutMod(self, transient=None):
     '''
     set modulation of glutamatergic input using stored data (dict of list of tuple)
     '''  
@@ -2237,7 +2237,7 @@ class SnuddaSimulate(object):
             syn.maxModNMDA  = maxModN
             
             
-            if transient:
+            if transient is not None:
               # play level parameter
               self.transientVector = self.sim.neuron.h.Vector()
               self.transientVector.from_python(transient)
@@ -2251,7 +2251,7 @@ class SnuddaSimulate(object):
             
   ###########################################################################
 
-  def setGABAMod(self, transient=0):
+  def setGABAMod(self, transient=None):
     '''
     set modulation of sgabaergic input using stored data (list)
     '''
@@ -2279,7 +2279,7 @@ class SnuddaSimulate(object):
           syn.maxMod  = maxMod
 
 
-          if transient:
+          if transient is not None:
             self.transientVector = self.sim.neuron.h.Vector()
             self.transientVector.from_python(transient)
             self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)

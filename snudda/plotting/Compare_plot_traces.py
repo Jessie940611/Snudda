@@ -167,10 +167,9 @@ class ComparePlotTraces():
               pdb.set_trace()
           
         
-          plt.plot(self.time[ctr][timeIdx]-skipTime,
-               self.voltage[ctr][r][timeIdx] + ofs,
+          plt.plot(self.time[ctr][timeIdx]-skipTime,\
+                   self.voltage[ctr][r][timeIdx] + ofs,\
                    color=chosenColor[ctr],label=self.labels[ctr])
-          
           ofs += offset
 
        
@@ -227,9 +226,8 @@ class ComparePlotTraces():
       if(nTraces <= 0):
         print("No traces of " + str(neuronType) + " to show")
         return
-    
-      self.plotTraces(offset=offset,traceID=traceID[:nTraces],skipTime=skipTime,
-                    title=self.neuronName(neuronType))
+     
+      self.plotTraces(offset=offset,traceID=traceID[:nTraces],skipTime=skipTime,title=self.neuronName(neuronType))
                                    
     time.sleep(1)
     
