@@ -437,11 +437,31 @@ class Snudda(object):
                          disableGapJunctions=disableGJ,
                          logFile=logFile,
                          verbose=args.verbose)
-         
+    if(args.currentInjection is not None):
+      currentInjection = eval(args.currentInjection)
+
+      import json
+      with open('tempHold.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items():
+        
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
+      with open('temp.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items(): 
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+
+    if (args.voltageClamp != 0):
+      
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True)
+      
     sim.addExternalInput()
     sim.checkMemoryStatus()
     sim.addSynapseFinalise()
     sim.PCbarrier()
+
+    
     
     if(voltFile is not None):
       sim.addRecording(sideLen=None) # Side len let you record from a subset
@@ -456,6 +476,16 @@ class Snudda(object):
     sim.checkMemoryStatus()  
     print("Running simulation for " + str(tSim) + " ms.")
     sim.run(tSim) # In milliseconds
+
+    if (args.voltageClamp != 0):
+      holdingCurrentDict = dict()
+      import json
+      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
+        holdingCurrentDict.update({str(cells) : list(current)[-1]})
+      with open('temp.json','w') as CurrHoldFile:
+        json.dump(holdingCurrentDict,CurrHoldFile)
+
+        
 
     print("Simulation done, saving output")
     if(spikesFile is not None):
