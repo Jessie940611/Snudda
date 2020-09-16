@@ -2137,6 +2137,8 @@ class SnuddaSimulate(object):
                     'lts':  ['na3_lts','hd_lts'] }
 
     
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transientVector)
     
     for cellType in channelList:
       for seg in sec:
@@ -2150,15 +2152,13 @@ class SnuddaSimulate(object):
             if(len(transientVector) == 0):
               mech.damod = 1
             else:
-              if "spn" in cellType:
                
-                self.transientVector = self.sim.neuron.h.Vector()
-                self.transientVector.from_python(transientVector)
+                
                 self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
                 self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",getattr(seg,mech.name()))
               
                 self.synapsesDA.append(syngpcr)
-                self.synapsesDA.append(self.transientVector)
+    self.synapsesDA.append(self.transientVector)
 
   ############################################################################
 
@@ -2216,7 +2216,9 @@ class SnuddaSimulate(object):
                     'LTS':  [1.0,1.0, 'no source, likely reduced trough presynaptic effect?'],
                     'FSN':  [1.0,1.0, 'no source, likely reduced trough presynaptic effect?']   
                     }
-    
+
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transient)
     for neuronID,synlist in self.externalStim.items():
         # get modulation (based on cell type)
         nname = self.neurons[neuronID].name.split('_')[0]
@@ -2239,16 +2241,15 @@ class SnuddaSimulate(object):
             
             if transient is not None:
               # play level parameter
-              self.transientVector = self.sim.neuron.h.Vector()
-              self.transientVector.from_python(transient)
+             
               self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
               self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
               self.synapsesDA.append(syngpcr)
-              self.synapsesDA.append(self.transientVector)
+              
                 #transient.play(syn._ref_level, self.sim.neuron.h.dt)
             else:
                 syn.level = 1   # constant, full modulation.
-            
+    self.synapsesDA.append(self.transientVector)
   ###########################################################################
 
   def setGABAMod(self, transient=None):
@@ -2263,7 +2264,8 @@ class SnuddaSimulate(object):
                     'LTS':  [1.0, 'no source, reduced?'],
                     'FSN':  [0.6, '1 source ~ -40%']   
                     }
-    
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transient)
     
     for syn in self.synapseList:
 
@@ -2280,15 +2282,15 @@ class SnuddaSimulate(object):
 
 
           if transient is not None:
-            self.transientVector = self.sim.neuron.h.Vector()
-            self.transientVector.from_python(transient)
+            
             self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
             self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
             self.synapsesDA.append(syngpcr)
-            self.synapsesDA.append(self.transientVector)
+            
 
           else:
             syn.level = 1   # constant, full modulation.
+    self.synapsesDA.append(self.transientVector)
   
   
   ###########################################################################

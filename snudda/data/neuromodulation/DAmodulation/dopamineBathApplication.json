@@ -3,5 +3,5 @@
 	"tstart" : 1000,
 	"tau" : 500
     },
-    "time-series" : "np.ones(int(2500/0.025))"
+    "time-series" : "np.ones(int(5000/0.025))"
 }
