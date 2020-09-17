@@ -76,7 +76,7 @@ export PYTHONPATH=/cfs/klemming/nobackup/${USER:0:1}/$USER/local/beskow/lib/pyth
 
 srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 3.5 --spikesOut $NETWORK_DIR/simulation/spikes-DA.txt --voltOut $NETWORK_DIR/simulation/volt-DA.csv --daTransient ../data/neuromodulation/DAmodulation/dopamineTransient.json --synapticModulation
 
-#srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 3.5 --spikesOut $NETWORK_DIR/simulation/spikes-NODA.txt --voltOut $NETWORK_DIR/simulation/volt-NODA.csv --daTransient ../data/neuromodulation/DAmodulation/dopamineControl.json --synapticModulation
+srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 3.5 --spikesOut $NETWORK_DIR/simulation/spikes-NODA.txt --voltOut $NETWORK_DIR/simulation/volt-NODA.csv --daTransient ../data/neuromodulation/DAmodulation/dopamineControl.json --synapticModulation
 
 
 
