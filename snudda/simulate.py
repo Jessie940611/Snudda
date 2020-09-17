@@ -2270,7 +2270,7 @@ class SnuddaSimulate(object):
     for syn in self.synapseList:
 
       if "Gaba" in str(syn):
-          print(syn)
+          
           seg_with_syn = syn.get_segment()
           syngpcr = self.sim.neuron.h.concDAfile(seg_with_syn)
 
@@ -2436,6 +2436,9 @@ if __name__ == "__main__":
                       default=None,
                       help="Name of the dopamine transient file (json)")
   
+  parser.add_argument("--synapticModulation",action="store_true",
+                          help="Adding modulation on synaptic models")
+  
   parser.add_argument("--disableGJ",action="store_true",
                       help="Disable gap junctions")
   parser.add_argument("--time",type=float,default=1.5,
@@ -2514,10 +2517,9 @@ if __name__ == "__main__":
     #sim.addRecordingOfType("ChIN",2)
 
   tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-  import pdb
-  pdb.set_trace()
+  
   if(args.daTransient is not None):
-    sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim)
+    sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
         
   sim.checkMemoryStatus()
   print("Running simulation for " + str(tSim) + " ms.")
