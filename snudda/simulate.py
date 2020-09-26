@@ -2435,6 +2435,15 @@ if __name__ == "__main__":
   parser.add_argument("--daTransient","--daTransient",
                       default=None,
                       help="Name of the dopamine transient file (json)")
+
+  parser.add_argument("--synapticModulation",action="store_true",
+                          help="Adding modulation on synaptic models")
+
+  parser.add_argument("--currentInjection",
+                          help="Current injection")
+
+  parser.add_argument("--voltageClamp",type=float,default=0,
+                          help="Voltage Clamp")
   
   parser.add_argument("--disableGJ",action="store_true",
                       help="Disable gap junctions")
@@ -2514,8 +2523,7 @@ if __name__ == "__main__":
     #sim.addRecordingOfType("ChIN",2)
 
   tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-  import pdb
-  pdb.set_trace()
+ 
   if(args.daTransient is not None):
     sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim)
         
