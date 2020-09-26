@@ -2270,7 +2270,7 @@ class SnuddaSimulate(object):
     for syn in self.synapseList:
 
       if "Gaba" in str(syn):
-          
+          print(syn)
           seg_with_syn = syn.get_segment()
           syngpcr = self.sim.neuron.h.concDAfile(seg_with_syn)
 
@@ -2435,9 +2435,15 @@ if __name__ == "__main__":
   parser.add_argument("--daTransient","--daTransient",
                       default=None,
                       help="Name of the dopamine transient file (json)")
-  
+
   parser.add_argument("--synapticModulation",action="store_true",
                           help="Adding modulation on synaptic models")
+
+  parser.add_argument("--currentInjection",
+                          help="Current injection")
+
+  parser.add_argument("--voltageClamp",type=float,default=0,
+                          help="Voltage Clamp")
   
   parser.add_argument("--disableGJ",action="store_true",
                       help="Disable gap junctions")
@@ -2502,9 +2508,27 @@ if __name__ == "__main__":
                        disableGapJunctions=disableGJ,
                        logFile=logFile,
                        verbose=args.verbose)
+  if(args.currentInjection is not None):
+    currentInjection = eval(args.currentInjection)
+
+    with open(self.networkPath + '/tempHold.json') as json_file:
+      data = json.load(json_file)
+      for cellIDCurr, currentInj in data.items():
+        sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
+
+    with open(self.networkPath +'/temp.json') as json_file:
+      data = json.load(json_file)
+      for cellIDCurr, currentInj in data.items():
+        sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+
+  if (args.voltageClamp != 0):
+    sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+    sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True) 
 
   sim.addExternalInput()
   sim.checkMemoryStatus()
+  sim.addSynapseFinalise()
+  sim.PCbarrier()
 
     
   if(voltFile is not None):
@@ -2517,14 +2541,24 @@ if __name__ == "__main__":
     #sim.addRecordingOfType("ChIN",2)
 
   tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-  
+ 
   if(args.daTransient is not None):
-    sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
+
+      sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
         
   sim.checkMemoryStatus()
   print("Running simulation for " + str(tSim) + " ms.")
   sim.run(tSim) # In milliseconds
 
+  if (args.voltageClamp != 0):
+      holdingCurrentDict = dict()
+      import json
+      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
+        holdingCurrentDict.update({str(cells) : list(current)[-1]})
+      with open(self.networkPath +'/temp.json','w') as CurrHoldFile:
+        json.dump(holdingCurrentDict,CurrHoldFile)
+
+        
   print("Simulation done, saving output")
   if(spikesFile is not None):
     sim.writeSpikes(spikesFile)
