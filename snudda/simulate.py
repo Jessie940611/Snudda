@@ -2508,25 +2508,22 @@ if __name__ == "__main__":
                        disableGapJunctions=disableGJ,
                        logFile=logFile,
                        verbose=args.verbose)
-
   if(args.currentInjection is not None):
-      currentInjection = eval(args.currentInjection)
+    currentInjection = eval(args.currentInjection)
 
-      
-      with open(self.networkPath + '/tempHold.json') as json_file:
-        data = json.load(json_file)
-        for cellIDCurr, currentInj in data.items():
-        
-          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
-      with open(self.networkPath +'/temp.json') as json_file:
-        data = json.load(json_file)
-        for cellIDCurr, currentInj in data.items(): 
-          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+    with open(self.networkPath + '/tempHold.json') as json_file:
+      data = json.load(json_file)
+      for cellIDCurr, currentInj in data.items():
+        sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
 
-    if (args.voltageClamp != 0):
-      
-      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
-      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True) 
+    with open(self.networkPath +'/temp.json') as json_file:
+      data = json.load(json_file)
+      for cellIDCurr, currentInj in data.items():
+        sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+
+  if (args.voltageClamp != 0):
+    sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+    sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True) 
 
   sim.addExternalInput()
   sim.checkMemoryStatus()
