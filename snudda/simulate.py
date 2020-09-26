@@ -2509,8 +2509,29 @@ if __name__ == "__main__":
                        logFile=logFile,
                        verbose=args.verbose)
 
+  if(args.currentInjection is not None):
+      currentInjection = eval(args.currentInjection)
+
+      
+      with open(self.networkPath + '/tempHold.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items():
+        
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
+      with open(self.networkPath +'/temp.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items(): 
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+
+    if (args.voltageClamp != 0):
+      
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True) 
+
   sim.addExternalInput()
   sim.checkMemoryStatus()
+  sim.addSynapseFinalise()
+  sim.PCbarrier()
 
     
   if(voltFile is not None):
@@ -2525,12 +2546,22 @@ if __name__ == "__main__":
   tSim = args.time*1000 # Convert from s to ms for Neuron simulator
  
   if(args.daTransient is not None):
-    sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim)
+
+      sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
         
   sim.checkMemoryStatus()
   print("Running simulation for " + str(tSim) + " ms.")
   sim.run(tSim) # In milliseconds
 
+  if (args.voltageClamp != 0):
+      holdingCurrentDict = dict()
+      import json
+      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
+        holdingCurrentDict.update({str(cells) : list(current)[-1]})
+      with open(self.networkPath +'/temp.json','w') as CurrHoldFile:
+        json.dump(holdingCurrentDict,CurrHoldFile)
+
+        
   print("Simulation done, saving output")
   if(spikesFile is not None):
     sim.writeSpikes(spikesFile)

@@ -437,6 +437,7 @@ class Snudda(object):
                          disableGapJunctions=disableGJ,
                          logFile=logFile,
                          verbose=args.verbose)
+
     if(args.currentInjection is not None):
       currentInjection = eval(args.currentInjection)
 
