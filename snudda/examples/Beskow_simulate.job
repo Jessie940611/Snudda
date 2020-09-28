@@ -1,11 +1,11 @@
 #!/bin/bash -l
 #SBATCH -t 2:59:00
-#SBATCH --time-min=0:59:00
+#SBATCH --time-min=1:59:00
 #SBATCH -J snudda_simulate
-#SBATCH -A 2019-3-644
+#SBATCH -A 2020-5-449
 #SBATCH -o save/output-snudda_simulate.o%j
 #SBATCH -e save/error-snudda_simulate.e%j
-#SBATCH --nodes=7-15
+#SBATCH --nodes=15-20
 #SBATCH --ntasks-per-node=32
 #SBATCH --mail-type=ALL
 
@@ -18,9 +18,13 @@ HOME=/cfs/klemming/nobackup/"${USER:0:1}"/$USER/Snudda
 
 # Synapse file
 SNUDDA_DIR=/cfs/klemming/nobackup/${USER:0:1}/$USER/Snudda/snudda
-NETWORK_DIR=$SNUDDA_DIR/../networks/TegnerRun.908177
+
+NETWORK_DIR=$SNUDDA_DIR/../networks/TegnerRun.904373
+
+
 NETWORK_INFO_FILE=$NETWORK_DIR/network-pruned-synapses.hdf5
 NETWORK_INPUT_FILE=$NETWORK_DIR/input-spikes.hdf5
+NETWORK_VOLTAGE_FILE=$NETWORK_DIR/simulation/voltage-trace-${SLURM_JOBID}.txt
 
 echo "Network dir: "$NETWORK_DIR
 
@@ -29,7 +33,9 @@ echo "Network dir: "$NETWORK_DIR
 #module load craype-haswell
 #module unload cray-libsci atp
 
-# Updated 2020-01-21
+
+# Updated 2020-08-25
+
 module sw PrgEnv-cray PrgEnv-intel/6.0.5
 module add mpi4py/3.0.2/py37
 module add neuron/7.7-py37
@@ -74,8 +80,11 @@ export PATH=/cfs/klemming/nobackup/${USER:0:1}/$USER/local/beskow/bin:$PATH
 export PYTHONPATH=/cfs/klemming/nobackup/${USER:0:1}/$USER/local/beskow/lib/python3.7/site-packages:$PYTHONPATH
 
 
-srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 2.5\ --voltOut $NETWORK_DIR/simulation/volt-NODA.csv\
-     --spikesOut $NETWORK_DIR/simulation/voltNODAspikes.txt\
+srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --disableGJ --time 3.5 --voltOut $NETWORK_VOLTAGE_FILE
+
+
+#srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 2.5\ --voltOut $NETWORK_DIR/simulation/volt-NODA.csv\
+#     --spikesOut $NETWORK_DIR/simulation/voltNODAspikes.txt\
 
 # Original version, start neuron from python, does not work on beskow
 #aprun -n  $N_WORKERS /cfs/klemming/nobackup/h/hjorth/ChINopt/model/x86_64/special -mpi -python snudda_simulate.py /cfs/klemming/nobackup/h/hjorth/ChINopt/model/save/save/network-connect-synapse-file-1749867.pickle

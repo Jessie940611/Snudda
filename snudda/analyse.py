@@ -1635,7 +1635,9 @@ class SnuddaAnalyse(object):
   def plotIncomingConnections(self,preType,neuronType,sideLen=None,
                               nameStr="",
                               connectionType="synapses",
-                              fig=None,colour=None,histRange=None):
+                              fig=None,colour=None,histRange=None,
+                              binSize=None,
+                              nBins=None):
 
     if(preType not in self.populations):
       print("plotIncomingConnections: " + str(preType) \
@@ -1664,26 +1666,40 @@ class SnuddaAnalyse(object):
     matplotlib.rcParams.update({'font.size':22})
 
     if(sum(nCon) > 0):
-      if(max(nCon) > 100):
-        binSize=10
-      else:
-        binSize=1
+
+
+      if(binSize is None):
+        if(max(nCon) > 100):
+          binSize=10
+        else:
+          binSize=1
 
       if(colour is None):
         colour = self.getNeuronColor(preType)
 
       if(histRange is None):
         histRange = range(0,int(np.max(nCon)),binSize)
-        
-      plt.hist(nCon,histRange,
-               align="left",density=True,
-               color=colour,histtype=histType)
 
+        
+      if(nBins is None):
+        plt.hist(nCon,histRange,
+                 align="left",density=True,
+                 color=colour,histtype=histType)
+      else:
+        plt.hist(nCon,bins=nBins,
+                 align="left",density=True,
+                 color=colour,histtype=histType)
+        
+
+        
     plt.xlabel("Number of connected neighbours")
     plt.ylabel("Probability density")
     plt.title(self.neuronName(preType) + " connecting to " \
               + self.neuronName(neuronType))
     plt.tight_layout()
+    xleft,xright = plt.xlim()
+    plt.xlim(0,xright)
+
     plt.ion()
     plt.draw()
 
@@ -1720,6 +1736,10 @@ class SnuddaAnalyse(object):
     plt.title(self.neuronName(preType) + " " + connectionType \
               + " on " + self.neuronName(neuronType))
     plt.tight_layout()
+
+    xleft,xright = plt.xlim()
+    plt.xlim(0,xright)
+    
     plt.ion()
     plt.draw()
 
