@@ -446,11 +446,8 @@ class NeuronModel(ephys.models.CellModel):
     for mechanism in self.mechanisms:
       mechanism.instantiate(sim=sim, icell=self.icell)
     for param in self.params.values():
-     try: 
-       param.instantiate(sim=sim, icell=self.icell)
-     except:
-       import pdb
-       pdb.set_trace()
+      param.instantiate(sim=sim, icell=self.icell)
+     
   ############################################################################
       
   def getReplacementAxon(self):

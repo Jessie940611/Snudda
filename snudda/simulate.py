@@ -57,10 +57,8 @@ class SnuddaSimulate(object):
                simulationConfig=None):
 
 
-    ##
-    self.synapsesDA = list()
-    ##
-
+     
+    
     self.verbose = verbose
     self.logFile = logFile
 
@@ -115,6 +113,8 @@ class SnuddaSimulate(object):
 
     self.concAChrecording = {}
 
+    self.synapsesDA = list()
+    
     self.previousGPCRsection = None
 
     self.iSaveCurr = []
