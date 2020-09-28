@@ -19,10 +19,11 @@ ENDCOMMENT
 
 
 NEURON {
-    SUFFIX kaf_ms
+    SUFFIX kaf_ms_mod
     USEION k READ ek WRITE ik
     RANGE gbar, gk, ik, q
-    RANGE maxMod, damod
+    RANGE maxMod
+    POINTER damod
 }
 
 UNITS {

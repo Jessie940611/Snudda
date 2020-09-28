@@ -1,5 +1,23 @@
 TITLE N-type calcium current (Cav2.2)
 
+COMMENT
+
+neuromodulation is added as functions:
+    
+    modulation = 1 + damod*(maxMod-1)
+
+where:
+    
+    damod  [0]: is a switch for turning modulation on or off {1/0}
+    maxMod [1]: is the maximum modulation for this specific channel (read from the param file)
+                e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+
+[] == default values
+{} == ranges
+    
+ENDCOMMENT
+
+
 UNITS {
     (mV) = (millivolt)
     (mA) = (milliamp)
@@ -11,9 +29,11 @@ UNITS {
 }
 
 NEURON {
-    SUFFIX can_ms
+    SUFFIX can_ms_mod
     USEION ca READ cai, cao WRITE ica VALENCE 2
     RANGE pbar, ica
+    RANGE maxMod
+    POINTER damod
 }
 
 PARAMETER {
@@ -21,6 +41,8 @@ PARAMETER {
     a = 0.21
     :q = 1	: room temperature 22-25 C
     q = 3	: body temperature 35 C
+    damod = 0
+    maxMod = 1
 } 
 
 ASSIGNED { 
@@ -40,7 +62,7 @@ STATE { m h }
 
 BREAKPOINT {
     SOLVE states METHOD cnexp
-    ica = pbar*m*m*(h*a+1-a)*ghk(v, cai, cao)
+    ica = pbar*m*m*(h*a+1-a)*ghk(v, cai, cao)*modulation()
 }
 
 INITIAL {
@@ -79,6 +101,14 @@ FUNCTION efun(z) {
         efun = z/(exp(z)-1)
     }
 }
+
+
+FUNCTION modulation() {
+    : returns modulation factor
+    
+    modulation = 1 + damod*(maxMod-1) 
+}
+
 
 COMMENT
 

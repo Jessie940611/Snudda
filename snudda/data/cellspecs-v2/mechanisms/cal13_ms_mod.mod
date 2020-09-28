@@ -29,7 +29,7 @@ UNITS {
 }
 
 NEURON {
-    SUFFIX cal13_ms
+    SUFFIX cal13_ms_mod
     USEION cal READ cali, calo WRITE ical VALENCE 2
     RANGE pbar, ical
     RANGE maxMod

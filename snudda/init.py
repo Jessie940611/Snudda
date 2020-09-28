@@ -1326,6 +1326,7 @@ class SnuddaInit(object):
     # Using start location of neuron  DOI: 10.25378/janelia.5521780 for centre
     # !!! If we use a larger mesh for cortex, we will need to reduce
     #     meshBinWidth to 1e-4 (or risk getting memory error)
+    #Putting SNc in the middle of Striatum
     self.defineStructure(structName="SNc",
                          structMesh="cube",
                          structCentre=np.array([3540e-6,4645e-6,5081e-6]),
@@ -1367,7 +1368,7 @@ class SnuddaInit(object):
                           "soma": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")],
                           "dend": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_car_ms", "damod")]
                             },
-                            "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopamineTransient.json")
+                            "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopaminedelay3.json")
                              }})
     self.addNeuronTarget(neuronName="DopaminergicAxon",
                          targetName="iSPN",
@@ -1385,7 +1386,7 @@ class SnuddaInit(object):
                           "soma": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_can_ms", "damod"),("pbar_car_ms", "damod")],
                           "dend": [("gbar_naf_ms", "damod"), ("gbar_kir_ms", "damod"),("gbar_kas_ms", "damod"),("gbar_kaf_ms", "damod"),("pbar_cal12_ms", "damod"),("pbar_cal13_ms", "damod"),("pbar_car_ms", "damod")]
                             },
-                            "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopamineTransient.json")
+                            "input-generator": ("time-series", self.dataPath + "/neuromodulation/DAmodulation/dopaminedelay1.json")
                              }})
 
   ############################################################################

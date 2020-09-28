@@ -1,0 +1,7 @@
+{
+    "alphaFunction" : {
+	"tstart" : 1000,
+	"tau" : 500
+    },
+    "time-series": "[0 if (ht>1200 and ht<1700) else 0 for ht in np.arange(0,3500,0.025)]"
+}

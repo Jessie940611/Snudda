@@ -1023,7 +1023,6 @@ class SnuddaSimulate(object):
                 for mod_ion_channel in ionchannel_modulation[name_section]:
 
                    for seg in modulated_section:
-                     
 
                      syn = neurotransmitter_release_mod(seg)
 
@@ -1039,11 +1038,11 @@ class SnuddaSimulate(object):
                    
                       
                      conductance_modulated_channel=getattr(seg,mod_ion_channel[0])
-                     #conductance_modulated_channel=0
-
-
-                     modulated_section.insert("_".join(mod_ion_channel[0].split("_")[1:])+"_mod")
+                    
+                    
                        
+                     modulated_section.insert("_".join(mod_ion_channel[0].split("_")[1:])+"_mod")
+                    
                      setattr(seg,mod_ion_channel[0]+'_mod',conductance_modulated_channel)
                      setattr(seg,mod_ion_channel[0],0)
 
@@ -1065,6 +1064,7 @@ class SnuddaSimulate(object):
                        Strpointer(pointermodulation,mod_ion_channel[1] ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'_mod'))
 
                      else:
+                       
                        VirtualAxonVector = gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][1]
                        with open(VirtualAxonVector,"r") as f:
                          VirtualVector = json.load(f)
@@ -1077,9 +1077,11 @@ class SnuddaSimulate(object):
                        self.synapsesDA.append(syn)
                        self.synapsesDA.append(self.transientVector)                
                        self.synapseList.append(syn)
+                       
                        Strpointer(neurotransmitter_concentration,neurotransmitter_pointer ,getattr(seg,"_".join(mod_ion_channel[0].split("_")[1:])+'_mod'))
-                       #import pdb
-                       #pdb.set_trace()
+                       
+                         
+                       
                      
                      
         for gpcr_neurotransmitter, gpcr_receptor in self.gpcrModulation.items():
@@ -1104,7 +1106,8 @@ class SnuddaSimulate(object):
                 if ("time-series" == gpcr_signalling['GPCR_signalling'][0]['GPCR']['input-generator'][0]):
 
                   continue
-                  
+                  import pdb
+                  pdb.set_trace()
                 else:
                   nc = self.pc.gid_connect(pre_cellIDsource, syn_gpcr)
                   nc.weight[0] = 1
@@ -1133,6 +1136,7 @@ class SnuddaSimulate(object):
 
     # You can not locate a point process at
     # position 0 or 1 if it needs an ion
+    
     if(sectionDist == 0.0):
       sectionDist = 0.01
     if(sectionDist == 1.0):
