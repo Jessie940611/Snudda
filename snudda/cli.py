@@ -36,8 +36,16 @@ def snudda_cli():
       parser.add_argument("--synapticModulation",action="store_true",
                           help="Adding modulation on synaptic models")
 
+
       parser.add_argument("--SNc",action="store_true",
                           help="Adding modulation on synaptic models")
+      parser.add_argument("--currentInjection",
+                          help="Current injection")
+
+      parser.add_argument("--voltageClamp",type=float,default=0,
+                          help="Voltage Clamp")
+      
+
       #############################################################
 
 	

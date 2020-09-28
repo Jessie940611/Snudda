@@ -8,8 +8,11 @@ from snudda.load import SnuddaLoad
 import re
 import ntpath
 import time
+import elephant
+import quantities as pq
+import neo
 
-class NetworkPlotTraces():
+class NetworAnalyseTraces():
 
   ############################################################################
   
@@ -145,6 +148,11 @@ class NetworkPlotTraces():
       plt.plot(self.time[timeIdx]-skipTime,
                self.voltage[r][timeIdx] + ofs,
                color=colour)
+      spikes = elephant.spike_train_generation.threshold_detection(neo.AnalogSignal(self.voltage[r][timeIdx] + ofs, units='mV',sampling_period = 0.0005 * pq.ms),threshold = 0 *pq.mV)
+
+      
+      plt.figure(0)
+      plt.scatter(['Control'],[len(spikes)])
       ofs += offset
 
     if(plotCount == 0):
@@ -168,9 +176,8 @@ class NetworkPlotTraces():
     plt.pause(0.001)
 
     #plt.savefig('figures/Network-spikes-' + str(self.ID) + "-colour.pdf")
-   
-    figPath = os.path.dirname(os.path.realpath(self.networkFile)) + "/figs"
-    print(figPath)
+
+    figPath = os.path.dirname(self.networkFile) + "/figs"
     if(not os.path.exists(figPath)):
       os.makedirs(figPath)
  

@@ -10,8 +10,11 @@ from snudda.load import SnuddaLoad
 import re
 import ntpath
 import time
+import neo
+import elephant
+import quantities as pq
 
-class ComparePlotTraces():
+class CompareTraces():
 
   ############################################################################
   
@@ -101,6 +104,9 @@ class ComparePlotTraces():
                  "FSN" : (6./255,31./255,85./255),
                  "ChIN" : [252./255,102./255,0],
                  "LTS" : [150./255,63./255,212./255]}
+    sameCells = dict()
+    
+    
     for ctr,networkInfo in self.networkInfos.items():
       print("Plotting traces: " + str(traceID))
       
@@ -167,13 +173,23 @@ class ComparePlotTraces():
               pdb.set_trace()
           
         
-          plt.plot(self.time[ctr][timeIdx]-skipTime,\
-                   self.voltage[ctr][r][timeIdx] + ofs,\
+          plt.plot(self.time[ctr][timeIdx]-skipTime,
+               self.voltage[ctr][r][timeIdx] + ofs,
                    color=chosenColor[ctr],label=self.labels[ctr])
+          
+          spikes = elephant.spike_train_generation.threshold_detection(neo.AnalogSignal(self.voltage[ctr][r][timeIdx] + ofs, units='mV',sampling_period = 0.0005 * pq.ms),threshold = 0 *pq.mV)
+          if str(r) not in sameCells.keys():
+            sameCells.update({str(r) : [len(spikes)]})
+          else:
+            sameCells[str(r)].append(len(spikes))
           ofs += offset
 
        
+    plt.figure(0)
+    for sameTraces, spikesTrace in sameCells.items():
       
+      plt.plot(self.labels, spikesTrace,'-o')
+            
     plt.xlabel('Time')
     plt.ylabel('Voltage')
 
@@ -226,8 +242,9 @@ class ComparePlotTraces():
       if(nTraces <= 0):
         print("No traces of " + str(neuronType) + " to show")
         return
-     
-      self.plotTraces(offset=offset,traceID=traceID[:nTraces],skipTime=skipTime,title=self.neuronName(neuronType))
+    
+      self.plotTraces(offset=offset,traceID=traceID[:nTraces],skipTime=skipTime,
+                    title=self.neuronName(neuronType))
                                    
     time.sleep(1)
     

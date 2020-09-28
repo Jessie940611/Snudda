@@ -6,7 +6,7 @@
 #
 #
 # This open source software code was developed in part or in whole in
-# the Human Brain Project, funded from the European Union’s Horizon
+# the Human Brain Project, funded from the European Union's Horizon
 # 2020 Framework Programme for Research and Innovation under Specific
 # Grant Agreements No. 720270 and No. 785907 (Human Brain Project SGA1
 # and SGA2).
@@ -116,6 +116,9 @@ class SnuddaSimulate(object):
     self.concAChrecording = {}
 
     self.previousGPCRsection = None
+
+    self.iSaveCurr = []
+    self.iKeyCurr = []
 
     #################################################################
 
@@ -419,6 +422,7 @@ class SnuddaSimulate(object):
         # A real neuron (not a virtual neuron that just provides input)
         parameterID = self.network_info["neurons"][ID]["parameterID"]
         modulationID = self.network_info["neurons"][ID]["modulationID"]
+       
 
         self.neurons[ID] = NeuronModel(param_file=param,
                                        morph_file=morph,
@@ -490,7 +494,7 @@ class SnuddaSimulate(object):
       #self.connectNetworkGapJunctions()
 
       self.connectNetworkGapJunctionsLOCAL()
-
+      self.pc.setup_transfer()
     self.pc.barrier()
 
   ############################################################################
@@ -664,11 +668,11 @@ class SnuddaSimulate(object):
 
     # GJIDoffset = self.network_info["GJIDoffset"]
     GJIDoffset = 100*self.nNeurons
-    GJGIDsrcA = GJIDoffset + 4*GJidxA
-    GJGIDsrcB = GJIDoffset + 4*GJidxB+1
+    GJGIDsrcA = GJIDoffset + 2*GJidxA
+    GJGIDsrcB = GJIDoffset + 2*GJidxB+1
 
-    GJGIDdestA = GJIDoffset + 4*GJidxA + 1#+2 # +1
-    GJGIDdestB = GJIDoffset + 4*GJidxB + 0 #+3 # +0
+    GJGIDdestA = GJIDoffset + 2*GJidxA + 1
+    GJGIDdestB = GJIDoffset + 2*GJidxB + 0
 
     neuronIDA = self.gapJunctions[GJidxA,0]
     neuronIDB = self.gapJunctions[GJidxB,1]
@@ -1145,6 +1149,7 @@ class SnuddaSimulate(object):
 
       parSet = parData[parID]
 
+
       if('GPCR' in parSet):
         
         # The synapse is GPCR modulation and uses addSynapseGPCR
@@ -1152,6 +1157,7 @@ class SnuddaSimulate(object):
         return self.addSynapseGPCR(cellIDsource, dendCompartment, sectionDist,conductance,parameterID,synapseTypeID,axonDist)
       
       else:
+
 
         syn = channelModule(dendCompartment(sectionDist))
         
@@ -1161,12 +1167,21 @@ class SnuddaSimulate(object):
             continue
 
           try:
-            setattr(syn,par,parSet[par])
-
+            # Can be value, or a tuple/list, if so second value is scale factor
+            # for SI -> natural units conversion
+            val = parSet[par]
+          
+            # Do we need to convert from SI to natural units?
+            if(type(val) == tuple or type(val) == list):
+              
+              val = val[0] * val[1]
+             
+            setattr(syn,par,val)
             #evalStr = "syn." + par + "=" + str(parSet[par])
             # self.writeLog("Updating synapse: " + evalStr)
             # !!! Can we avoid an eval here, it is soooo SLOW
             #exec(evalStr)
+            
           except:
             import traceback
             tstr = traceback.format_exc()
@@ -1662,33 +1677,39 @@ class SnuddaSimulate(object):
 
   def addRecordingOfType(self,neuronType,nNeurons=None):
 
-    cellID = self.snuddaLoader.getCellIDofType(neuronType=neuronType,
+     cellID = self.snuddaLoader.getCellIDofType(neuronType=neuronType,
                                                nNeurons=nNeurons)
 
-    self.addRecording(cellID)
+     self.addRecording(cellID)
 
   ############################################################################
 
-  def addVoltageClamp(self,cellID,voltage,duration,res=1e-9,saveIflag=False):
+  def addVoltageClamp(self,cellID,voltage,duration,res=1e-9,saveIflag=False,neuronType=None):
 
+    
+
+    if neuronType is not None:
+      cellIDs = self.snuddaLoader.getCellIDofType(neuronType=neuronType)
+    
     if(type(cellID) not in [list,np.ndarray]):
       cellID = [cellID]
 
     if(type(voltage) not in [list,np.ndarray]):
-      voltage = [voltage for x in cellID]
+      voltage = [voltage for x in cellIDs]
 
     if(type(duration) not in [list,np.ndarray]):
-      duration = [duration for x in cellID]
+      duration = [duration for x in cellIDs]
 
     if(type(res) not in [list,np.ndarray]):
-      res = [res for x in cellID]
+      res = [res for x in cellIDs]
 
     if(saveIflag and (len(self.tSave) == 0 or self.tSave is None)):
       self.tSave = self.sim.neuron.h.Vector()
       self.tSave.record(self.sim.neuron.h._ref_t)
 
-    for cID,v,rs,dur in zip(cellID,voltage,res,duration):
-
+   
+    for cID,v,rs,dur in zip(cellIDs,voltage,res,duration):
+      
       try:
         if(not(cID in self.neuronID)):
           # Not in the list of neuronID on the worker, skip it
@@ -1705,19 +1726,20 @@ class SnuddaSimulate(object):
       s = self.neurons[cID].icell.soma[0]
       vc = neuron.h.SEClamp(s(0.5))
       vc.rs = rs
-      vc.amp1 = v*1e3
+      vc.amp1 = v
       vc.dur1 = dur*1e3
 
       self.writeLog("Resistance: " + str(rs) \
                     + ", voltage: " + str(vc.amp1) + "mV")
 
       self.vClampList.append(vc)
-
+      
       if(saveIflag):
+        
         cur = self.sim.neuron.h.Vector()
         cur.record(vc._ref_i)
-        self.iSave.append(cur)
-        self.iKey.append(cID)
+        self.iSaveCurr.append(cur)
+        self.iKeyCurr.append(cID)
 
   ############################################################################
 
@@ -2031,22 +2053,28 @@ class SnuddaSimulate(object):
 
 ############################################################################
 
-  def addCurrentInjection(self,neuronID,startTime,endTime,amplitude):
+  def addCurrentInjection(self,startTime,endTime,amplitude,neuronType=None,neuronID=None,):
 
-    if neuronID not in self.neuronID:
-      # The neuron ID does not exist on this worker
-      return
+    if neuronID is None:
+      neuronIDs = self.snuddaLoader.getCellIDofType(neuronType=neuronType)
+    else:
+      neuronIDs = [neuronID]
+    for neuronID in neuronIDs:
+      if neuronID not in self.neuronID:
+        # The neuron ID does not exist on this worker
+        return
 
-    assert endTime > startTime, \
-      "addCurrentInection: End time must be after start time"
+      assert endTime > startTime, \
+        "addCurrentInection: End time must be after start time"
 
-    curStim = self.sim.neuron.h.IClamp(0.5,
-                                       sec=self.neurons[neuronID].icell.soma[0])
-    curStim.delay = startTime*1e3
-    curStim.dur = (endTime-startTime)*1e3
-    curStim.amp = amplitude*1e9 # What is units of amp?? nA??
-
-    self.iStim.append(curStim)
+      curStim = self.sim.neuron.h.IClamp(0.5,
+                                         sec=self.neurons[neuronID].icell.soma[0])
+      curStim.delay = startTime*1e3
+      curStim.dur = (endTime-startTime)*1e3
+      #curStim.amp = amplitude*1e9 # What is units of amp?? nA??
+      curStim.amp = amplitude
+      
+      self.iStim.append(curStim)
 
   ############################################################################
 
@@ -2132,6 +2160,8 @@ class SnuddaSimulate(object):
                     'lts':  ['na3_lts','hd_lts'] }
 
     
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transientVector)
     
     for cellType in channelList:
       for seg in sec:
@@ -2145,15 +2175,13 @@ class SnuddaSimulate(object):
             if(len(transientVector) == 0):
               mech.damod = 1
             else:
-              if "spn" in cellType:
                
-                self.transientVector = self.sim.neuron.h.Vector()
-                self.transientVector.from_python(transientVector)
+                
                 self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
                 self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",getattr(seg,mech.name()))
               
                 self.synapsesDA.append(syngpcr)
-                self.synapsesDA.append(self.transientVector)
+    self.synapsesDA.append(self.transientVector)
 
   ############################################################################
 
@@ -2199,7 +2227,7 @@ class SnuddaSimulate(object):
 
   ############################################################################
 
-  def setGlutMod(self, transient=0):
+  def setGlutMod(self, transient=None):
     '''
     set modulation of glutamatergic input using stored data (dict of list of tuple)
     '''  
@@ -2211,7 +2239,9 @@ class SnuddaSimulate(object):
                     'LTS':  [1.0,1.0, 'no source, likely reduced trough presynaptic effect?'],
                     'FSN':  [1.0,1.0, 'no source, likely reduced trough presynaptic effect?']   
                     }
-    
+
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transient)
     for neuronID,synlist in self.externalStim.items():
         # get modulation (based on cell type)
         nname = self.neurons[neuronID].name.split('_')[0]
@@ -2232,21 +2262,20 @@ class SnuddaSimulate(object):
             syn.maxModNMDA  = maxModN
             
             
-            if transient:
+            if transient is not None:
               # play level parameter
-              self.transientVector = self.sim.neuron.h.Vector()
-              self.transientVector.from_python(transient)
+             
               self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
               self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
               self.synapsesDA.append(syngpcr)
-              self.synapsesDA.append(self.transientVector)
+              
                 #transient.play(syn._ref_level, self.sim.neuron.h.dt)
             else:
                 syn.level = 1   # constant, full modulation.
-            
+    self.synapsesDA.append(self.transientVector)
   ###########################################################################
 
-  def setGABAMod(self, transient=0):
+  def setGABAMod(self, transient=None):
     '''
     set modulation of sgabaergic input using stored data (list)
     '''
@@ -2258,7 +2287,8 @@ class SnuddaSimulate(object):
                     'LTS':  [1.0, 'no source, reduced?'],
                     'FSN':  [0.6, '1 source ~ -40%']   
                     }
-    
+    self.transientVector = self.sim.neuron.h.Vector()
+    self.transientVector.from_python(transient)
     
     for syn in self.synapseList:
 
@@ -2274,16 +2304,16 @@ class SnuddaSimulate(object):
           syn.maxMod  = maxMod
 
 
-          if transient:
-            self.transientVector = self.sim.neuron.h.Vector()
-            self.transientVector.from_python(transient)
+          if transient is not None:
+            
             self.transientVector.play(syngpcr._ref_concentration,self.sim.neuron.h.dt)
             self.sim.neuron.h.setpointer(syngpcr._ref_concentration,"damod",syn)
             self.synapsesDA.append(syngpcr)
-            self.synapsesDA.append(self.transientVector)
+            
 
           else:
             syn.level = 1   # constant, full modulation.
+    self.synapsesDA.append(self.transientVector)
   
   
   ###########################################################################
@@ -2428,6 +2458,15 @@ if __name__ == "__main__":
   parser.add_argument("--daTransient","--daTransient",
                       default=None,
                       help="Name of the dopamine transient file (json)")
+
+  parser.add_argument("--synapticModulation",action="store_true",
+                          help="Adding modulation on synaptic models")
+
+  parser.add_argument("--currentInjection",
+                          help="Current injection")
+
+  parser.add_argument("--voltageClamp",type=float,default=0,
+                          help="Voltage Clamp")
   
   parser.add_argument("--disableGJ",action="store_true",
                       help="Disable gap junctions")
@@ -2492,9 +2531,27 @@ if __name__ == "__main__":
                        disableGapJunctions=disableGJ,
                        logFile=logFile,
                        verbose=args.verbose)
+  if(args.currentInjection is not None):
+    currentInjection = eval(args.currentInjection)
+
+    with open(self.networkPath + '/tempHold.json') as json_file:
+      data = json.load(json_file)
+      for cellIDCurr, currentInj in data.items():
+        sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
+
+    with open(self.networkPath +'/temp.json') as json_file:
+      data = json.load(json_file)
+      for cellIDCurr, currentInj in data.items():
+        sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+
+  if (args.voltageClamp != 0):
+    sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+    sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True) 
 
   sim.addExternalInput()
   sim.checkMemoryStatus()
+  sim.addSynapseFinalise()
+  sim.PCbarrier()
 
     
   if(voltFile is not None):
@@ -2507,15 +2564,24 @@ if __name__ == "__main__":
     #sim.addRecordingOfType("ChIN",2)
 
   tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-  import pdb
-  pdb.set_trace()
+ 
   if(args.daTransient is not None):
-    sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim)
+
+      sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
         
   sim.checkMemoryStatus()
   print("Running simulation for " + str(tSim) + " ms.")
   sim.run(tSim) # In milliseconds
 
+  if (args.voltageClamp != 0):
+      holdingCurrentDict = dict()
+      import json
+      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
+        holdingCurrentDict.update({str(cells) : list(current)[-1]})
+      with open(self.networkPath +'/temp.json','w') as CurrHoldFile:
+        json.dump(holdingCurrentDict,CurrHoldFile)
+
+        
   print("Simulation done, saving output")
   if(spikesFile is not None):
     sim.writeSpikes(spikesFile)

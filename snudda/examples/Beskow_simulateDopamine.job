@@ -1,11 +1,11 @@
 #!/bin/bash -l
-#SBATCH -t 2:59:00
-#SBATCH --time-min=0:59:00
+#SBATCH -t 00:19:00
+#SBATCH --time-min=00:19:00
 #SBATCH -J snudda_simulate
-#SBATCH -A 2019-3-644
+#SBATCH -A 2020-5-449
 #SBATCH -o save/output-snudda_simulate.o%j
 #SBATCH -e save/error-snudda_simulate.e%j
-#SBATCH --nodes=7-15
+#SBATCH --nodes=15
 #SBATCH --ntasks-per-node=32
 #SBATCH --mail-type=ALL
 
@@ -44,7 +44,7 @@ export CRAY_ROOTFS=DSL
 
 # Remove "special" old directory
 rm -r x86_64
-nrnivmodl ../data/cellspecs-v2/mechanisms
+nrnivmodl ../data/cellspecs-v2/mechanismsWithModulation/
 
 
 # Split the config file (is aprun blocking?)
@@ -74,8 +74,11 @@ export PATH=/cfs/klemming/nobackup/${USER:0:1}/$USER/local/beskow/bin:$PATH
 export PYTHONPATH=/cfs/klemming/nobackup/${USER:0:1}/$USER/local/beskow/lib/python3.7/site-packages:$PYTHONPATH
 
 
-srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 2.5\ --voltOut $NETWORK_DIR/simulation/volt-NODA.csv\
-     --spikesOut $NETWORK_DIR/simulation/voltNODAspikes.txt\
+srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 3.5 --spikesOut $NETWORK_DIR/simulation/spikes-DA.txt --voltOut $NETWORK_DIR/simulation/volt-DA.csv --daTransient ../data/neuromodulation/DAmodulation/dopamineTransient.json --synapticModulation
+
+srun -n $N_WORKERS $SNUDDA_DIR/examples/x86_64/special -mpi -python $SNUDDA_DIR/simulate.py $NETWORK_INFO_FILE $NETWORK_INPUT_FILE --time 3.5 --spikesOut $NETWORK_DIR/simulation/spikes-NODA.txt --voltOut $NETWORK_DIR/simulation/volt-NODA.csv --daTransient ../data/neuromodulation/DAmodulation/dopamineControl.json --synapticModulation
+
+
 
 # Original version, start neuron from python, does not work on beskow
 #aprun -n  $N_WORKERS /cfs/klemming/nobackup/h/hjorth/ChINopt/model/x86_64/special -mpi -python snudda_simulate.py /cfs/klemming/nobackup/h/hjorth/ChINopt/model/save/save/network-connect-synapse-file-1749867.pickle

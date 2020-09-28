@@ -32,10 +32,11 @@ class NeuronModel(ephys.models.CellModel):
     params=self.define_parameters(param_file,parameterID)
     
     if(modulation_file is not None):
+   
       #Here is where modulation is added to parameters
       modParams = self.define_parameters(modulation_file,modulationID)
       params = params + modParams
-    
+      
     super(NeuronModel, self).__init__(name=cell_name,morph=morph,
                       mechs=mechs,params=params)      
     self.synlist = []
@@ -445,8 +446,11 @@ class NeuronModel(ephys.models.CellModel):
     for mechanism in self.mechanisms:
       mechanism.instantiate(sim=sim, icell=self.icell)
     for param in self.params.values():
-      param.instantiate(sim=sim, icell=self.icell)
-
+     try: 
+       param.instantiate(sim=sim, icell=self.icell)
+     except:
+       import pdb
+       pdb.set_trace()
   ############################################################################
       
   def getReplacementAxon(self):

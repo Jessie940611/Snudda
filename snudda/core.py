@@ -277,7 +277,7 @@ class Snudda(object):
   def setupInput(self,args):
 
     from .input import SnuddaInput
-
+    import json
     print("Setting up inputs, assuming input.json exists")
     logFileName = self.networkPath + "/log/logFile-setup-input.log"
     self.setupLogFile(logFileName) # sets self.logFile
@@ -351,7 +351,7 @@ class Snudda(object):
     start = timeit.default_timer()
     
     from .simulate import SnuddaSimulate
-    
+    import json
     if(args.networkFile):
       networkFile = args.networkFile
     else:
@@ -450,6 +450,25 @@ class Snudda(object):
                          logFile=logFile,
                          verbose=args.verbose)
 
+    if(args.currentInjection is not None):
+      currentInjection = eval(args.currentInjection)
+
+      
+      with open(self.networkPath + '/tempHold.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items():
+        
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
+      with open(self.networkPath +'/temp.json') as json_file:
+        data = json.load(json_file)
+        for cellIDCurr, currentInj in data.items(): 
+          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
+
+    if (args.voltageClamp != 0):
+      
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
+      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True)
+      
     sim.addExternalInput()
     sim.checkMemoryStatus()
     sim.addSynapseFinalise()
@@ -470,6 +489,16 @@ class Snudda(object):
     sim.checkMemoryStatus()  
     print("Running simulation for " + str(tSim) + " ms.")
     sim.run(tSim) # In milliseconds
+
+    if (args.voltageClamp != 0):
+      holdingCurrentDict = dict()
+      import json
+      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
+        holdingCurrentDict.update({str(cells) : list(current)[-1]})
+      with open(self.networkPath +'/temp.json','w') as CurrHoldFile:
+        json.dump(holdingCurrentDict,CurrHoldFile)
+
+        
 
     print("Simulation done, saving output")
     if(spikesFile is not None):

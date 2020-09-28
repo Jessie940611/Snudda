@@ -17,25 +17,7 @@
             "sectionlist": "basal",
             "type": "range",
             "value": 0.8844523788493078
-        },{
-            "dist_type": "uniform",
-            "mech": "kir_ms",
-            "mech_param": "maxModMq",
-            "param_name": "maxModMq_kir_ms",
-            "sectionlist": "somatic",
-            "type": "range",
-            "value": 0.8844523788493078
         },
-        {
-            "dist_type": "uniform",
-            "mech": "kir_ms",
-            "mech_param": "maxModMq",
-            "param_name": "maxModMq_kir_ms",
-            "sectionlist": "basal",
-            "type": "range",
-            "value": 0.8844523788493078
-        },
-
         {
             "dist_type": "uniform",
             "mech": "kas_ms",
@@ -89,23 +71,6 @@
             "sectionlist": "basal",
             "type": "range",
             "value": 0.9260223382701958
-        },{
-            "dist_type": "uniform",
-            "mech": "naf_ms",
-            "mech_param": "maxModMq",
-            "param_name": "maxModMq_naf_ms",
-            "sectionlist": "somatic",
-            "type": "range",
-            "value": 1.1
-        },
-        {
-            "dist_type": "uniform",
-            "mech": "naf_ms",
-            "mech_param": "maxModMq",
-            "param_name": "maxModMq_naf_ms",
-            "sectionlist": "basal",
-            "type": "range",
-            "value": 1.1
         },
         {
             "dist_type": "uniform",
@@ -240,23 +205,6 @@
             "mech": "cal12_ms",
             "mech_param": "maxMod",
             "param_name": "maxMod_cal12_ms",
-            "sectionlist": "basal",
-            "type": "range",
-            "value": 1.1387518948541633
-        },{
-            "dist_type": "uniform",
-            "mech": "cal12_ms",
-            "mech_param": "maxModMq",
-            "param_name": "maxModMq_cal12_ms",
-            "sectionlist": "somatic",
-            "type": "range",
-            "value": 1.1387518948541633
-        },
-        {
-            "dist_type": "uniform",
-            "mech": "cal12_ms",
-            "mech_param": "maxModMq",
-            "param_name": "maxModMq_cal12_ms",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.1387518948541633
