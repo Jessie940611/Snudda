@@ -64,7 +64,7 @@ class SnuddaLoad(object):
           print(str(data["nSynapses"]) + \
                 " synapses, which is a lot, not loading them into memory!")
           loadSynapses = False
-
+          
         # Depricated ??
         if("network/GJIDoffset" in f):
           data["GJIDoffset"] = f["network/GJIDoffset"][()]

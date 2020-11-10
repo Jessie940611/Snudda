@@ -1327,11 +1327,16 @@ class SnuddaInit(object):
     # !!! If we use a larger mesh for cortex, we will need to reduce
     #     meshBinWidth to 1e-4 (or risk getting memory error)
     #Putting SNc in the middle of Striatum
+    SNcVolume = 1e-9*(6000)/600
+    SNcSideLen = SNcVolume ** (1./3)
     self.defineStructure(structName="SNc",
-                         structMesh="cube",
-                         structCentre=np.array([3540e-6,4645e-6,5081e-6]),
-                         sideLen=200e-6,
-                         meshBinWidth=5e-5)
+                         structMesh=self.dataPath + "/mesh/Striatum-mesh.obj",
+                         meshBinWidth=1e-3)
+
+    #self.defineStructure(structName="SNc",
+                         #structMesh=self.dataPath + "/mesh/Striatum-mesh.obj",
+                         #structCentre=np.array([3540e-6,4645e-6,5081e-6]),
+                         #meshBinWidth=5e-5)
 
 
     SNcDir = self.dataPath + "/InputAxons/SNc"

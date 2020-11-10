@@ -1050,7 +1050,8 @@ class SnuddaDetect(object):
           radius = np.arange(0,
                                naNeuron["axonDensityRadius"]+self.voxelSize,
                                self.voxelSize)
-        
+
+          
           density_as_func = eval('lambda r: ' + naNeuron["axonDensity"])
           naPDensity = np.array([density_as_func(r) for r in radius])
 
@@ -1083,7 +1084,7 @@ class SnuddaDetect(object):
           self.noAxonPointsSphere(naNeuron["position"],
                                   naCumDensity,
                                   naPoints)
-
+        
       elif(naNeuron["axonDensityType"] == "xyz"):
 
         axonDensityFunc = eval("lambda x,y,z: " + naNeuron["axonDensity"])

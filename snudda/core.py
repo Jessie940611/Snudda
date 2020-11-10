@@ -94,7 +94,7 @@ class Snudda(object):
                     "GPi" : 0,
                     "SNr" : 0,
                     "STN" : 0,
-                    "SNc" : 3,
+                    "SNc" : 120,
                     "Cortex" : 0,
                     "Thalamus" : 0}
     else:
