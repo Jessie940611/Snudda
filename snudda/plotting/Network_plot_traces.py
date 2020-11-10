@@ -4,7 +4,7 @@
 import sys
 import os
 import numpy as np
-from snudda.load import SnuddaLoad
+from snudda.load import Snuddaload
 import re
 import ntpath
 import time
@@ -32,7 +32,7 @@ class NetworkPlotTraces():
       self.ID = 666
 
     if(self.networkFile is not None):
-      self.networkInfo = SnuddaLoad(self.networkFile)
+      self.networkInfo = Snuddaload(self.networkFile)
       # assert(int(self.ID) == int(self.networkInfo.data["SlurmID"]))
    
     else:
@@ -168,9 +168,14 @@ class NetworkPlotTraces():
     plt.pause(0.001)
 
     #plt.savefig('figures/Network-spikes-' + str(self.ID) + "-colour.pdf")
+<<<<<<< HEAD
    
     figPath = os.path.dirname(os.path.realpath(self.networkFile)) + "/figs"
     print(figPath)
+=======
+    
+    figPath = os.path.dirname(os.path.realpath(self.networkFile)) + "/figs"
+>>>>>>> origin/master
     if(not os.path.exists(figPath)):
       os.makedirs(figPath)
  

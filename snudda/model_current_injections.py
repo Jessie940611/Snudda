@@ -29,7 +29,7 @@
 import os
 
 from snudda.simulate import SnuddaSimulate
-from snudda.load import SnuddaLoad
+from snudda.load import Snuddaload
 from snudda.init import SnuddaInit
 from snudda import Snudda
 
@@ -107,7 +107,7 @@ class SnuddaModelCurrentInjections(object):
       simType = self.simType
             
     configName= simName + "/network-config.json"
-    cnc = SnuddaInit(structDef={},configName=configName,nChannels=1)
+    cnc = SnuddaInit(struct_def={}, config_name=configName, nChannels=1)
 
     # In a 1x1x0.15 mm slice there are 12000 neurons normally
     # We want 10% of MS population only, since those are the ones being
@@ -126,48 +126,48 @@ class SnuddaModelCurrentInjections(object):
       #                   volumeType="slice",sideLen=200e-6)
       #cnc.defineStriatum(nMSD1=20,nMSD2=20,nFS=10,nLTS=0,nChIN=10,
       #                   volumeType="slice",sideLen=200e-6)
-      cnc.defineStriatum(nMSD1=153,nMSD2=153,nFS=10,nLTS=0,nChIN=10,
-                         volumeType="slice",sideLen=500e-6)    
+      cnc.define_striatum(num_dSPN=153, num_iSPN=153, num_FS=10, num_LTS=0, num_ChIN=10,
+                          volume_type="slice", side_len=500e-6)
 
 
 
     if(simType == "Chuhma2011"):
-      cnc.defineStriatum(nMSD1=1140+self.nNrns,
-                         nMSD2=1140+self.nNrns,
-                         nFS=5,
-                         nLTS=0,
-                         nChIN=self.nNrns,
-                         volumeType="slice",
-                         sideLen=1000e-6,
-                         sliceDepth=300e-6) # 400mum, assume 100 mum dead    
+      cnc.define_striatum(num_dSPN=1140 + self.nNrns,
+                          num_iSPN=1140 + self.nNrns,
+                          num_FS=5,
+                          num_LTS=0,
+                          num_ChIN=self.nNrns,
+                          volume_type="slice",
+                          side_len=1000e-6,
+                          slice_depth=300e-6) # 400mum, assume 100 mum dead
 
     elif(simType == "Straub2016FS"):
       # nFS must be correct density, but readout neurons can be any density
-      cnc.defineStriatum(nMSD1=self.nNrns,
-                         nMSD2=self.nNrns,
-                         nFS=182, nLTS=0,
-                         nChIN=self.nNrns,
-                         volumeType="slice",
-                         sideLen=1000e-6,
-                         sliceDepth=175e-6)  #275e-6 m slice, assume 100e-6 dead
+      cnc.define_striatum(num_dSPN=self.nNrns,
+                          num_iSPN=self.nNrns,
+                          num_FS=182, num_LTS=0,
+                          num_ChIN=self.nNrns,
+                          volume_type="slice",
+                          side_len=1000e-6,
+                          slice_depth=175e-6)  #275e-6 m slice, assume 100e-6 dead
 
     elif(simType == "Straub2016LTS"):
-      cnc.defineStriatum(nMSD1=self.nNrns,
-                         nMSD2=self.nNrns,
-                         nFS=0,nLTS=98,
-                         nChIN=self.nNrns,
-                         volumeType="slice",
-                         sideLen=1000e-6,
-                         sliceDepth=175e-6)    
+      cnc.define_striatum(num_dSPN=self.nNrns,
+                          num_iSPN=self.nNrns,
+                          num_FS=0, num_LTS=98,
+                          num_ChIN=self.nNrns,
+                          volume_type="slice",
+                          side_len=1000e-6,
+                          slice_depth=175e-6)
     elif(simType == "Szydlowski2013"):
-      cnc.defineStriatum(nMSD1=0,
-                         nMSD2=0,
-                         nFS=156,
-                         nLTS=self.nNrns,
-                         nChIN=0,
-                         volumeType="slice",
-                         sideLen=1000e-6,
-                         sliceDepth=150e-6)          
+      cnc.define_striatum(num_dSPN=0,
+                          num_iSPN=0,
+                          num_FS=156,
+                          num_LTS=self.nNrns,
+                          num_ChIN=0,
+                          volume_type="slice",
+                          side_len=1000e-6,
+                          slice_depth=150e-6)
     else:
       print("setup : Unkown simType: " + str(simType))
       exit(-1)
@@ -177,7 +177,7 @@ class SnuddaModelCurrentInjections(object):
     if not os.path.exists(dirName):
       os.makedirs(dirName)
 
-    cnc.writeJSON(configName)
+    cnc.write_json(configName)
 
   ############################################################################
 
@@ -216,10 +216,10 @@ class SnuddaModelCurrentInjections(object):
 
       print("Using network file: " + str(self.networkFile))
       
-      self.snuddaSim = SnuddaSimulate(networkFile=self.networkFile,
-                                      inputFile=None,
-                                      logFile=logFile,
-                                      disableGapJunctions=True)
+      self.snuddaSim = SnuddaSimulate(network_file=self.networkFile,
+                                      input_file=None,
+                                      log_file=logFile,
+                                      disable_gap_junctions=True)
     
 
     # Get neuronID of neurons that will get artificial stimulation
@@ -264,10 +264,10 @@ class SnuddaModelCurrentInjections(object):
       logFile = simName + "/log/simlog.txt"
       self.networkFile = simName + "/network-pruned-synapses.hdf5"
       
-      self.snuddaSim = SnuddaSimulate(networkFile=self.networkFile,
-                                      inputFile=None,
-                                      logFile=logFile,
-                                      disableGapJunctions=True)
+      self.snuddaSim = SnuddaSimulate(network_file=self.networkFile,
+                                      input_file=None,
+                                      log_file=logFile,
+                                      disable_gap_junctions=True)
     
     # Get neuronID of neurons that will get artificial stimulation
     if(simType == "Straub2016FS"):
@@ -298,10 +298,10 @@ class SnuddaModelCurrentInjections(object):
       logFile = simName + "/log/simlog.txt"
       self.networkFile = simName + "/network-pruned-synapses.hdf5"
       
-      self.snuddaSim = SnuddaSimulate(networkFile=self.networkFile,
-                                      inputFile=None,
-                                      logFile=logFile,
-                                      disableGapJunctions=True)
+      self.snuddaSim = SnuddaSimulate(network_file=self.networkFile,
+                                      input_file=None,
+                                      log_file=logFile,
+                                      disable_gap_junctions=True)
     
     stimID = [x["neuronID"] \
               for x in self.snuddaSim.network_info["neurons"] \
@@ -322,28 +322,28 @@ class SnuddaModelCurrentInjections(object):
       logFile = simName + "/log/simlog.txt"
       self.networkFile = simName + "/network-pruned-synapses.hdf5"
           
-      self.snuddaSim = SnuddaSimulate(networkFile=self.networkFile,
-                                      inputFile=None,
-                                      logFile=logFile,
-                                      disableGapJunctions=True)
+      self.snuddaSim = SnuddaSimulate(network_file=self.networkFile,
+                                      input_file=None,
+                                      log_file=logFile,
+                                      disable_gap_junctions=True)
     
     # Set up stimulation protocol
     for nID in stimID:
-      self.snuddaSim.addCurrentInjection(neuronID=nID,
-                                         startTime=self.tInj,
-                                         endTime=self.tInj+self.injDuration,
-                                         amplitude=self.curInj)
+      self.snuddaSim.add_current_injection(neuron_id=nID,
+                                           start_time=self.tInj,
+                                           end_time=self.tInj + self.injDuration,
+                                           amplitude=self.curInj)
 
     # Add recordings
-    self.snuddaSim.addVoltageClamp(cellID = measureID,
-                                   voltage = self.holdV,
-                                   duration=self.simEnd,
-                                   saveIflag=True)
+    self.snuddaSim.add_voltage_clamp(cell_id= measureID,
+                                     voltage = self.holdV,
+                                     duration=self.simEnd,
+                                     save_i_flag=True)
     
     # Also add voltage recording for debugging reasons
     saveVoltage = True # False #True
     if(saveVoltage):
-      self.snuddaSim.addRecording(cellID=stimID)
+      self.snuddaSim.add_recording(cell_id=stimID)
 
     self.setGABArev(self.GABArev)
     
@@ -352,13 +352,13 @@ class SnuddaModelCurrentInjections(object):
     self.currentFile = simName + "/" + simType \
       + "-network-stimulation-current.txt"
     
-    self.snuddaSim.writeCurrent(self.currentFile)
+    self.snuddaSim.write_current(self.currentFile)
 
     if(saveVoltage):
       voltageFile = simName  + "/" + simType \
         + "-network-stimulation-voltage.txt"
       
-      self.snuddaSim.writeVoltage(voltageFile)
+      self.snuddaSim.write_voltage(voltageFile)
       
   ############################################################################
 
@@ -378,9 +378,9 @@ class SnuddaModelCurrentInjections(object):
     args = FakeArgs()
     
     
-    sn.placeNeurons(args)
-    sn.touchDetection(args)
-    sn.pruneSynapses(args)
+    sn.place_neurons(args)
+    sn.touch_detection(args)
+    sn.prune_synapses(args)
 
   ############################################################################
 
@@ -497,7 +497,7 @@ class SnuddaModelCurrentInjections(object):
 
     # Read the network info
     networkFile = simName + "/network-pruned-synapses.hdf5"    
-    self.snuddaLoad = SnuddaLoad(networkFile)
+    self.snuddaLoad = Snuddaload(networkFile)
     self.data = self.snuddaLoad.data
     
     recordedNeurons = [x for x in current]
@@ -630,7 +630,7 @@ class SnuddaModelCurrentInjections(object):
 
     print("Setting GABA reversal potential to " + str(vRevCl*1e3) + " mV")
     
-    for s in self.snuddaSim.synapseList:
+    for s in self.snuddaSim.synapse_list:
       assert s.e == -65, "It should be GABA synapses only that we modify!"
       s.e = vRevCl * 1e3
     

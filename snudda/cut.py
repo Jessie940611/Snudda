@@ -11,7 +11,7 @@
 import os
 import h5py
 import numpy as np
-from .load import SnuddaLoad
+from .load import Snuddaload
 import time
 
 
@@ -55,7 +55,7 @@ class SnuddaCut(object):
     
     if(False):
       self.inFile.close()
-      self.outFile.close()
+      self.out_file.close()
 
     
     

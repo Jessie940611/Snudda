@@ -51,7 +51,7 @@ import os
 import glob
 import numpy as np
 from snudda.simulate import SnuddaSimulate
-from snudda.load import SnuddaLoad
+from snudda.load import Snuddaload
 import matplotlib
 import matplotlib.pyplot as plt
 import neuron
@@ -121,16 +121,16 @@ class SnuddaCalibrateSynapses(object):
     from .init import SnuddaInit
 
     configName= simName + "/network-config.json"
-    cnc = SnuddaInit(structDef={},configName=configName,nChannels=1)
-    cnc.defineStriatum(nMSD1=nMSD1,nMSD2=nMSD2,nFS=nFS,nLTS=nLTS,nChIN=nChIN,
-                       volumeType="slice",sideLen=200e-6,sliceDepth=150e-6)
+    cnc = SnuddaInit(struct_def={}, config_name=configName, nChannels=1)
+    cnc.define_striatum(num_dSPN=nMSD1, num_iSPN=nMSD2, num_FS=nFS, num_LTS=nLTS, num_ChIN=nChIN,
+                        volume_type="slice", side_len=200e-6, slice_depth=150e-6)
 
     dirName = os.path.dirname(configName)
   
     if not os.path.exists(dirName):
       os.makedirs(dirName)
 
-    cnc.writeJSON(configName)
+    cnc.write_json(configName)
 
     
     print("\n\npython3 snudda.py place " + str(simName))
@@ -200,7 +200,7 @@ class SnuddaCalibrateSynapses(object):
 
     print("Setting GABA reversal potential to " + str(vRevCl*1e3) + " mV")
     
-    for s in self.snuddaSim.synapseList:
+    for s in self.snuddaSim.synapse_list:
       assert s.e == -65, "It should be GABA synapses only that we modify!"
       s.e = vRevCl * 1e3
           
@@ -208,10 +208,10 @@ class SnuddaCalibrateSynapses(object):
   
   def runSim(self,GABArev):
     
-    self.snuddaSim = SnuddaSimulate(networkFile=self.networkFile,
-                                    inputFile=None,
-                                    logFile=self.logFile,
-                                    disableGapJunctions=True)
+    self.snuddaSim = SnuddaSimulate(network_file=self.networkFile,
+                                    input_file=None,
+                                    log_file=self.logFile,
+                                    disable_gap_junctions=True)
 
     
     # A current pulse to all pre synaptic neurons, one at a time
@@ -235,29 +235,29 @@ class SnuddaCalibrateSynapses(object):
     # Add current injections defined in init
     for (nid,t) in self.injInfo:
       print("Current injection to " + str(nid) + " at " + str(t) + " s")
-      self.snuddaSim.addCurrentInjection(neuronID=nid,
-                                         startTime=t,
-                                         endTime=t+self.injDuration,
-                                         amplitude=self.curInj)
+      self.snuddaSim.add_current_injection(neuron_id=nid,
+                                           start_time=t,
+                                           end_time=t + self.injDuration,
+                                           amplitude=self.curInj)
 
     # !!! We could maybe update code so that for postType == "ALL" we
     # record voltage from all neurons
 
     if(self.postType == "ALL"):
-      self.snuddaSim.addRecording()
+      self.snuddaSim.add_recording()
     else:
       # Record from all the potential post synaptic neurons
-      self.snuddaSim.addRecordingOfType(self.postType)
+      self.snuddaSim.add_recording_of_type(self.postType)
 
       # Also save the presynaptic traces for debugging, to make sure they spike
-      self.snuddaSim.addRecordingOfType(self.preType)
+      self.snuddaSim.add_recording_of_type(self.preType)
 
     
     # Run simulation
-    self.snuddaSim.run(simEnd*1e3,holdV=self.holdV)
+    self.snuddaSim.run(simEnd * 1e3, hold_v=self.holdV)
     
     # Write results to disk
-    self.snuddaSim.writeVoltage(self.voltFile)
+    self.snuddaSim.write_voltage(self.voltFile)
 
 
   ############################################################################
@@ -305,7 +305,7 @@ class SnuddaCalibrateSynapses(object):
       maxDist = self.maxDist
     
     # Read the data
-    self.snuddaLoad = SnuddaLoad(self.networkFile)
+    self.snuddaLoad = Snuddaload(self.networkFile)
     self.data = self.snuddaLoad.data
 
     time,voltage = self.readVoltage(self.voltFile) # sets self.voltage
@@ -539,7 +539,7 @@ if __name__ == "__main__":
     GABArev = -39e-3
     
   else:
-    print("Unknown expType = " + str(expType))
+    print("Unknown expType = " + str(args.expType))
     exit(-1)
 
   scs = SnuddaCalibrateSynapses(networkFile=args.networkFile,

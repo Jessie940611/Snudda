@@ -1,7 +1,7 @@
 export IPYTHONDIR="`pwd`/.ipython"
 export IPYTHON_PROFILE=Snudda_LOCAL
 
-ipcluster start -n 6 --profile=$IPYTHON_PROFILE --ip=127.0.0.1&
+ipcluster start -n 4 --profile=$IPYTHON_PROFILE --ip=127.0.0.1&
 sleep 20
 
 # simName=networks/article100000-v1
@@ -19,14 +19,9 @@ sleep 20
 simName=networks/tinySim10
 #simName=networks/Article-nojitter
 
-if [ -d "$simName" ]; then
-  echo "Directory $simName already exists!!"
-  exit 666    
-fi
-
 #snudda init $simName --size 1760000
 #snudda init $simName --size 100000
-snudda init $simName --size 100
+snudda init $simName --size 1000 --overwrite
 
 snudda place $simName 
 #snudda detect $simName --hvsize 50 --volumeID Striatum
@@ -34,7 +29,7 @@ snudda detect $simName --volumeID Striatum
 snudda prune $simName
 
 # Copy over template input
-cp -a data/config/input-tinytest-v6.json $simName/input.json
+cp -a data/config/input-tinytest-v8.json $simName/input.json
 echo "Make sure the input config file was found, otherwise provide your own"
 
 # TODO, maybe use to get snudda base install dir:
