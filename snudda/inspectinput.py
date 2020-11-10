@@ -1,6 +1,6 @@
 import os
 import h5py
-from snudda.load import SnuddaLoad
+from snudda.load import Snuddaload
 
 class InspectInput(object):
 
@@ -10,7 +10,7 @@ class InspectInput(object):
     self.inputFile = inputFile
 
     # We just need this to identify which neuron is which
-    self.network = SnuddaLoad(self.networkFile,loadSynapses=False)
+    self.network = Snuddaload(self.networkFile, loadSynapses=False)
 
     self.inputData = h5py.File(inputFile,'r')
 
@@ -37,7 +37,7 @@ class InspectInput(object):
 
     print(f"Counting inputs for {neuronType}")
     
-    cellID = self.network.getCellIDofType(neuronType)
+    cellID = self.network.get_cell_id_of_type(neuronType)
     cellIDstr = [str(c) for c in cellID]
     
     inputCount = dict()
