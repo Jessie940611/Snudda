@@ -363,14 +363,6 @@ class Snudda(object):
             # !!! problem with paths, testing to create mechanism dir in current dir
             mech_dir = "mechanisms"
 
-<<<<<<< HEAD
-    from .input import SnuddaInput
-    import json
-    print("Setting up inputs, assuming input.json exists")
-    logFileName = self.networkPath + "/log/logFile-setup-input.log"
-    self.setupLogFile(logFileName) # sets self.logFile
-    self.setupParallel() # sets self.dView and self.lbView
-=======
             if not os.path.exists(mech_dir):
                 m_dir = os.path.dirname(__file__) + "/data/cellspecs-v2/mechanisms"
                 os.symlink(m_dir, mech_dir)
@@ -379,7 +371,6 @@ class Snudda(object):
 
         # !!! These are saved in current directory x86_64
         # --- problem since nrnivmodl seems to want a relative path...
->>>>>>> origin/master
 
         make_mods_str = "nrnivmodl " + mech_dir
         if not os.path.exists('x86_64'):
@@ -430,195 +421,8 @@ class Snudda(object):
             print("Creating directory " + log_dir)
             os.makedirs(log_dir, exist_ok=True)
 
-<<<<<<< HEAD
-    if(args.networkFile):
-      networkFile = args.networkFile
-    else:
-      networkFile = self.networkPath \
-        + "/network-pruned-synapses.hdf5"
-
-    if(args.inputFile):
-      inputFile = args.inputFile
-    else:
-      inputFile = self.networkPath + "/input-spikes.hdf5"
-
-
-    outDir = self.networkPath + "/SONATA/"
-
-    cn = ConvertNetwork(networkFile=networkFile,
-                        inputFile=inputFile,
-                        outDir=outDir)
-
-  ############################################################################
-
-  def simulate(self,args):
-
-    start = timeit.default_timer()
-    
-    from .simulate import SnuddaSimulate
-    import json
-    if(args.networkFile):
-      networkFile = args.networkFile
-    else:
-      networkFile = self.networkPath \
-        + "/network-pruned-synapses.hdf5"
-
-    if(args.inputFile):
-      inputFile = args.inputFile
-    else:
-      inputFile = self.networkPath + "/input-spikes.hdf5"
-
-    self.makeDirIfNeeded(self.networkPath + "/simulation")
-    
-    print("Using input file " + inputFile)
-
-    #nWorkers = args.ncores
-    #print("Using " + str(nWorkers) + " workers for neuron")
-
-    # Problems with nested symbolic links when the second one is a relative
-    # path going beyond the original base path
-    if(args.mechDir is None):
-      mechDir = os.path.dirname(networkFile) + "/mechanisms"
-
-      # !!! problem with paths, testing to create mechanism dir in current dir
-      mechDir = "mechanisms"
-      
-      if(not os.path.exists(mechDir)):
-        mDir = os.path.dirname(__file__) + "/data/cellspecs/mechanisms"
-        os.symlink(mDir,mechDir)
-    else:
-      mechDir = args.mechDir
-
-    # !!! These are saved in current directory x86_64
-    # --- problem since nrnivmodl seems to want a relative path...
-
-    makeModsStr = "nrnivmodl " +  mechDir
-    if(not os.path.exists('x86_64')):
-      print("Please first run: " + makeModsStr)
-      exit(-1)
-      # I was having problems when running nrnivmodl in the script, but
-      # running it manually in bash works... WHY?!!
-      
-    # os.system(makeModsStr)
-
-    saveDir = os.path.dirname(networkFile) + "/simulation/"
-
-    if(not os.path.exists(saveDir)):
-      print("Creating directory " + saveDir)
-      os.makedirs(saveDir, exist_ok=True)
-
-    # Get the SlurmID, used in default file names
-    SlurmID = os.getenv('SLURM_JOBID')
-  
-    if(SlurmID is None):
-      SlurmID = str(666)
-
-
-    print("args: " + str(args))
-    
-    if(args.voltOut is not None):
-      # Save neuron voltage
-      if(args.voltOut == "default"):
-        voltFile = saveDir + 'network-voltage-' + SlurmID + '.csv'
-      else:
-        voltFile = args.voltOut
-    else:
-      voltFile = None
-	
-    
-    if(args.spikesOut is None or args.spikesOut == "default"):
-      spikesFile = saveDir + 'network-output-spikes-' + SlurmID + '.txt'
-    else:
-      spikesFile = args.spikesOut
-      
-    disableGJ = args.disableGJ
-    if(disableGJ):
-      print("!!! WE HAVE DISABLED GAP JUNCTIONS !!!")
-      
-    logFile = os.path.dirname(networkFile) \
-      + "/log/network-simulation-log.txt"
-
-    logDir = os.path.dirname(networkFile) + "/log"
-    if(not os.path.exists(logDir)):
-      print("Creating directory " + logDir)
-      os.makedirs(logDir, exist_ok=True)
-    
-    
-    from mpi4py import MPI # This must be imported before neuron, to run parallel
-    from neuron import h #, gui
-      
-    pc = h.ParallelContext()
-    
-    sim = SnuddaSimulate(networkFile=networkFile,
-                         inputFile=inputFile,
-                         disableGapJunctions=disableGJ,
-                         logFile=logFile,
-                         verbose=args.verbose)
-
-    if(args.currentInjection is not None):
-      currentInjection = eval(args.currentInjection)
-
-      
-      with open(self.networkPath + '/tempHold.json') as json_file:
-        data = json.load(json_file)
-        for cellIDCurr, currentInj in data.items():
-        
-          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0, endTime = args.time, amplitude = currentInj)
-      with open(self.networkPath +'/temp.json') as json_file:
-        data = json.load(json_file)
-        for cellIDCurr, currentInj in data.items(): 
-          sim.addCurrentInjection(neuronID=int(cellIDCurr),startTime = 0.2, endTime = args.time, amplitude = currentInj)
-
-    if (args.voltageClamp != 0):
-      
-      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'dSPN', cellID = None, saveIflag = True)
-      sim.addVoltageClamp(voltage = args.voltageClamp, duration = args.time, neuronType = 'iSPN', cellID = None, saveIflag = True)
-      
-    sim.addExternalInput()
-    sim.checkMemoryStatus()
-    sim.addSynapseFinalise()
-    sim.PCbarrier()
-
-    
-    
-    if(voltFile is not None):
-      sim.addRecording(sideLen=None) # Side len let you record from a subset
-      #sim.addRecordingOfType("dSPN",5) # Side len let you record from a subset
-
-    tSim = args.time*1000 # Convert from s to ms for Neuron simulator
-  
-    if(args.daTransient is not None):
-
-      sim.applyDopamine(transientVector=args.daTransient,transientType="time-series",simDur=tSim,synapticModulation= args.synapticModulation)
-
-    sim.checkMemoryStatus()  
-    print("Running simulation for " + str(tSim) + " ms.")
-    sim.run(tSim) # In milliseconds
-
-    if (args.voltageClamp != 0):
-      holdingCurrentDict = dict()
-      import json
-      for cells,current in zip(sim.iKeyCurr,sim.iSaveCurr):
-        holdingCurrentDict.update({str(cells) : list(current)[-1]})
-      with open(self.networkPath +'/temp.json','w') as CurrHoldFile:
-        json.dump(holdingCurrentDict,CurrHoldFile)
-
-        
-
-    print("Simulation done, saving output")
-    if(spikesFile is not None):
-      sim.writeSpikes(spikesFile)
-    
-    if(voltFile is not None):
-      sim.writeVoltage(voltFile)
-
-    stop = timeit.default_timer()
-    if(sim.pc.id() == 0):
-      print("Program run time: " + str(stop - start ))
-=======
         from mpi4py import MPI  # This must be imported before neuron, to run parallel
         from neuron import h  # , gui
->>>>>>> origin/master
 
         pc = h.ParallelContext()
 

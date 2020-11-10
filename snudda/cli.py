@@ -5,89 +5,6 @@ import os
 
 
 def snudda_cli():
-<<<<<<< HEAD
-      parser = ArgumentParser(description="Microcircuit generation\n\n" + snudda_help_text(), formatter_class=RawTextHelpFormatter)
-      parser.add_argument("action", choices=["init", "create", "place","detect",
-                                             "prune","input","export","analyse","convert","simulate","help"],
-                          help="Action to do")
-      parser.add_argument("path", help="Storage path for network files")
-      parser.add_argument("--size",type=int,help="Number of neurons",
-                          default=None)
-      parser.add_argument("-cont", "--cont",help="Continue partial touch detection",
-                          action="store_true")
-      parser.add_argument("-hvsize", "--hvsize",help="Hyper voxel size, 100 good value for full striatum, for small runs, use smaller values to more evenly distribute the workload between workers")
-      parser.add_argument("--volumeID", help="Specify volumeID for detection step")
-      parser.add_argument("--mergeonly","--onlymerge", help="Only merge synapses in hyper voxels into a big file. Pre-processing to pruning, normally run before. This allows the user to run this separately.",action="store_true")
-      parser.add_argument("--h5legacy",help="Use legacy hdf5 support",action="store_true")
-      parser.add_argument("--profile",help="Run python cProfile",action="store_true")
-      parser.add_argument("--nchannels",type=int,help="Number of functional channels in the structure, affects connectivity and input correlation",default=1)
-      parser.add_argument("--input",help="Input json config file (for input setup)")
-      parser.add_argument("--inputFile",help="Input hdf5 file (for simulation)")
-      parser.add_argument("--networkFile", help="Network file, if not network-pruned-synapses.hdf5")
-      parser.add_argument("--time",type=float,default=2.5,
-                          help="Duration of simulation in seconds")
-      parser.add_argument("--voltOut","--voltout",
-                          default=None,
-                          help="Name of voltage output file (csv)")
-
-      ################ Dopamine Modulation ########################
-      parser.add_argument("--daTransient","--daTransient",
-                      default=None,
-                      help="Name of the dopamine transient file (json)")
-  
-      parser.add_argument("--synapticModulation",action="store_true",
-                          help="Adding modulation on synaptic models")
-
-      parser.add_argument("--currentInjection",
-                          help="Current injection")
-
-      parser.add_argument("--voltageClamp",type=float,default=0,
-                          help="Voltage Clamp")
-      
-      #############################################################
-
-	
-      parser.add_argument("--spikesOut","--spikesout",
-                          default=None,
-                          help="Name of spike output file (csv)")
-      parser.add_argument("--disableGJ",action="store_true",
-                          help="Disable gap junctions")
-     
-      #parser.add_argument("--ncores", default=12,
-      #                    help="Number of cores used for simulation")
-      parser.add_argument("--overwrite",
-                          help="Skips check if network directory already exists",
-                          action="store_true")
-      parser.add_argument("--mechDir", help="mechanism directory if not default",
-                          default=None)
-      parser.add_argument("--verbose",action="store_true")
-  
-      args = parser.parse_args()
-
-      if(args.path is not None):
-        if(args.path[-1] == "/"):
-          args.path = args.path[:-1]
-
-      snudda = Snudda(args.path)
-
-      actions = { "init" : snudda.initConfig,
-                  "place" : snudda.placeNeurons,
-                  "detect" : snudda.touchDetection,
-                  "prune" : snudda.pruneSynapses,
-                  "input" : snudda.setupInput,
-                  "export" : snudda.exportToSONATA,
-                  "convert" : snudda.exportToSONATA,
-                  "analyse" : snudda.analyse,
-                  "simulate" : snudda.simulate,
-                  "help" : snudda.helpInfo,
-                  "create" : create_project}
-
-
-
-      if(args.profile):
-        profFile = "profile-"+args.action+".prof"
-        print("Saving profile data to: " + profFile)
-=======
 
     parser = ArgumentParser(description="Microcircuit generation\n\n" + snudda_help_text(),
                             formatter_class=RawTextHelpFormatter)
@@ -159,7 +76,6 @@ def snudda_cli():
     if args.profile:
         prof_file = "profile-" + args.action + ".prof"
         print("Saving profile data to: " + prof_file)
->>>>>>> origin/master
         import cProfile
         cProfile.run("actions[args.action](args)", prof_file)
 
