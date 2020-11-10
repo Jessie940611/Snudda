@@ -1,7 +1,0 @@
-{
-    "alphaFunction" : {
-	"tstart" : 1000,
-	"tau" : 500
-    },
-    "time-series" : "np.zeros(int(5000/0.025))"
-}

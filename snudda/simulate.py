@@ -24,7 +24,7 @@ import neuron
 import h5py
 import json
 import timeit
-
+import modulation
 import bluepyopt.ephys as ephys
 from snudda.Neuron_model_extended import NeuronModel
 # from Network_place_neurons import NetworkPlaceNeurons
@@ -52,7 +52,7 @@ class SnuddaSimulate(object):
     def __init__(self, network_file, input_file=None,
                  verbose=True, log_file=None,
                  disable_gap_junctions=True,
-                 simulation_config=None):
+                 simulation_config=None, neuromodulation = False):
 
         self.verbose = verbose
         self.log_file = log_file
@@ -150,6 +150,10 @@ class SnuddaSimulate(object):
 
         #    for i in range(0,self.nNeurons):
         #      print("Node : " + str(int(self.pc.id())) + " cell " + str(i) + " status " + str(self.pc.gid_exists(i)))
+
+        if neuromodulation:
+            self.apply_neuromodulation()
+
 
         self.connect_network()
         self.check_memory_status()
@@ -845,6 +849,10 @@ class SnuddaSimulate(object):
                     # expdata is not a parameter, and cond we take from synapse matrix
                     continue
 
+                elif par == 'gpcr':
+                     syn = self.add_synapse_gpcr(syn,par_set['gpcr'],cell_id_source, dend_compartment, section_dist, conductance,
+                    parameter_id, synapse_type_id, axon_dist=None)
+
                 try:
                     # Can be value, or a tuple/list, if so second value is scale factor
                     # for SI -> natural units conversion
@@ -1162,6 +1170,7 @@ class SnuddaSimulate(object):
 
                     # Need to save references, otherwise they will be freed
                     # So sorry, but that is how neuron is
+
                     self.external_stim[neuron_id].append((v, vs, nc, syn, spikes))
 
                     # ps = h.PatternStim()
@@ -1734,6 +1743,157 @@ class SnuddaSimulate(object):
 
     ############################################################################
 
+    def apply_neuromodulation(self):
+
+        self.neuromodulation = dict()
+
+        from pathlib import Path
+
+        define_neuro_modulation = json.load(open(Path(os.path.dirname(__file__)) / 'data/neuromodulation/modulation.json', 'r'))
+
+        for type_modulation, description_neuromodulation in define_neuro_modulation.items():
+
+            modulation_vector = self.neuron_vector(modulation.getattr(description_neuromodulation['method'])(description_neuromodulation['parameters']))
+
+            self.neuromodulation.update({
+                type_modulation :\
+                    {
+                        'modulation_vector': modulation_vector,
+                        'ion_channels' : description_neuromodulation['ion_channels']
+                        'receptors' : description_neuromodulation['receptors'],
+                        'presynaptic' : description_neuromodulation['presynaptic']
+                    }
+            })
+
+
+
+    def neuromodulation_network_wide(self):
+
+        for type_modulation, modulation_items in self.neuromodulation:
+
+            if 'ion_channels' in modulation_items.keys():
+                self.modulate_ion_channels(modulation = type_modulation, ion_channels = modulation_items['ion_channels'])
+            elif 'receptors' in modulation_items.keys():
+                self.modulate_synapses(modulation = type_modulation, position ='postsynaptic', synapses = modulation_items['receptors'], extrinsic=True, intrinsic=True)
+            elif 'presynaptic' in modulation_items.keys():
+                self.modulate_synapses(modulation = type_modulation, position ='presynaptic',synapses = modulation_items['presynaptic'], extrinsic=True, intrinsic=True)
+
+
+    def modulate_ion_channels(self,*kwargs):
+
+        cells = dict((k, self.neurons[k]) \
+                     for k in cellID if not self.isVirtualNeuron[k])
+
+        modulation_key = self.neuromodulation['defintion'][kwargs.__getitem__('modulation')]['mod']
+        modulation_defined = kwargs.__getitem__('ion_channels')
+
+        for c in cells.values():
+            cell_modulation = modulation_defined[c.name]
+            for part, ion_channels in cell_modulation.items():
+            for comp in getattr(c.icell,part):
+                for sec in comp:
+                    for seg in sec:
+                        for mech in seg:
+                            if mech.name() in ion_channels:
+                                index = np.where(ion_channels == mech.name)
+                                setattr(mech,modulation_key,1)
+                                self.neuromodulation[kwargs.__getitem__('modulation')]\
+                                    ['vector'].play(getattr(mech,\
+                                    "_ref_level"+modulation_key.replace("mod","")),\
+                                    h.dt)
+
+
+    def modulate_synapses(self,*kwargs):
+
+        modulation = kwargs.__getitem__('modulation')
+        modulation_key = self.neuromodulation['definition'][kwargs.__getitem__('modulation')]['mod']
+        if extrinsic:
+
+            for neuronID, synlist in self.externalStim.items():
+                for syn in synlist:
+                    if syn.cell in [kwargs.__getitem__('synapses')].keys() and syn.type in [kwargs.__getitem__('synapses')][syn.cell]:
+
+                        syn = syntuple[3]
+                        self.modulate_pre_or_post_synaptically(syn= syn,position=position,modulation=modulation,
+                                                           modulation_key=modulation_key)
+
+        elif intrinsic:
+            for syn in self.synapseList:
+                if syn.cell in [kwargs.__getitem__('synapses')].keys() and syn.type in [kwargs.__getitem__('synapses')][
+                    syn.cell]:
+                    self.modulate_pre_or_post_synaptically(syn=syn, position=position, modulation=modulation,
+                                                       modulation_key=modulation_key)
+
+
+
+    def modulate_pre_or_post_synaptically(self,syn,position,modulation,modulation_key):
+
+        setattr(syn, modulation_key, 1)
+
+        if 'postsynaptic' in position:
+            self.neuromodulation[modulation] \
+                ['vector'].play(getattr(syn, \
+                                        "_ref_level" + modulation_key.replace("mod", "")), \
+                                h.dt)
+        elif 'presynaptic' in position:
+
+            self.neuromodulation[modulation] \
+                ['vector'].play(getattr(syn, \
+                                        "_ref_failRate" + modulation_key.replace("mod", "")), \
+                                h.dt)
+
+    ############################################################################
+
+    def neuron_vector(self,vector):
+
+        return sim.h.Vector.from_python(vector)
+
+    def add_synapse_gpcr(self, syn,neuromodulation_set,cell_id_source, dend_compartment, section_dist, conductance,
+                    parameter_id, synapse_type_id, axon_dist=None):
+
+        seg_with_gpcr = syn.get_segment()
+
+
+        if syn_type not in seg_with_gpcr.point_processes():
+            modulation_module = eval(neuromodulation_set['modfile'])
+            syn_gpcr = modulation_module(seg_with_gpcr)
+
+        else:
+            syn_gpcr = seg_with_gpcr.point_processes()
+
+        if self.neuromodulation[kwargs.__getitem__('modulation')] ['vector'] is not None:
+            self.neuromodulation[kwargs.__getitem__('modulation')] ['vector'].play(getattr(syn_gpcr, \
+                                        "_ref_concentration", \
+                                h.dt))
+
+        modulation_units = self.neuromodulation[neuromodulation_set['type']][neuromodulation_set['target']]]
+
+        if 'presynaptic':
+            for syn_modulation in seg_with_gpcr.point_processes():
+
+                if syn_modulation in modulation_units:
+
+                    setattr(syn_modulation, modulation_key, 1)
+                    setattr(syn_gpcr._ref_concentration, getattr(mech, \
+                                                     "_ref_failRate" + modulation_key.replace("mod", "")))
+
+        elif 'receptors':
+            for syn_modulation in seg_with_gpcr.point_processes():
+                for syn_modulation in seg_with_gpcr.point_processes():
+
+                    if syn_modulation in modulation_units:
+                        setattr(syn_modulation, modulation_key, 1)
+                        setattr(syn_gpcr._ref_concentration, getattr(mech, \
+                                                     "_ref_level" + modulation_key.replace("mod", "")))
+        elif 'ion_channels:
+            for mech in seg_with_gpcr:
+                index = np.where(ion_channels == mech.name)
+                setattr(mech, modulation_key, 1)
+                setattr(syn_gpcr._ref_concentration,getattr(mech,\
+                                        "_ref_level" + modulation_key.replace("mod", "")))
+
+
+        return syn_gpcr
 
 def find_latest_file(file_mask):
     files = glob(file_mask)
@@ -1745,6 +1905,7 @@ def find_latest_file(file_mask):
 
 
 ############################################################################
+
 
 #
 # Test code to run a simulation
