@@ -850,8 +850,7 @@ class SnuddaSimulate(object):
                     continue
 
                 elif par == 'gpcr':
-                     syn = self.add_synapse_gpcr(syn,par_set['gpcr'],cell_id_source, dend_compartment, section_dist, conductance,
-                    parameter_id, synapse_type_id, axon_dist=None)
+                     syn = self.add_synapse_gpcr(syn,par_set['gpcr'])
 
                 try:
                     # Can be value, or a tuple/list, if so second value is scale factor
@@ -1848,8 +1847,7 @@ class SnuddaSimulate(object):
 
         return sim.h.Vector.from_python(vector)
 
-    def add_synapse_gpcr(self, syn,neuromodulation_set,cell_id_source, dend_compartment, section_dist, conductance,
-                    parameter_id, synapse_type_id, axon_dist=None):
+    def add_synapse_gpcr(self, syn,neuromodulation_set):
 
         seg_with_gpcr = syn.get_segment()
 
