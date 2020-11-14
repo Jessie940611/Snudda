@@ -1858,7 +1858,7 @@ class SnuddaSimulate(object):
             
             self.neuromodulation[modulation] \
                 ['modulation_vector'].play(getattr(syn, \
-                                        "_ref_failRate" + modulation_key.replace("mod", "")), \
+                                        "_ref_failRate_level" + modulation_key.replace("mod", "")), \
                                 h.dt)
 
     ############################################################################

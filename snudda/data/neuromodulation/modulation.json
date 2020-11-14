@@ -3,7 +3,7 @@
 		"key" : "modulationA",
 		"method": "alpha",
 		"duration" : 2500,
-		"parameters": {"tstart" : 50, "gmax" : 2, "tau" : 100},
+		"parameters": {"tstart" : 100, "gmax" : 1, "tau" : 500},
 		"ion_channels": {
 			"dSPN": {
 				"soma": ["cal12_ms","cal13_ms","kir_ms","kas_ms","naf_ms","can_ms"],
