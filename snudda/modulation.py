@@ -1,7 +1,15 @@
 import numpy as np
 
 
-def alpha(ht, tstart, gmax, tau):
+def alpha(parameter=None):
+
+    ht = parameter['ht']
+    tstart = parameter['tstart']
+    gmax = parameter['gmax']
+    tau = parameter['tau']
+
+    mag = list()
+    
     '''
     calc and returns a "magnitude" using an alpha function -> used for modulation
         transients
@@ -12,10 +20,15 @@ def alpha(ht, tstart, gmax, tau):
     tau     = time constant of alpha function
     '''
 
-    t = (ht - tstart) / tau
-    e = np.exp(1 - t)
-    mag = gmax * t * e
+    for t_step in ht:
 
+        if t_step >= tstart:
+            t = (t_step - tstart) / tau
+            e = np.exp(1 - t)
+            mag.append(gmax * t * e)
+
+        else:
+            mag.append(0)
     return mag
 
 

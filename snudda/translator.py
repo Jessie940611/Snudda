@@ -1,8 +1,8 @@
 
 translation ={
-    "dend" : "basal",
-    "soma" : "somatic",
-    "axon" : "axonal"
+    "dendrite" : "basal",
+    "soma" : "soma",
+    "axon" : "axon"
 } 
 
 

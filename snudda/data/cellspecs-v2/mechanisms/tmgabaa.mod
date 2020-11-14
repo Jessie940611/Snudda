@@ -2,16 +2,27 @@ TITLE GABA_A synapse with short-term plasticity
 
 COMMENT
 
-neuromodulation is added as functions:
+Neuromodulation is added as functions:
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA
 
 where:
     
-    damod  [0]: is a switch for turning modulation on or off {1/0}
-    maxMod [1]: is the maximum modulation for this specific channel (read from the param file)
-                e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+    modA  [0]: is a switch for turning modulation on or off {1/0}
+    maxModA [1]: is the maximum modulation for this specific channel (read from the param file)
+                    e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+    levelA  [0]: is an additional parameter for scaling modulation. 
+                Can be used simulate non static modulation by gradually changing the value from 0 to 1 {0-1}
+									
+	  Further neuromodulators can be added by for example:
+          modulationA = 1 + modA*(maxModA-1)
+	  modulationB = 1 + modB*(maxModB-1)
+	  ....
 
+	  etc. for other neuromodulators
+	  
+	   
+								     
 [] == default values
 {} == ranges
 
@@ -21,7 +32,8 @@ NEURON {
     POINT_PROCESS tmGabaA
     RANGE tau1, tau2, e, i, q
     RANGE tau, tauR, tauF, U, u0
-    RANGE failRate, damod, maxMod
+    RANGE modA, maxModA, levelA, modB, maxModB, levelB
+    RANGE failRate
     NONSPECIFIC_CURRENT i
 }
 
@@ -42,8 +54,12 @@ PARAMETER {
     U = 0.1 (1) <0, 1>
     u0 = 0 (1) <0, 1>
     failRate = 0	
-    damod = 0
-    maxMod = 1
+    modA = 0
+    maxModA = 1
+    levelA = 0
+    modB = 0
+    maxModB = 1 
+    levelB = 0
 
 }
 
@@ -71,7 +87,7 @@ INITIAL {
 
 BREAKPOINT {
     SOLVE state METHOD cnexp
-    g = (B - A) * modulation()
+    g = (B - A)*modulationA()*modulationB()
     i = g*(v - e)
 }
 
@@ -116,12 +132,17 @@ FUNCTION urand() {
 }
 
 
-FUNCTION modulation() {
+FUNCTION modulationA() {
     : returns modulation factor
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA 
 }
 
+FUNCTION modulationB() {
+    : returns modulation factor
+    
+    modulationB = 1 + modB*(maxModB-1)*levelB 
+}
 COMMENT
 
 (2019-11-25) Synaptic failure rate (failRate) added. Random factor, no
@@ -151,5 +172,4 @@ networks with frequency-dependent synapses. J Neurosci. 20(1):RC50.
 O'Donnell P, Finkel LH (2005) NMDA/AMPA ratio impacts state transitions
 and entrainment to oscillations in a computational model of the nucleus
 accumbens medium spiny projection neuron. J Neurosci 25(40):9080-95.
-
 ENDCOMMENT

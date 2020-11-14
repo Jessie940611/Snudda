@@ -430,10 +430,12 @@ class Snudda(object):
                              input_file=input_file,
                              disable_gap_junctions=disable_gj,
                              log_file=log_file,
-                             verbose=args.verbose)
+                             verbose=args.verbose,
+                             neuromodulation=True)
 
         sim.add_external_input()
-
+        sim.apply_neuromodulation()
+        sim.neuromodulation_network_wide()
         sim.check_memory_status()
 
         if volt_file is not None:

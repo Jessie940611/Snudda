@@ -5,16 +5,27 @@ stp can be turned of by setting use_stp == 0
 
 --------------------------------------------
 
-neuromodulation is added as functions:
+Neuromodulation is added as functions:
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA
 
 where:
     
-    damod  [0]: is a switch for turning modulation on or off {1/0}
-    maxMod [1]: is the maximum modulation for this specific channel (read from the param file)
-                e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+    modA  [0]: is a switch for turning modulation on or off {1/0}
+    maxModA [1]: is the maximum modulation for this specific channel (read from the param file)
+                    e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+    levelA  [0]: is an additional parameter for scaling modulation. 
+                Can be used simulate non static modulation by gradually changing the value from 0 to 1 {0-1}
+									
+	  Further neuromodulators can be added by for example:
+          modulationA = 1 + modA*(maxModA-1)
+	  modulationB = 1 + modB*(maxModB-1)
+	  ....
 
+	  etc. for other neuromodulators
+	  
+	   
+								     
 [] == default values
 {} == ranges
 
@@ -28,7 +39,9 @@ NEURON {
     RANGE e, g, i, q, mg
     RANGE tau, tauR, tauF, U, u0
     RANGE ca_ratio_ampa, ca_ratio_nmda, mggate, use_stp
-    RANGE failRate, damod, maxModAMPA, maxModNMDA
+    RANGE failRate
+    RANGE modA_AMPA, maxModA_AMPA, levelA_AMPA, modB_AMPA, maxModB_AMPA, levelB_AMPA
+    RANGE modA_NMDA, maxModA_NMDA, levelA_NMDA, modB_NMDA, maxModB_NMDA, levelB_NMDA
     NONSPECIFIC_CURRENT i
     USEION cal WRITE ical VALENCE 2
 }
@@ -56,9 +69,20 @@ PARAMETER {
     ca_ratio_ampa = 0.005
     ca_ratio_nmda = 0.1
     mg = 1 (mM)
-    damod = 0
-    maxModNMDA = 1
-    maxModAMPA = 1
+    
+    modA_AMPA = 0
+    maxModA_AMPA = 1
+    levelA_AMPA = 0
+    modB_AMPA = 0
+    maxModB_AMPA = 1 
+    levelB_AMPA = 0
+
+    modA_NMDA = 0
+    maxModA_NMDA = 1
+    levelA_NMDA = 0
+    modB_NMDA = 0
+    maxModB_NMDA = 1 
+    levelB_NMDA = 0
 
     use_stp = 1     : to turn of use_stp -> use 0
     failRate = 0
@@ -110,13 +134,13 @@ BREAKPOINT {
     
     : NMDA
     mggate    = 1 / (1 + exp(-0.062 (/mV) * v) * (mg / 3.57 (mM)))
-    g_nmda    = (B_nmda - A_nmda) * modNMDA()
+    g_nmda    = (B_nmda - A_nmda) * modulationA_NMDA()*modulationB_NMDA()
     itot_nmda = g_nmda * (v - e) * mggate
     ical_nmda = ca_ratio_nmda*itot_nmda
     i_nmda    = itot_nmda - ical_nmda
     
     : AMPA
-    g_ampa    = (B_ampa - A_ampa) * modAMPA()
+    g_ampa    = (B_ampa - A_ampa) * modulationA_AMPA() * modulationB_AMPA()
     itot_ampa = g_ampa*(v - e) 
     ical_ampa = ca_ratio_ampa*itot_ampa
     i_ampa    = itot_ampa - ical_ampa
@@ -192,17 +216,28 @@ FUNCTION urand() {
 }
 
 
-FUNCTION modAMPA() {
+FUNCTION modulationA_NMDA() {
     : returns modulation factor
     
-    modAMPA = 1 + damod*(maxModAMPA-1)
+    modulationA_NMDA = 1 + modA_NMDA*(maxModA_NMDA-1)*levelA_NMDA 
 }
 
-
-FUNCTION modNMDA() {
+FUNCTION modulationB_NMDA() {
     : returns modulation factor
     
-    modNMDA = 1 + damod*(maxModNMDA-1)
+    modulationB_NMDA = 1 + modB_NMDA*(maxModB_NMDA-1)*levelB_NMDA 
+}
+
+FUNCTION modulationA_AMPA() {
+    : returns modulation factor
+    
+    modulationA_AMPA = 1 + modA_AMPA*(maxModA_AMPA-1)*levelA_AMPA 
+}
+
+FUNCTION modulationB_AMPA() {
+    : returns modulation factor
+    
+    modulationB_AMPA = 1 + modB_AMPA*(maxModB_AMPA-1)*levelB_AMPA 
 }
 
 COMMENT

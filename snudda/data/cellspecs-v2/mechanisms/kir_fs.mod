@@ -2,16 +2,27 @@ TITLE Non-inactivating inwardly rectifying potassium current (Kir2.3)
 
 COMMENT
 
-neuromodulation is added as functions:
+Neuromodulation is added as functions:
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA
 
 where:
     
-    damod  [0]: is a switch for turning modulation on or off {1/0}
-    maxMod [1]: is the maximum modulation for this specific channel (read from the param file)
+    modA  [0]: is a switch for turning modulation on or off {1/0}
+    maxModA [1]: is the maximum modulation for this specific channel (read from the param file)
                     e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+    levelA  [0]: is an additional parameter for scaling modulation. 
+                Can be used simulate non static modulation by gradually changing the value from 0 to 1 {0-1}
+									
+	  Further neuromodulators can be added by for example:
+          modulationA = 1 + modA*(maxModA-1)
+	  modulationB = 1 + modB*(maxModB-1)
+	  ....
 
+	  etc. for other neuromodulators
+	  
+	   
+								     
 [] == default values
 {} == ranges
     
@@ -21,7 +32,7 @@ NEURON {
     SUFFIX kir_fs
     USEION k READ ek WRITE ik
     RANGE gbar, gk, ik, shift
-    RANGE damod, maxMod
+    RANGE modA, maxModA, levelA
 }
 
 UNITS {
@@ -34,8 +45,9 @@ PARAMETER {
     gbar = 0.0 	(S/cm2) 
     shift = 0
     q = 1 	: body temperature 35 C
-    damod = 0
-    maxMod = 1
+    modA = 0
+    maxModA = 1
+    levelA = 0
 }
 
 ASSIGNED {
@@ -51,7 +63,7 @@ STATE { m }
 
 BREAKPOINT {
     SOLVE states METHOD cnexp
-    gk = gbar*m*modulation()
+    gk = gbar*m*modulationA()
     ik = gk*(v-ek)
 }
 
@@ -72,11 +84,12 @@ PROCEDURE rates() {
     UNITSON
 }
 
-FUNCTION modulation() {
+FUNCTION modulationA() {
     : returns modulation factor
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA 
 }
+
 
 COMMENT
 

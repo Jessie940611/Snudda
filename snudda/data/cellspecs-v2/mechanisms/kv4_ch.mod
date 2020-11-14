@@ -5,16 +5,27 @@ c1 - c2 - c3 - c4 - o
 i1 - i2 - i3 - i4 - i5 - is
 
 
-neuromodulation is added as functions:
+Neuromodulation is added as functions:
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA
 
 where:
     
-    damod  [0]: is a switch for turning modulation on or off {1/0}
-    maxMod [1]: is the maximum modulation for this specific channel (read from the param file)
+    modA  [0]: is a switch for turning modulation on or off {1/0}
+    maxModA [1]: is the maximum modulation for this specific channel (read from the param file)
                     e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
+    levelA  [0]: is an additional parameter for scaling modulation. 
+                Can be used simulate non static modulation by gradually changing the value from 0 to 1 {0-1}
+									
+	  Further neuromodulators can be added by for example:
+          modulationA = 1 + modA*(maxModA-1)
+	  modulationB = 1 + modB*(maxModB-1)
+	  ....
 
+	  etc. for other neuromodulators
+	  
+	   
+								     
 [] == default values
 {} == ranges
     
@@ -29,7 +40,7 @@ NEURON {
 	GLOBAL ci, ic, oi, io, a, b, am, bm, vc, gamma, delta, vha, vhb
 	GLOBAL i5is, isi5
 	GLOBAL q10i, q10v
-    RANGE damod, maxMod
+        RANGE modA, maxModA, levelA
 }
 
 UNITS {
@@ -58,8 +69,9 @@ PARAMETER {
 	q10i = 3
 	q10v = 3
 	celsius		(degC)
-    damod = 0
-    maxMod = 1
+        modA = 0
+        maxModA = 1
+        levelA = 0
 }
 
 ASSIGNED {
@@ -87,7 +99,7 @@ STATE {
 
 BREAKPOINT {
 	SOLVE kin METHOD sparse
-	g = gbar*o*modulation()
+	g = gbar*o*modulationA()
 	ik = g*(v-ek)
 }
 
@@ -124,8 +136,8 @@ PROCEDURE rates(v(millivolt)) {LOCAL q10
 	beta = q10*bm*exp((v-vhb)/-vc)
 }
 
-FUNCTION modulation() {
+FUNCTION modulationA() {
     : returns modulation factor
     
-    modulation = 1 + damod*(maxMod-1)
+    modulationA = 1 + modA*(maxModA-1)*levelA 
 }

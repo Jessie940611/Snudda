@@ -44,6 +44,9 @@ def snudda_cli():
     parser.add_argument("--disableGJ", action="store_true",
                         help="Disable gap junctions")
 
+    parser.add_argument("--neuromodulation", action="store_true",
+                        help="Disable gap junctions")
+
     # parser.add_argument("--ncores", default=12,
     #                    help="Number of cores used for simulation")
     parser.add_argument("--overwrite",
