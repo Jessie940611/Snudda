@@ -4,8 +4,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.081078819028194
@@ -13,8 +13,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.081078819028194
@@ -22,8 +22,8 @@
         {
             "dist_type": "uniform",
             "mech": "na3_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_na3_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_na3_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1885444052484788
@@ -34,8 +34,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1628204779244709
@@ -43,8 +43,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.1628204779244709
@@ -52,8 +52,8 @@
         {
             "dist_type": "uniform",
             "mech": "na3_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_na3_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_na3_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1471583466078394
@@ -64,8 +64,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1854346371194575
@@ -73,8 +73,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.1854346371194575
@@ -82,8 +82,8 @@
         {
             "dist_type": "uniform",
             "mech": "na3_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_na3_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_na3_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1611792180161207
@@ -94,8 +94,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1569012068203637
@@ -103,8 +103,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.1569012068203637
@@ -112,8 +112,8 @@
         {
             "dist_type": "uniform",
             "mech": "na3_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_na3_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_na3_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.0889228914008076
@@ -124,8 +124,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1063571846421159
@@ -133,8 +133,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.1063571846421159
@@ -142,8 +142,8 @@
         {
             "dist_type": "uniform",
             "mech": "na3_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_na3_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_na3_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.127479001734381
@@ -153,8 +153,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.0913369791573981
@@ -162,8 +162,8 @@
         {
             "dist_type": "uniform",
             "mech": "hd_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_hd_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_hd_lts",
             "sectionlist": "basal",
             "type": "range",
             "value": 1.0913369791573981
@@ -171,8 +171,8 @@
         {
             "dist_type": "uniform",
             "mech": "na3_lts",
-            "mech_param": "maxMod",
-            "param_name": "maxMod_na3_lts",
+            "mech_param": "maxModA",
+            "param_name": "maxModA_na3_lts",
             "sectionlist": "somatic",
             "type": "range",
             "value": 1.1587012995475963

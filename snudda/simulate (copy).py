@@ -114,7 +114,7 @@ class SnuddaSimulate(object):
 
         self.neuromodulation = dict()
         self.compartment = None
-        self.cell = None
+        self.section_dist = None
         self.syn_mod_list = None
         self.net_con_list = []  # Avoid premature garbage collection
         self.synapse_list = []
@@ -147,7 +147,7 @@ class SnuddaSimulate(object):
         # We need to initialise random streams, see Lytton el at 2016 (p2072)
 
         self.load_network_info(network_file)
-        self.conductances = dict()
+
         self.check_memory_status()
         self.distribute_neurons()
         self.setup_neurons()
@@ -581,15 +581,6 @@ class SnuddaSimulate(object):
             
                 if 'gpcr' in self.synapse_parameters[s_type_id][1][0].keys():
 
-                    self.add_synapse_gpcr_p(cell_id_source=src_id,
-                                 dend_compartment=section,
-                                 section_dist=section_x,
-                                 synapse_type_id=s_type_id,
-                                 axon_dist=axon_dist,
-                                 conductance=cond,
-                                 parameter_id=p_id)
-                elif 'vector' in self.synapse_parameters[s_type_id][1][0].keys():
-
                     self.add_synapse_gpcr(cell_id_source=src_id,
                                  dend_compartment=section,
                                  section_dist=section_x,
@@ -597,8 +588,6 @@ class SnuddaSimulate(object):
                                  axon_dist=axon_dist,
                                  conductance=cond,
                                  parameter_id=p_id)
-
-                
                 else:
                     self.add_synapse(cell_id_source=src_id,
                                      dend_compartment=section,
@@ -1439,8 +1428,7 @@ class SnuddaSimulate(object):
         self.sim.run(t, dt=0.025)
         self.pc.barrier()
         self.write_log("Simulation done.")
-        import pdb
-        pdb.set_trace()
+
         end_time = timeit.default_timer()
         self.write_log("Simulation run time: " \
                        + str(end_time - start_time) + " s")
@@ -1891,402 +1879,133 @@ class SnuddaSimulate(object):
                                         "_ref_failRate_level" + modulation_key.replace("mod", "")), \
                                 h.dt)
 
-    
     ############################################################################
 
     def neuron_vector(self,vector):
 
         return self.sim.neuron.h.Vector(vector)
 
+    def subcellular_setup(self,par_set,channel_module, dend_compartment, section_dist):
 
-    def add_synapse_gpcr_p(self,cell_id_source, dend_compartment, section_dist, conductance,parameter_id, synapse_type_id, axon_dist=None):
-
-        print(str(dend_compartment))
-
-    def add_synapse_gpcr_pointer(self,cell_id_source, dend_compartment, section_dist, conductance,parameter_id, synapse_type_id, axon_dist=None):
-
-        # You can not locate a point process at
-        # position 0 or 1 if it needs an ion
-        if section_dist == 0.0:
-            section_dist = 0.01
-        if section_dist == 1.0:
-            section_dist = 0.99
-      
-        (channel_module, par_data) = self.synapse_parameters[synapse_type_id]
-
-        par_id = parameter_id % len(par_data)
-
-        par_set = par_data[par_id]
-
-        cell = str(dend_compartment).split(".")[0]
-        compartment=str(dend_compartment)
         section = translator.re_translate(str(dend_compartment).split(".")[-1].split("[")[0])
-     
-        if len(self.conductances)==0:
-            
-            self.conductances = dict()
-            self.ion_channels = list()
-            self.modulators = list()
-            
-            
-            for i, seg in enumerate(dend_compartment):
-                
-                self.conductances.update({i : {"section" : dend_compartment,"segment":seg, "cell_id_source" : list(), "conductance" : list(), "parameters" : list() , "synapses" : dict()}})
-                
-
-            self.compartment = compartment
-
+        syn_list = dict()
         
-        if compartment==self.compartment:
-        #collect info on present section
-            section_num = int(dend_compartment.nseg/(1/dend_compartment(section_dist).x))
-            self.conductances[section_num]["cell_id_source"].append(cell_id_source)
-            self.conductances[section_num]["conductance"].append(conductance)
-            self.conductances[section_num]["parameters"].append(par_set['gpcr'])
-            self.ion_channels = self.ion_channels + par_set['gpcr']['ion_channels'][section]
-            self.modulators.append(par_set['gpcr']["key"])
-        else:
-            ##
-            print('Placing the modulation for Cell')
-            syn_list = list()
-            syn_md = list()
-            
-           
-            modulated_compartment =  self.conductances[0]["section"]
-            
-            for modulated in np.unique(self.ion_channels):
-                modulated_compartment.insert(modulated+"_p")
 
-            for seg in modulated_compartment:
-
-                for mech in seg:
-
-                    if mech.name() in np.unique(self.ion_channels):
-                        modulate_variables = dict()
-                                   
-                        for modulator in self.modulators:
-                                   
-                            modulator_suffix = "maxMod" + modulator.replace("modulation","")
-
-                            if modulator_suffix in dir(mech):
-                                   modulate_variables.update({modulator_suffix :getattr(mech,modulator_suffix)})
-                            
-                        conductance_dict.update({ mech.name() :[ getattr(mech,translator.conductance_translate(mech.name())), modulate_variables]})
-
-            
-
-            for i, segment_info in self.conductances.items():
-                seg = segment_info["segment"]
-                parameters = segment_info["parameters"]
-
-                for parameter in parameters:
-
-                    pointers = list()
-
-                    if "module" in parameter.keys():
-                    
-                        pointers.append(parameter["module"])
-
-                    if "subcellular" in parameter.keys():
-                         
-                        pointers.append(parameter["subcellular"])
-
-                    if len(pointers)>1:
-
-                        syn = getattr(self.sim.neuron.h,pointers[0][0])(seg)
-                        
-                        syn_md = getattr(self.sim.neuron.h,pointers[1][0]+"p")(seg)
-                        syn_list.append(syn)
-                        self.synapse_list.append(syn_md)
-                        self.sim.neuron.h.setpointer(syn._ref_concentration,pointers[1][1],syn_md)
-
-                    if len(pointers)==1:
-                        syn = getattr(self.sim.neuron.h,pointers[0][0])(seg)
-                        syn_list.append(syn)
-                        
-                        
-                    for mech in seg:
-                      
-                        if mech.name().replace("_p","") in np.unique(self.ion_channels) and "_p" in mech.name():
-                             
-                             name = mech.name().replace("_p","")
-                             modulator_suffix = "maxMod" + modulator.replace("modulation","")
-                             mod = "mod" + modulator.replace("modulation","")
-                             level_suffix = "level" + modulator.replace("modulation","")
-                             print(conductance_dict)
-                             setattr(mech,translator.conductance_translate(name),conductance_dict[name][0])
-                             for maxMod, value in conductance_dict[name][1].items():
-                                 setattr(mech,modulator_suffix,value)
-                                 setattr(mech,mod,1)
-                            
-                             self.sim.neuron.h.setpointer(syn._ref_concentration,level_suffix,mech)
-
-                             
-                        if mech.name() in np.unique(self.ion_channels):
-
-                            setattr(mech,translator.conductance_translate(mech.name()),0)
-                            
-
-                    for point_process in seg.point_processes():
-
-                        print("point process")
-                        
-
-                
-
-               
-                if axon_dist is not None:
-                    # axon dist is in micrometer, want delay in ms
-                    synapse_delay = (1e3 * 1e-6 * axon_dist) / self.axon_speed + self.synapse_delay
-                else:
-                    synapse_delay = self.synapse_delay
-
-                    #    self.write_log("Synapse delay: " + str(synapse_delay) + " ms")
-
-                    # What do we do if the GID does not exist?
-                    # print("GID exists:" + str(self.pc.gid_exists(cellIDsource)))
-
-                if self.is_virtual_neuron[cell_id_source]:
-
-                    "Deal with transient"
-               
-          
-                    self.synapse_list.append(syn)
-
-                else:
-                    
-                    for syn in syn_list:
-                        
-                        for cell_id_source in segment_info["cell_id_source"]:
-                            nc = self.pc.gid_connect(cell_id_source, syn)
-                            nc.weight[0] = 1
-                            nc.delay = synapse_delay
-                            nc.threshold = self.spike_threshold
-                    
-                        self.net_con_list.append(nc)
-                        self.synapse_list.append(syn)
-                    
-            self.conductances = dict()
-            
-        
-            for i, seg in enumerate(dend_compartment):
-                self.conductances.update({i : {"section" : dend_compartment,"segment":seg, "cell_id_source" : list(), "conductance" : list(), "parameters" : list() , "synapses" : dict()}})
-
-            section_num = int(dend_compartment.nseg/(1/dend_compartment(section_dist).x))
-            self.conductances[section_num]["cell_id_source"].append(cell_id_source)
-            self.conductances[section_num]["conductance"].append(conductance)
-            self.conductances[section_num]["parameters"].append(par_set['gpcr'])
-                
-
-            
-        self.compartment = compartment       
-            
-
-    def add_synapse_gpcr_subcellular_transient(self,cell_id_source, dend_compartment, section_dist, conductance,parameter_id, synapse_type_id, axon_dist=None):
-
-        # You can not locate a point process at
-        # position 0 or 1 if it needs an ion
-        if section_dist == 0.0:
-            section_dist = 0.01
-        if section_dist == 1.0:
-            section_dist = 0.99
-      
-        (channel_module, par_data) = self.synapse_parameters[synapse_type_id]
-
-        par_id = parameter_id % len(par_data)
-
-        par_set = par_data[par_id]
-
-        cell = str(dend_compartment).split(".")[0]
-        section = translator.re_translate(str(dend_compartment).split(".")[-1].split("[")[0])
-        modulation_key = par_set['gpcr']['key'].replace("ulation","")
-
-
-        if cell!=self.cell or len(self.conductances)==0:
-         
-            self.conductances = dict()
-            
-        
-        if par_set["gpcr"]["name"] not in self.neuromodulation.keys():
-            
- 
-            method = getattr(modulation,par_set['gpcr']['input']['method'])
-            par_set['gpcr']['input']['parameters'].update({"ht": np.arange(0,par_set['gpcr']['input']['duration'],0.025)})
-           
-            self.neuromodulation.update({par_set["gpcr"]["name"] : \
-                                           { "key" :  par_set['gpcr']['key'], \
-                                           "method" : par_set['gpcr']['input']["method"], \
-                                           "parameters" : par_set['gpcr']['input']["parameters"],\
-                                           "duration" : par_set['gpcr']['input']["duration"],\
-                                           "modulation_vector" : self.neuron_vector(method(par_set['gpcr']['input']['parameters']))
-                                          }})
-
-        
-        if self.compartment!=dend_compartment:
-
-            
-            
-            for seg in dend_compartment:
-
-           
-                syn = getattr(self.sim.neuron.h, par_set['gpcr']["subcellular"][0])(seg)
-                self.neuromodulation[par_set["gpcr"]["name"]]['modulation_vector'].play(getattr(syn,"_ref_conc_acetylcholine"),h.dt)
-                self.synapse_list.append(syn)
-                
-                for mech in seg:
-                    if mech.name() in par_set['gpcr']['ion_channels'][section]:
-
-                        if section not in self.conductances.keys():
-                            self.conductances.update({section : {mech.name() : [getattr(mech,translator.conductance_translate(mech.name())),getattr(mech,"maxMod"+par_set['gpcr']['key'].replace("modulation",""))]}})
-                            
-
-                        elif mech.name() not in self.conductances[section].keys():
-                            self.conductances[section].update({mech.name() : [getattr(mech,translator.conductance_translate(mech.name())),getattr(mech,"maxMod"+par_set['gpcr']['key'].replace("modulation",""))]})
-                            
-                        dend_compartment.insert(mech.name()+"_p")
-                        
-                        setattr(dend_compartment,translator.conductance_translate(mech.name())+"_"+mech.name()+"_p",0)
-                        self.sim.neuron.h.setpointer(syn._ref_concentration, "level"+par_set['gpcr']['key'].replace("modulation",""),getattr(seg,mech.name()+"_p"))
-
-            k = int(dend_compartment.nseg/(1/section_dist))
-            l = 0
-            print(self.conductances)
-
-  
-            for seg in dend_compartment:
-
-                for mech in seg:
-
-                    if "_p" in mech.name() and l==k:
-
-                        setattr(dend_compartment,modulation_key+"_"+mech.name(),1)
-                        conductance = self.conductances[section][mech.name().replace("_p","")][0]
-                        modulationMax = self.conductances[section][mech.name().replace("_p","")][1]
-                        setattr(dend_compartment,translator.conductance_translate(mech.name().replace("_p",""))+"_"+mech.name(),conductance)
-                        setattr(mech,"maxMod"+par_set['gpcr']['key'].replace("modulation",""),modulationMax)
-              
-
-                    elif mech.name() in par_set['gpcr']['ion_channels'][section] and l==k:
-                        
-                        setattr(mech,translator.conductance_translate(mech.name()),0)
-                l=l+1
-                
-            
-        else:
-            k = int(dend_compartment.nseg/(1/section_dist))
-            l = 0
-
-            print(self.conductances)
-            for seg in dend_compartment:
-
-                for mech in seg:
-    
-                    if mech.name() in par_set['gpcr']['ion_channels'][section] and l==k:
-
-                        setattr(mech,translator.conductance_translate(mech.name()),0)
-
-                for mech in dend_compartment(section_dist):
-
-                    if "_p" in mech.name() and l==k:
-                 
-                        setattr(mech, modulation_key,1)
-                        conductance =  self.conductances[section][mech.name().replace("_p","")][0]
-                        modulationMax = self.conductances[section][mech.name().replace("_p","")][1]
-                        setattr(mech,translator.conductance_translate(mech.name().replace("_p","")),conductance)
-                        setattr(mech,"maxMod"+par_set['gpcr']['key'].replace("modulation",""),modulationMax)
-                l=l+1
-                    
-                
-               
-
-
-        self.cell = cell        
-    
-        self.compartment = dend_compartment
-
-        syn = channel_module(dend_compartment(section_dist))
-
-        if axon_dist is not None:
-            # axon dist is in micrometer, want delay in ms
-            synapse_delay = (1e3 * 1e-6 * axon_dist) / self.axon_speed + self.synapse_delay
-        else:
-            synapse_delay = self.synapse_delay
-
-        #    self.write_log("Synapse delay: " + str(synapse_delay) + " ms")
-
-        # What do we do if the GID does not exist?
-        # print("GID exists:" + str(self.pc.gid_exists(cellIDsource)))
-
-        if self.is_virtual_neuron[cell_id_source]:
-            # Source is a virtual neuron, need to read and connect input
-            src_name = self.network_info["neurons"][cell_id_source]["name"]
-    
-            nc = self.pc.gid_connect(cell_id_source, syn)
-            nc.weight[0] = conductance
-            nc.delay = synapse_delay
-            nc.threshold = self.spike_threshold
-
-            # Prevent garbage collection in python
-            self.net_con_list.append(nc)
+        for seg in dend_compartment:
+            syn = channel_module(seg)
+            syn_mod = getattr(self.sim.neuron.h, par_set['gpcr']["subcellular"][0])(seg)
+            self.sim.neuron.h.setpointer(syn._ref_concentration,par_set['gpcr']["subcellular"][1],syn_mod)
+            syn_list.update({str(seg) : [syn_mod, syn]})
+            self.synapse_list.append(syn_mod)
             self.synapse_list.append(syn)
 
-        else:
+            for mech in seg:
 
-            nc = self.pc.gid_connect(cell_id_source, syn)
-            nc.weight[0] = conductance
-            nc.delay = synapse_delay
-            nc.threshold = self.spike_threshold
-
-            self.net_con_list.append(nc)
-            self.synapse_list.append(syn)
-
-        return syn
+                if mech.name() in par_set['gpcr']['ion_channels'][section]:
+                    dend_compartment.insert(mech.name()+"_p")
+                    self.sim.neuron.h.setpointer(syn_mod._ref_concentration, "level"+par_set['gpcr']['key'].replace("modulation",""),getattr(seg,mech.name()+"_p"))
+                  
+                    
                 
-                
-    def add_synapse_gpcr_phenomenological(self,cell_id_source, dend_compartment, section_dist, conductance,parameter_id, synapse_type_id, axon_dist=None):
-
-        # You can not locate a point process at
-        # position 0 or 1 if it needs an ion
-        if section_dist == 0.0:
-            section_dist = 0.01
-        if section_dist == 1.0:
-            section_dist = 0.99
-      
-        (channel_module, par_data) = self.synapse_parameters[synapse_type_id]
-
-        par_id = parameter_id % len(par_data)
-
-        par_set = par_data[par_id]
-
         
+
+        return syn_list
+
+    def subcellular_section_dist(self,dend_compartment,section_dist,par_set):
+
         section = translator.re_translate(str(dend_compartment).split(".")[-1].split("[")[0])
         modulation_key = par_set['gpcr']['key'].replace("ulation","")
-       
-        syn = channel_module(dend_compartment(section_dist))
-        if par_set["gpcr"]["name"] not in self.neuromodulation.keys():
-            
- 
-            method = getattr(modulation,par_set['gpcr']['input']['method'])
-            par_set['gpcr']['input']['parameters'].update({"ht": np.arange(0,par_set['gpcr']['input']['duration'],0.025)})
-           
-            self.neuromodulation.update({par_set["gpcr"]["name"] : \
-                                           { "key" :  par_set['gpcr']['key'], \
-                                           "method" : par_set['gpcr']['input']["method"], \
-                                           "parameters" : par_set['gpcr']['input']["parameters"],\
-                                           "duration" : par_set['gpcr']['input']["duration"],\
-                                           "modulation_vector" : self.neuron_vector(method(par_set['gpcr']['input']['parameters']))
-                                          }})
-            
-      
         
-
         for mech in dend_compartment(section_dist):
             if mech.name() in par_set['gpcr']['ion_channels'][section]:
+                conductance = getattr(mech,translator.conductance_translate(mech.name()))
+                
+                setattr(mech,translator.conductance_translate(mech.name()),0)
+                
+                setattr(getattr(dend_compartment(section_dist),mech.name()+"_p"),translator.conductance_translate(mech.name()),conductance)
+                    
+                setattr(getattr(dend_compartment(section_dist),mech.name()+"_p"), modulation_key,1)
+
+    def get_syn_compartment(self,dend_compartment,section_dist):
+
+        k = int(dend_compartment.nseg/(1/section_dist))
+        l = 0
+  
+        for seg in dend_compartment:
+
+            if l==k:
+                syn = self.syn_mod_list[str(seg)][1]
+            l=l+1
             
-                setattr(mech, modulation_key,1)
-                
-                self.neuromodulation[par_set["gpcr"]["name"]]['modulation_vector'].play(getattr(mech,"_ref_level"+par_set['gpcr']['key'].replace("modulation","")),h.dt)
-                
+        return syn
+    
+    def add_synapse_gpcr(self,cell_id_source, dend_compartment, section_dist, conductance,
+                    parameter_id, synapse_type_id, axon_dist=None):
+
+        # You can not locate a point process at
+        # position 0 or 1 if it needs an ion
+        if section_dist == 0.0:
+            section_dist = 0.01
+        if section_dist == 1.0:
+            section_dist = 0.99
+      
+        (channel_module, par_data) = self.synapse_parameters[synapse_type_id]
+
+        par_id = parameter_id % len(par_data)
+
+        par_set = par_data[par_id]
+
+        
+        if par_set['gpcr']["signalling"] == "subcellular" and self.compartment!=dend_compartment:
+            
+            self.syn_mod_list = self.subcellular_setup(par_set,channel_module, dend_compartment, section_dist)
+
+        if par_set['gpcr']["signalling"] == "subcellular":
+
+            self.subcellular_section_dist(dend_compartment,section_dist,par_set)
+         
+            syn = self.get_syn_compartment(dend_compartment,section_dist)
+            
+        if par_set['gpcr']["signalling"] == "phenomenological":
+            section = translator.re_translate(str(dend_compartment).split(".")[-1].split("[")[0])
+            modulation_key = par_set['gpcr']['key'].replace("ulation","")
+        
+            syn = channel_module(dend_compartment(section_dist))
+            syn_gpcr = self.sim.neuron.h.Vector()
+            syn_gpcr.record(syn._ref_concentration)
+            self.synapse_list.append(syn)
+            self.synapse_gpcr.update({str(dend_compartment(section_dist)) : [syn_gpcr, syn]})
+        
+
+            
+            for mech in dend_compartment(section_dist):
+                if mech.name() in par_set['gpcr']['ion_channels'][section]:
+            
+                    setattr(mech, modulation_key,1)
+                    self.synapse_gpcr[str(dend_compartment(section_dist))][0].play(getattr(mech,"_ref_level"+par_set['gpcr']['key'].replace("modulation","")),h.dt)
+        
+            
+        self.compartment = dend_compartment
+        
+        if par_set["gpcr"]["name"] in self.neuromodulation.keys():
+            
+            self.neuromodulation[par_set["gpcr"]["name"]]['modulation_vector'].play(getattr(syn,"_ref_modulation_input"),h.dt)
+
+        else:
+            
+            method = getattr(modulation,par_set['gpcr']['input']['method'])
+            par_set['gpcr']['input']['parameters'].update({"ht": np.arange(0,par_set['gpcr']['input']['duration'],0.025)})
+           
+            self.neuromodulation.update({par_set["gpcr"]["name"] : \
+                                           { "key" :  par_set['gpcr']['key'], \
+                                           "method" : par_set['gpcr']['input']["method"], \
+                                           "parameters" : par_set['gpcr']['input']["parameters"],\
+                                           "duration" : par_set['gpcr']['input']["duration"],\
+                                           "modulation_vector" : self.neuron_vector(method(par_set['gpcr']['input']['parameters']))
+                                          }})
+            
+            self.neuromodulation[par_set["gpcr"]["name"]]['modulation_vector'].play(getattr(syn,"_ref_modulation_input"),h.dt)
+
         
         if axon_dist is not None:
             # axon dist is in micrometer, want delay in ms
@@ -2323,7 +2042,31 @@ class SnuddaSimulate(object):
             self.synapse_list.append(syn)
 
         return syn
-       
+
+    def phenomenological_setup(self,par_set,channel_module, dend_compartment, section_dist):
+
+        section = translator.re_translate(str(dend_compartment).split(".")[-1].split("[")[0])
+        modulation_key = par_set['gpcr']['key'].replace("ulation","")
+        
+        syn = channel_module(dend_compartment(section_dist))
+        syn_gpcr = self.sim.neuron.h.Vector()
+        syn_gpcr.record(syn._ref_concentration)
+        self.synapse_list.append(syn)
+        self.synapse_gpcr.update({str(dend_compartment(section_dist)) : [syn_gpcr, syn]})
+        
+
+        for seg in dend_compartment:
+            for mech in seg:
+                if mech.name() in par_set['gpcr']['ion_channels'][section]:
+            
+                    setattr(mech, modulation_key,0)
+                    self.synapse_gpcr[str(dend_compartment(section_dist))][0].play(getattr(mech,"_ref_level"+par_set['gpcr']['key'].replace("modulation","")),h.dt)
+
+    
+        
+
+        
+
 def find_latest_file(file_mask):
     files = glob(file_mask)
 

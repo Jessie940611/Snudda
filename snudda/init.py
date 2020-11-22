@@ -100,6 +100,7 @@ class SnuddaInit(object):
                        "GPi": self.define_GPi,
                        "STN": self.define_STN,
                        "SNr": self.define_SNr,
+                       "SNc": self.define_SNc,
                        "Cortex": self.define_cortex,
                        "Thalamus": self.define_thalamus}
 
@@ -1152,6 +1153,169 @@ class SnuddaInit(object):
 
         # !!! Need to add targets for neurons in SNr
 
+    #############################################################################
+
+    def define_SNc(self, num_neurons):
+
+        if num_neurons <= 0:
+            # No neurons, skipping
+            return
+
+        self.num_SNc_neurons = num_neurons
+        self.num_neurons_total += num_neurons
+
+        snc_volume = 1e-9 * num_neurons / 80.5e3  # 80.5e3
+        snc_side_len = snc_volume ** (1. / 3)
+        snc_centre = np.array([3540e-6, 4645e-6, 5081e-6])
+        mesh_bin_width = snc_side_len
+        '''
+        self.define_structure(struct_name="SNc",
+                              struct_mesh="mesh/SNc-mesh.obj",
+                              mesh_bin_width=1e-4)
+
+        '''
+
+        self.define_structure(struct_name="SNc",
+                                  struct_mesh="cube",
+                                  struct_centre=snc_centre,
+                                  side_len=snc_side_len,
+                                  mesh_bin_width=mesh_bin_width)
+        
+        snc_dir = self.data_path + "/InputAxons/SNc"
+
+        snc_axon_density = ("r", "50000*1e12/3*np.exp(-r/120e-6)",500e-6)
+
+        if True:
+            cs_dir = self.data_path + "/cellspecs-v2"
+            LTS_dir = cs_dir + "/lts"
+
+            dopaminergic_cond = [1e-9,0.1e-9]
+            self.add_neurons("DopaminergicAxon",LTS_dir, self.num_SNc_neurons, \
+                             axon_density= snc_axon_density,
+                             volume_id="SNc")
+
+            self.add_neuron_target(neuron_name="DopaminergicAxon",
+                                   target_name="dSPN",
+                                   connection_type="dopamine",
+                                   dist_pruning=None,
+                                   f1=None, soft_max=None, mu2=None,a3=None,
+                                   conductance=dopaminergic_cond,
+                                   parameter_file=None,
+                                   mod_file="concDA",
+                                   channel_param_dictionary={
+                                       "gpcr": {
+                                           "name" : "dopamine_A",
+                                           "key" : "modulationA",               
+                                           "module": ("concDA", "concentration"),
+                                           "signalling": "subcellular",
+                                           "subcellular" : ("M4", "conc_acetylcholine"),
+                                           "ion_channels": {
+                                               "soma": ["naf_ms","kir_ms","kas_ms",\
+                                                        "kaf_ms","cal12_ms","cal13_ms",\
+                                                        "can_ms","car_ms"],
+                                               "dendrite": ["naf_ms","kir_ms","kas_ms",\
+                                                            "kaf_ms","cal12_ms","cal13_ms","car_ms"]
+                                           }}})
+
+            
+        if False:
+            self.add_neurons("DopaminergicAxon",snc_dir, self.num_SNc_neurons, \
+                             model_type="virtual",
+                             rotation_mode="",
+                             axon_density= snc_axon_density,
+                             volume_id="SNc")
+            # Define targets
+            
+            dopaminergic_cond = [1e-9,0.1e-9]
+            
+            self.add_neuron_target(neuron_name="DopaminergicAxon",
+                                   target_name="dSPN",
+                                   connection_type="dopamine",
+                                   dist_pruning=None,
+                                   f1=None, soft_max=None, mu2=None,a3=None,
+                                   conductance=dopaminergic_cond,
+                                   parameter_file=None,
+                                   mod_file="concDA",
+                                   channel_param_dictionary={
+                                       "gpcr": {
+                                           "name" : "dopamine_A",
+                                           "key" : "modulationA",               
+                                           "module": ("concDA", "concentration"),                             
+                                           "ion_channels": {
+                                               "soma": ["naf_ms","kir_ms","kas_ms",\
+                                                        "kaf_ms","cal12_ms","cal13_ms",\
+                                                        "can_ms","car_ms"],
+                                               "dendrite": ["naf_ms","kir_ms","kas_ms",\
+                                                            "kaf_ms","cal12_ms","cal13_ms","car_ms"]
+                                           }}})
+        
+        if False:
+
+            self.add_neurons("DopaminergicAxon",snc_dir, self.num_SNc_neurons, \
+                             model_type="virtual",
+                             rotation_mode="",
+                             axon_density= snc_axon_density,
+                             volume_id="SNc")
+            # Define targets
+            
+            dopaminergic_cond = [1e-9,0.1e-9]
+            
+            self.add_neuron_target(neuron_name="DopaminergicAxon",
+                                   target_name="dSPN",
+                                   connection_type="dopamine",
+                                   dist_pruning=None,
+                                   f1=None, soft_max=None, mu2=None,a3=None,
+                                   conductance=dopaminergic_cond,
+                                   parameter_file=None,
+                                   mod_file="concDA",
+                                   channel_param_dictionary={
+                                       "vector": {
+                                           "name" : "dopamine_A",
+                                           "key" : "modulationA",
+                                           "ion_channels": {
+                                               "soma": ["naf_ms","kir_ms","kas_ms",\
+                                                        "kaf_ms","cal12_ms","cal13_ms",\
+                                                        "can_ms","car_ms"],
+                                               "dendrite": ["naf_ms","kir_ms","kas_ms",\
+                                                            "kaf_ms","cal12_ms","cal13_ms","car_ms"]
+                                           },
+                                           "input": {"method" : "alpha", "duration" : 2500 ,\
+                                                     "parameters": {"tstart" : 10, "gmax" : 5,\
+                                                                    "tau" : 500}}}})
+        if False:
+
+
+            self.add_neurons("DopaminergicAxon",snc_dir, self.num_SNc_neurons, \
+                             model_type="virtual",
+                             rotation_mode="",
+                             axon_density= snc_axon_density,
+                             volume_id="SNc")
+            # Define targets
+            dopaminergic_cond = [1e-9,0.1e-9]
+
+            self.add_neuron_target(neuron_name="DopaminergicAxon",
+                                   target_name="dSPN",
+                                   connection_type="dopamine",
+                                   dist_pruning=None,
+                                   f1=None, soft_max=None, mu2=None,a3=None,
+                                   conductance=dopaminergic_cond,
+                                   parameter_file=None,
+                                   mod_file="concDA",
+                                   channel_param_dictionary={
+                                       "gpcr": {
+                                           "name" : "dopamine_A",
+                                           "key" : "modulationA",   
+                                           "subcellular" : ("M4", "conc_acetylcholine"),
+                                           "ion_channels": {
+                                               "soma": ["naf_ms","kir_ms","kas_ms",\
+                                                        "kaf_ms","cal12_ms","cal13_ms",\
+                                                        "can_ms","car_ms"],
+                                               "dendrite": ["naf_ms","kir_ms","kas_ms",\
+                                                            "kaf_ms","cal12_ms","cal13_ms","car_ms"]
+                                           },
+                                           "input": {"method" : "alpha", "duration" : 2500 ,\
+                                                     "parameters": {"tstart" : 10, "gmax" : 5,\
+                                                                    "tau" : 500}}}})
     ############################################################################
 
     def define_cortex(self, num_neurons):

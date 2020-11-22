@@ -33,17 +33,18 @@ ENDCOMMENT
 
 NEURON {
     THREADSAFE
-    POINT_PROCESS tmGlut_M1RH_D1
+    POINT_PROCESS tmGlut_M1RH_D1_p
     RANGE tau1_ampa, tau2_ampa, tau1_nmda, tau2_nmda
     RANGE g_ampa, g_nmda, i_ampa, i_nmda, nmda_ratio
     RANGE e, g, i, q, mg
     RANGE tau, tauR, tauF, U, u0
     RANGE ca_ratio_ampa, ca_ratio_nmda, mggate, use_stp
-    RANGE modA, maxModA_AMPA, levelA, maxModB_AMPA, levelB
+    RANGE modA, maxModA_AMPA, maxModB_AMPA, levelB
     RANGE maxModA_NMDA, modB, maxModB_NMDA
     NONSPECIFIC_CURRENT i
     RANGE failRateA, failRate_levelA
     USEION cal WRITE ical VALENCE 2
+    POINTER levelA
 }
 
 UNITS {

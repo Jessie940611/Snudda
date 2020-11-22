@@ -4,8 +4,9 @@ Two state kinetic scheme  which reproduces the concentration change of acetylcho
 ENDCOMMENT
 
 NEURON {
-	POINT_PROCESS concACh
+	POINT_PROCESS concDA
 	RANGE tau1, tau2, e
+	RANGE amplitude
 	RANGE concentration
 }
 
@@ -18,12 +19,13 @@ UNITS {
 PARAMETER {
 	tau1 = 400 (ms) <1e-9,1e9>
 	tau2 = 300 (ms) <1e-9,1e9>
-	concentration = 4.5e-5 (nM)
-	amplitude = 0.25e-4			      
+	amplitude = 1
+	concentration = 1
 }
 
 ASSIGNED {
      factor
+     
 }
 
 STATE {
@@ -47,9 +49,9 @@ INITIAL {
 }
 
 BREAKPOINT {
-	SOLVE state METHOD cnexp
-	concentration = B - A
-	concentration = amplitude*concentration		   
+     SOLVE state METHOD cnexp
+	concentration = B-A
+	concentration = concentration*amplitude		   
 	
 }
 
@@ -62,3 +64,4 @@ NET_RECEIVE(weight (uS)) {
 	A = A + weight*factor
 	B = B + weight*factor
 }
+
