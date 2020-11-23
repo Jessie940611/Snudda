@@ -32,27 +32,67 @@ def alpha(parameter=None):
     return mag
 
 
-def step(ht, tstart, gmax=None):
-    mag = 0
+def step(parameter=None):
 
-    if ht > tstart:
-        mag = gmax
+    ht = parameter['ht']
+    tstart = parameter['tstart']
+    tstop = parameter['tstop']
+    gmax = parameter['gmax']
 
-    return mag
-
-
-def bathapplication(ht, mag=1):
-    return mag
-
-
-def alpha_background(ht, gmax, tau, tonic, tstart=[]):
-    mag = 0
-
-    for start in tstart:
-        mag = mag + alpha(ht, tstart[index], gmax, tau) + tonic
+    mag = list()
+    
+    for t_step in ht:
+        if ht > tstart and ht < tstop:
+            mag.append(gmax)
+        else:
+            mag.append(0)
+            
 
     return mag
 
 
-def time_series():
-    return array
+def bath_application(parameter=None):
+
+    ht = parameter['ht']
+    gmax = parameter['gmax']
+
+    mag = list()
+
+    for t_step in ht:
+
+        mag.append(gmax)
+
+    return mag
+
+
+def alpha_background(parameter=None):
+
+    ht = parameter['ht']
+    tstart = parameter['tstart']
+    gmax = parameter['gmax']
+    tau = parameter['tau']
+    tonic = parameter['tau']
+
+    mag = list()
+
+    for t_step in ht:
+
+        for start in tstart:
+
+            mag_intermediate = 0
+
+            if t_step >= tstart:
+                t = (t_step - tstart) / tau
+                e = np.exp(1 - t)
+                mag_intermediate = mag_intermediate + gmax * t * e
+
+        mag.append(mag_intermediate + tonic)
+
+    return mag
+
+
+def time_series(parameter=None):
+
+    mag = eval(parameter['array'])
+    
+    return mag

@@ -1439,8 +1439,6 @@ class SnuddaSimulate(object):
         self.sim.run(t, dt=0.025)
         self.pc.barrier()
         self.write_log("Simulation done.")
-        import pdb
-        pdb.set_trace()
         end_time = timeit.default_timer()
         self.write_log("Simulation run time: " \
                        + str(end_time - start_time) + " s")
@@ -1775,11 +1773,11 @@ class SnuddaSimulate(object):
 
     ############################################################################
 
-    def apply_neuromodulation(self):
+    def apply_neuromodulation(self,neuromodulation_file):
 
         from pathlib import Path
 
-        define_neuro_modulation = json.load(open(Path('/home/jofrony/Documents/Repositories/Snudda/snudda/') / 'data/neuromodulation/modulation.json', 'r'))
+        define_neuro_modulation = json.load(open(Path(neuromodulation_file), 'r'))
 
 
         for type_modulation, description_neuromodulation in define_neuro_modulation.items():
@@ -1788,7 +1786,7 @@ class SnuddaSimulate(object):
             method = getattr(modulation,description_neuromodulation['method'])
 
             description_neuromodulation['parameters'].update({"ht" : duration})
-            
+
             modulation_vector = method(description_neuromodulation['parameters'])
             
             self.neuromodulation.update({
@@ -1856,35 +1854,45 @@ class SnuddaSimulate(object):
                     cell_name = self.neurons[neuronID].name.split("_")[0]
                     syn = syntuple[3]
                     syn_name = str(syn).split("[")[0]
-                    if  cell_name in synapses.keys() and syn_name in synapses[cell_name]:
+                    if  cell_name in synapses.keys() and syn_name in synapses[cell_name].keys():
 
                         self.modulate_pre_or_post_synaptically(syn= syn,position=position,modulation=modulation,
-                                                           modulation_key=modulation_key)
+                                                               modulation_key=modulation_key,parameters=synapses[cell_name][syn_name])
 
         if intrinsic:
             for syn in self.synapse_list:
                 
                 cell_name = str(syn.get_segment()).split("_")[0]
                 syn_name = str(syn).split("[")[0]
-                if cell_name in synapses.keys() and syn_name in synapses[cell_name]:
+                if cell_name in synapses.keys() and syn_name in synapses[cell_name].keys():
                     self.modulate_pre_or_post_synaptically(syn=syn, position=position, modulation=modulation,
-                                                       modulation_key=modulation_key)
+                                                           modulation_key=modulation_key,parameters=synapses[cell_name][syn_name])
 
 
 
-    def modulate_pre_or_post_synaptically(self,syn,position,modulation,modulation_key):
+    def modulate_pre_or_post_synaptically(self,syn,position,modulation,modulation_key,parameters):
 
         
         
         setattr(syn, modulation_key, 1)
-       
-        print(position)
+
+        
         if 'postsynaptic' in position:
+
+            for max_param, value in parameters.items():
+
+                setattr(syn,max_param+modulation_key.replace("mod", ""),value)
+
+            
             self.neuromodulation[modulation] \
                 ['modulation_vector'].play(getattr(syn, \
                                         "_ref_level" + modulation_key.replace("mod", "")), \
                                 h.dt)
         if 'presynaptic' in position:
+
+            for max_param, value in parameters.items():
+
+                setattr(syn,max_param+modulation_key.replace("mod", ""),value)
             
             self.neuromodulation[modulation] \
                 ['modulation_vector'].play(getattr(syn, \
@@ -2268,7 +2276,8 @@ class SnuddaSimulate(object):
  
             method = getattr(modulation,par_set['gpcr']['input']['method'])
             par_set['gpcr']['input']['parameters'].update({"ht": np.arange(0,par_set['gpcr']['input']['duration'],0.025)})
-           
+            import pdb
+            pdb.set_trace()
             self.neuromodulation.update({par_set["gpcr"]["name"] : \
                                            { "key" :  par_set['gpcr']['key'], \
                                            "method" : par_set['gpcr']['input']["method"], \
@@ -2368,6 +2377,8 @@ if __name__ == "__main__":
                         help="Duration of simulation in seconds")
     parser.add_argument("--verbose", action="store_true")
 
+    parser.add_argument("--neuromodulation", default=None, help="json-file with neuromodulation")
+
     # If called through "nrniv -python Network_simulate.py ..." then argparse
     # gets confused by -python flag, and we need to ignore it
     # parser.add_argument("-python",help=argparse.SUPPRESS,
@@ -2428,6 +2439,11 @@ if __name__ == "__main__":
 
     sim.add_external_input()
     sim.check_memory_status()
+
+    if args.neuromodulation is not None:
+
+        sim.apply_neuromodulation(args.neuromodulation)
+        sim.neuromodulation_network_wide()
 
     if volt_file is not None:
         sim.add_recording(side_len=None)  # Side len let you record from a subset

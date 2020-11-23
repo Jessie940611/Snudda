@@ -6,7 +6,7 @@
 import sys
 import os
 import numpy as np
-from snudda.load import SnuddaLoad
+from snudda.load import Snuddaload
 import re
 import ntpath
 import time
@@ -47,12 +47,12 @@ class ComparePlotTraces():
     if(type(networkFiles) is not list):
       networkFile = networkFiles
       for r in range(len(fileNames)):
-        self.networkInfos.update({simulations_i: SnuddaLoad(networkFile)})
+        self.networkInfos.update({simulations_i: Snuddaload(networkFile)})
         simulations_i = simulations_i + 1
     elif(type(networkFiles) is list):
       
       for networkFile in networkFiles:
-        self.networkInfos.update({simulations_i: SnuddaLoad(networkFile)})
+        self.networkInfos.update({simulations_i: Snuddaload(networkFile)})
         simulations_i = simulations_i + 1
 
     else:

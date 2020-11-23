@@ -39,8 +39,8 @@ NEURON {
     RANGE e, g, i, q, mg
     RANGE tau, tauR, tauF, U, u0
     RANGE ca_ratio_ampa, ca_ratio_nmda, mggate, use_stp
-    RANGE modA, maxModA_AMPA, levelA, maxModB_AMPA, levelB
-    RANGE maxModA_NMDA, modB, maxModB_NMDA
+    RANGE modA, maxMod_AMPAA, levelA, maxMod_AMPAB, levelB
+    RANGE maxMod_NMDAA, modB, maxMod_NMDAB
     NONSPECIFIC_CURRENT i
     RANGE failRateA, failRate_levelA
     USEION cal WRITE ical VALENCE 2
@@ -73,18 +73,18 @@ PARAMETER {
     mg = 1 (mM)
 
     
-    maxModA_AMPA = 2
+    maxMod_AMPAA = 1
     levelA = 0
     
-    maxModB_AMPA = 2 
-    failRateA = 0.5
+    maxMod_AMPAB = 1 
+    failRateA = 0
     failRate_levelA = 1
 
     modA = 0
-    maxModA_NMDA = 2
+    maxModA_NMDA = 1
     
     modB = 0
-    maxModB_NMDA = 2 
+    maxModB_NMDA = 1 
     levelB = 0
 			
     use_stp = 1     : to turn of use_stp -> use 0
@@ -228,25 +228,25 @@ FUNCTION urand() {
 FUNCTION modulationA_NMDA() {
     : returns modulation factor
     
-    modulationA_NMDA = 1 + modA*(maxModA_NMDA-1)*levelA 
+    modulationA_NMDA = 1 + modA*(maxMod_NMDAA-1)*levelA 
 }
 
 FUNCTION modulationB_NMDA() {
     : returns modulation factor
     
-    modulationB_NMDA = 1 + modB*(maxModB_NMDA-1)*levelB 
+    modulationB_NMDA = 1 + modB*(maxMod_NMDAB-1)*levelB 
 }
 
 FUNCTION modulationA_AMPA() {
     : returns modulation factor
     
-    modulationA_AMPA = 1 + modA*(maxModA_AMPA-1)*levelA 
+    modulationA_AMPA = 1 + modA*(maxMod_AMPAA-1)*levelA 
 }
 
 FUNCTION modulationB_AMPA() {
     : returns modulation factor
     
-    modulationB_AMPA = 1 + modB*(maxModB_AMPA-1)*levelB 
+    modulationB_AMPA = 1 + modB*(maxMod_AMPAB-1)*levelB 
 }
 
 COMMENT
