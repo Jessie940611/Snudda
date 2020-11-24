@@ -1,5 +1,93 @@
 [
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -110,7 +198,95 @@
             "value": 0.3876401867569197
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -229,7 +405,95 @@
             "value": 0.408768635324925
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -348,7 +612,95 @@
             "value": 0.3252069636045454
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -467,7 +819,95 @@
             "value": 0.5242670868326372
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -586,7 +1026,95 @@
             "value": 0.9791209263449564
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -705,7 +1233,95 @@
             "value": 0.4314743565456175
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -824,7 +1440,95 @@
             "value": 0.986901974106719
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -943,7 +1647,95 @@
             "value": 0.8749528300676304
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1062,7 +1854,95 @@
             "value": 0.48816610370036007
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1181,7 +2061,95 @@
             "value": 0.5151507016505671
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1300,7 +2268,95 @@
             "value": 0.5481619988225302
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1419,7 +2475,95 @@
             "value": 0.7687816554597721
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1538,7 +2682,95 @@
             "value": 0.4907692339953116
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1658,7 +2890,95 @@
         }
     ],
     [
-        {
+       {
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+}, {
             "dist_type": "uniform",
             "mech": "kir_ms",
             "mech_param": "maxModA",
@@ -1776,7 +3096,95 @@
             "value": 0.8576524743615083
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -1895,7 +3303,95 @@
             "value": 0.4884392410967112
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2014,7 +3510,95 @@
             "value": 0.30481995214045754
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2134,7 +3718,95 @@
         }
     ],
     [
-        {
+       {
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+}, {
             "dist_type": "uniform",
             "mech": "kir_ms",
             "mech_param": "maxModA",
@@ -2252,7 +3924,95 @@
             "value": 0.8611043675324325
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2372,7 +4132,95 @@
         }
     ],
     [
-        {
+       {
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+}, {
             "dist_type": "uniform",
             "mech": "kir_ms",
             "mech_param": "maxModA",
@@ -2490,7 +4338,95 @@
             "value": 0.19584145701476874
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2609,7 +4545,95 @@
             "value": 0.10329594109065487
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2728,7 +4752,95 @@
             "value": 0.39948921911673996
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2847,7 +4959,95 @@
             "value": 0.33305841587596907
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",
@@ -2966,7 +5166,95 @@
             "value": 0.11823512334983921
         }
     ],
-    [
+    [{
+	"dist_type": "uniform",
+	"mech": "naf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_naf_ms",
+	"sectionlist": "all",
+	"type": "range",
+	"value": 1.1175966497580283
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": -0.07041953761822128
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.9340244503720702
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.6279049286120428
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "basal",
+	"type": "range",
+	"value": 0.5428023923942951
+}, {
+	"dist_type": "uniform",
+	"mech": "kaf_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kaf_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": -2.0012744085484293
+}, {
+	"dist_type": "uniform",
+	"mech": "kir_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_kir_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.900958505268107
+}, {
+	"dist_type": "uniform",
+	"mech": "cal12_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal12_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.5021282396784104
+}, {
+	"dist_type": "uniform",
+	"mech": "cal13_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_cal13_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.6761783262032841
+}, {
+	"dist_type": "uniform",
+	"mech": "can_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_can_ms",
+	"sectionlist": "somatic",
+	"type": "range",
+	"value": 0.7223033551902275
+}, {
+	"dist_type": "uniform",
+	"mech": "Im_ms",
+	"mech_param": "maxModB",
+	"param_name": "maxModB_Im_ms",
+	"sectionlist": "axonal",
+	"type": "range",
+	"value": 0.022653837617089768
+},
         {
             "dist_type": "uniform",
             "mech": "kir_ms",

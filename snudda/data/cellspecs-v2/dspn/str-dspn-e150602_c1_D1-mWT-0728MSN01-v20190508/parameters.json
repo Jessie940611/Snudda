@@ -1,5 +1,13 @@
 [
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -385,7 +393,15 @@
         "value": 7.970578664898645e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -771,7 +787,15 @@
         "value": 7.955832960004925e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -1157,7 +1181,15 @@
         "value": 6.258136869405439e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -1543,7 +1575,15 @@
         "value": 4.668806194240507e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -1929,7 +1969,15 @@
         "value": 2.0568103378086052e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -2315,7 +2363,15 @@
         "value": 3.3403857178110366e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -2701,7 +2757,15 @@
         "value": 2.5771901063014438e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 

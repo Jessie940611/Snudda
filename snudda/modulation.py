@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def alpha(parameter=None):
 
     ht = parameter['ht']
@@ -69,9 +68,9 @@ def alpha_background(parameter=None):
 
     ht = parameter['ht']
     tstart = parameter['tstart']
-    gmax = parameter['gmax']
+    gmax_decrease = parameter['gmax_decrease']
     tau = parameter['tau']
-    tonic = parameter['tau']
+    tonic = parameter['tonic']
 
     mag = list()
 
@@ -84,9 +83,11 @@ def alpha_background(parameter=None):
             if t_step >= tstart:
                 t = (t_step - tstart) / tau
                 e = np.exp(1 - t)
-                mag_intermediate = mag_intermediate + gmax * t * e
+                mag_intermediate = mag_intermediate + gmax_decrease * t * e
 
-        mag.append(mag_intermediate + tonic)
+        if mag_intermediate > 0.99:
+            mag_intermediate = 1
+        mag.append(tonic - mag_intermediate)
 
     return mag
 

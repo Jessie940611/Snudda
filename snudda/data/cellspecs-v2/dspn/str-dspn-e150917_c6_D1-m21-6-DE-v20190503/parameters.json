@@ -1,5 +1,13 @@
 [
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -385,7 +393,15 @@
         "value": 6.024323516649796e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -771,7 +787,15 @@
         "value": 3.042023420682343e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -1157,7 +1181,15 @@
         "value": 4.1906415027718615e-07
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -1543,7 +1575,15 @@
         "value": 6.48090291706204e-07
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 
@@ -1929,7 +1969,15 @@
         "value":  1.4945517897790187e-06
     }
 ],
-[
+[{
+        "dist_type": "uniform", 
+        "mech": "Im_ms", 
+        "mech_param": "gbar", 
+        "param_name": "gbar_Im_ms", 
+        "sectionlist": "axonal", 
+        "type": "range", 
+        "value": 0.001
+    }, 
     {
         "param_name": "celsius", 
         "type": "global", 

@@ -1788,7 +1788,7 @@ class SnuddaSimulate(object):
             description_neuromodulation['parameters'].update({"ht" : duration})
 
             modulation_vector = method(description_neuromodulation['parameters'])
-            
+           
             self.neuromodulation.update({
                 description_neuromodulation['key'] :\
                     {
