@@ -1838,6 +1838,8 @@ class SnuddaSimulate(object):
                         for mech in seg:
                             if mech.name() in modulate_section:
                                 setattr(mech,modulation_key,1)
+                                print("maxMod"+modulation_key.replace("mod",""))
+                                print(getattr(mech,"maxMod"+modulation_key.replace("mod","")))
                                 self.neuromodulation[modulation]['modulation_vector'].play(getattr(mech,"_ref_level"+modulation_key.replace("mod","")),h.dt)
                     
 

@@ -71,7 +71,7 @@ PARAMETER {
     mg = 1 (mM)
     
     modA = 0
-    maxMod_AMPAAA = 1
+    maxMod_AMPAA = 1
     modB = 0
     maxMod_AMPAB = 1
     levelB = 0

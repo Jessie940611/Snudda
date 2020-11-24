@@ -81,10 +81,10 @@ PARAMETER {
     failRate_levelA = 1
 
     modA = 0
-    maxModA_NMDA = 1
+    maxMod_NMDAA = 1
     
     modB = 0
-    maxModB_NMDA = 1 
+    maxMod_NMDAB = 1 
     levelB = 0
 			
     use_stp = 1     : to turn of use_stp -> use 0
