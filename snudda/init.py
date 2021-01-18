@@ -1105,18 +1105,86 @@ class SnuddaInit(object):
 
     ############################################################################
 
-    def define_SNr(self, num_neurons):
+    def define_SNr(self, num_neurons=None,f_SNr_neuron=1.0,num_SNr_neuron=None,volume_type=None,side_len=None,slice_depth=None,cell_spec_dir=None,neuron_density=30000):
 
-        if num_neurons <= 0:
-            # No neurons, skipping
-            return
+        get_val = lambda x: 0 if x is None else x
 
+        if num_neurons is None:
+            self.num_SNr_neuron = get_val(num_SNr_neuron)
+
+            num_neurons = self.num_SNr_neuron
+
+            if num_neurons <= 0:
+                # No neurons, skipping
+                return
+        else:
+
+            if num_neurons <= 0:
+                # No neurons, skipping
+                return
+
+            f_tot = f_SNr_neuron
+
+            self.num_SNr_neuron = np.round(f_SNr_neuron * num_SNr_neuron / f_tot)
+
+
+            num_neurons = self.num_SNr_neuron
+                
+        if num_neurons <= 1e6:  # 1e6
+            print("Using cube for SNr")
+            # 1.73 million neurons, volume of allen striatal mesh is 21.5mm3
+            snr_volume = 1e-9 * num_neurons / neuron_density  # 80.5e3
+            snr_side_len = snr_volume ** (1. / 3)
+            snr_centre = np.array([3540e-6, 4645e-6, 5081e-6])  #### CHANGE MEE!!!!!!
+
+            if num_neurons < 500:
+                mesh_bin_width = snr_side_len
+            elif num_neurons < 5000:
+                mesh_bin_width = snr_side_len / 5
+            else:
+                mesh_bin_width = snr_side_len / 10
+
+            # Reduced striatum, due to few neurons
+            self.define_structure(struct_name="SNr",
+                                  struct_mesh="cube",
+                                  struct_centre=snr_centre,
+                                  side_len=snr_side_len,
+                                  mesh_bin_width=mesh_bin_width)
         self.num_SNr_neurons = num_neurons
         self.num_neurons_total += num_neurons
 
-        self.define_structure(struct_name="SNr",
-                              struct_mesh="mesh/SNr-mesh.obj",
-                              mesh_bin_width=1e-4)
+
+        if cell_spec_dir is None:
+            cs_dir = self.data_path + "/cellspecs-v2"
+
+
+        SNr_neuron_dir = cs_dir + "/SNr"
+            
+        self.reg_size = 5
+
+        SNr_axon_density = ("r", "5000*1e12/3*np.exp(-r/120e-6)", 350e-6)
+        
+        self.add_neurons(name="SNr_neuron", neuron_dir=SNr_neuron_dir,
+                         num_neurons=self.num_SNr_neuron,
+                         axon_density=SNr_axon_density,
+                         volume_id="SNr")
+
+        '''
+        self.add_neuron_target(neuron_name="SNr_neuron",
+                               target_name="SNr_neuron",
+                               connection_type="GABA",
+                               dist_pruning=None,
+                               f1=0.15, soft_max=5, mu2=2, a3=1,
+                               conductance=1e-9,
+                               parameter_file=pfFSFS,
+                               mod_file="tmGabaA",
+                               channel_param_dictionary={"tau1": (1.33e-3, 1e3),
+                                                         "tau2": (5.7e-3, 1e3)})
+        '''
+
+        
+        
+        
 
         # !!! Need to add targets for neurons in SNr
 
