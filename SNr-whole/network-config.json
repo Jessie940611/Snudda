@@ -1,0 +1,45 @@
+{
+    "RandomSeed": {
+        "masterseed": 1000,
+        "init": 2989689681,
+        "place": 4191542321,
+        "detect": 2529548519,
+        "prune": 3619692248,
+        "input": 327553172,
+        "simulate": 2898895421
+    },
+    "Volume": {
+        "Striatum": {
+            "type": "mesh",
+            "dMin": 1.5e-05,
+            "meshFile": "/home/jofrony/Documents/Repositories/BasalGangliaExperiments/SNr-include/Snudda/snudda/data/mesh/SNr-mesh.obj",
+            "meshBinWidth": 0.0001
+        }
+    },
+    "PopulationUnits": {
+        "nPopulationUnits": 1,
+        "method": "populationUnitSpheres",
+        "centres": [
+            []
+        ],
+        "radius": null
+    },
+    "Connectivity": {},
+    "Neurons": {
+        "SNr_neuron_0": {
+            "morphology": "/home/jofrony/Documents/Repositories/BasalGangliaExperiments/SNr-include/Snudda/snudda/data/cellspecs-v2/SNr/SNr-neuron/Lee2007Fig5clean.swc",
+            "parameters": "/home/jofrony/Documents/Repositories/BasalGangliaExperiments/SNr-include/Snudda/snudda/data/cellspecs-v2/SNr/SNr-neuron/parameters.json",
+            "mechanisms": "/home/jofrony/Documents/Repositories/BasalGangliaExperiments/SNr-include/Snudda/snudda/data/cellspecs-v2/SNr/SNr-neuron/mechanisms.json",
+            "num": 20000,
+            "hoc": null,
+            "neuronType": "neuron",
+            "rotationMode": "random",
+            "volumeID": "SNr",
+            "axonDensity": [
+                "r",
+                "5000*1e12/3*np.exp(-r/120e-6)",
+                0.00035
+            ]
+        }
+    }
+}

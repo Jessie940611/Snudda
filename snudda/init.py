@@ -1129,8 +1129,13 @@ class SnuddaInit(object):
 
 
             num_neurons = self.num_SNr_neuron
-                
-        if num_neurons <= 1e6:  # 1e6
+
+        if volume_type == "mouseSNr":
+            self.define_structure(struct_name="SNr",
+                                  struct_mesh=self.data_path + "/mesh/SNr-mesh.obj",
+                                  mesh_bin_width=1e-4)
+            
+        elif num_neurons <= 1e6:  # 1e6
             print("Using cube for SNr")
             # 1.73 million neurons, volume of allen striatal mesh is 21.5mm3
             snr_volume = 1e-9 * num_neurons / neuron_density  # 80.5e3

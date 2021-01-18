@@ -1,0 +1,29 @@
+No mesh cache file found (/home/jofrony/Documents/Repositories/BasalGangliaExperiments/SNr-include/Snudda/snudda/data/mesh/SNr-mesh.obj-100-cache.pickle)
+Running in serial
+Voxel mask: 17x18x49
+Processing x = 0
+Processing x = 1
+Processing x = 2
+Processing x = 3
+Processing x = 4
+Processing x = 5
+Processing x = 6
+Processing x = 7
+Processing x = 8
+Processing x = 9
+Processing x = 10
+Processing x = 11
+Processing x = 12
+Processing x = 13
+Processing x = 14
+Processing x = 15
+Processing x = 16
+Fraction of border voxels: 0.0
+Saving mesh cache file /home/jofrony/Documents/Repositories/BasalGangliaExperiments/SNr-include/Snudda/snudda/data/mesh/SNr-mesh.obj-100-cache.pickle
+Calculation time: 315.6741828219965 s
+Setup voxel list
+Setup place neurons
+Update padding mask
+Regenerating new random pool
+Setup done
+Inner voxel bin volume: 1.5 mm³
