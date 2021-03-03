@@ -7,7 +7,7 @@
 	    "frequency" : 1,
 	    "populationUnitCorrelation" : 0.0,
 	    "jitter" : 0.002,
-	    "conductance" : 0,
+	    "conductance" : 5e-11,
 	    "modFile": "tmGlut",
 	    "parameterFile": "$DATA/synapses/v2/M1RH_Analysis_190925.h5-parameters-MS.json"
 	},
@@ -31,7 +31,7 @@
 	    "frequency" : 1,
 	    "populationUnitCorrelation" : 0.0,
 	    "jitter" : 0.01,
-	    "conductance" : 0,
+	    "conductance" : 5e-11,
 	    "modFile": "tmGlut",
 	    "parameterFile":"$DATA/synapses/v2/TH_Analysis_191001.h5-parameters-MS.json"
 	}	
@@ -45,7 +45,7 @@
 	    "frequency" : 1,
 	    "populationUnitCorrelation" : 0.0,
 	    "jitter" : 0.003,
-	    "conductance" : 0,
+	    "conductance" : 5e-11,
         "modFile":"tmGlut",
 	    "parameterFile": "$DATA/synapses/v2/M1RH_Analysis_190925.h5-parameters-MS.json"
 	},
@@ -69,7 +69,7 @@
 	    "frequency" : 1,
 	    "populationUnitCorrelation" : 0.0,
 	    "jitter" : 0.01,
-	    "conductance" : 0,
+	    "conductance" : 5e-11,
 	    "modFile": "tmGlut",
 	    "parameterFile":"$DATA/synapses/v2/TH_Analysis_191001.h5-parameters-MS.json"
 	}	
