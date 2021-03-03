@@ -26,7 +26,7 @@
 #
 # * Compile mod files (we now have failure rates for GABA)
 #
-# nrnivmodl cellspecs/mechanisms/
+# nrnivmodl data/neurons/mechanisms/
 #
 # * Cut the slice, so z > 0.00504 is kept
 #
@@ -51,7 +51,7 @@ import os
 import glob
 import numpy as np
 from snudda.simulate import SnuddaSimulate
-from snudda.load import Snuddaload
+from snudda.load import SnuddaLoad
 import matplotlib
 import matplotlib.pyplot as plt
 import neuron
@@ -121,7 +121,7 @@ class SnuddaCalibrateSynapses(object):
     from .init import SnuddaInit
 
     configName= simName + "/network-config.json"
-    cnc = SnuddaInit(struct_def={}, config_name=configName, nChannels=1)
+    cnc = SnuddaInit(struct_def={}, config_file=configName, nChannels=1)
     cnc.define_striatum(num_dSPN=nMSD1, num_iSPN=nMSD2, num_FS=nFS, num_LTS=nLTS, num_ChIN=nChIN,
                         volume_type="slice", side_len=200e-6, slice_depth=150e-6)
 
@@ -141,7 +141,7 @@ class SnuddaCalibrateSynapses(object):
 
     print("\nThe last command will pop up a figure and enter debug mode, press ctrl+D in the terminal window after inspecting the plot to continue")
 
-    print("\n!!! Remember to compile the mod files: nrnivmodl cellspecs/mechanisms")
+    print("\n!!! Remember to compile the mod files: nrnivmodl data/neurons/mechanisms")
 
     print("\nTo run for example dSPN -> iSPN (and dSPN->dSPN) calibration:")
     print("mpiexec -n 12 -map-by socket:OVERSUBSCRIBE python3 snudda_calibrate_synapses.py run " + str(expType) + " " + str(simName) + "/network-cut-slice.hdf5 dSPN iSPN")
@@ -305,7 +305,7 @@ class SnuddaCalibrateSynapses(object):
       maxDist = self.maxDist
     
     # Read the data
-    self.snuddaLoad = Snuddaload(self.networkFile)
+    self.snuddaLoad = SnuddaLoad(self.networkFile)
     self.data = self.snuddaLoad.data
 
     time,voltage = self.readVoltage(self.voltFile) # sets self.voltage
@@ -334,7 +334,7 @@ class SnuddaCalibrateSynapses(object):
     
     for (preID,t) in self.injInfo:
       # Post synaptic neurons to preID
-      synapses,coords = self.snuddaLoad.findSynapses(preID=preID)
+      synapses,coords = self.snuddaLoad.find_synapses(pre_id=preID)
 
       postIDset = set(synapses[:,1]).intersection(self.possiblePostID)
       prePos = self.snuddaLoad.data["neuronPositions"][preID,:]

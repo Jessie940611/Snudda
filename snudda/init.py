@@ -6,94 +6,70 @@
 #
 # Add a function so that $SNUDDADATA refers to the base datapath for snudda
 #
-
 import numpy as np
+import numexpr
+import sys
 import os.path
 import glob
 import collections
-from .CreateCubeMesh import CreateCubeMesh
-from .CreateSliceMesh import CreateSliceMesh
+from .create_cube_mesh import create_cube_mesh
+from .create_slice_mesh import create_slice_mesh
 
 import json
+from snudda.utils.snudda_path import snudda_parse_path, snudda_simplify_path
+from snudda.utils.snudda_path import snudda_path_exists
+from snudda.utils.snudda_path import snudda_isdir
+from snudda.utils.snudda_path import snudda_isfile
+
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            # return super(NumpyEncoder, self).default(obj)
+            return json.JSONEncoder.default(self, obj)
 
 
 class SnuddaInit(object):
 
-    def __init__(self, struct_def, config_name,
-                 num_population_units=1, population_unit_centres="[[]]", population_unit_radius=None):
+    def __init__(self,
+                 network_path=None,
+                 struct_def=None, config_file=None,
+                 random_seed=None):
 
-        print("CreateConfig")
+        # print("CreateConfig")
 
         self.network_data = collections.OrderedDict([])
+
+        self.network_data["RandomSeed"], self.init_rng = SnuddaInit.setup_random_seeds(random_seed)
         self.network_data["Volume"] = collections.OrderedDict([])
         self.num_neurons_total = 0
-        self.configName = config_name
 
-        if config_name is not None:
-            self.basePath = os.path.dirname(config_name)
+        if config_file:
+            self.config_file = config_file
+        elif network_path:
+            self.config_file = os.path.join(network_path, "network-config.json")
         else:
-            self.basePath = ""
+            self.config_file = None
 
-        self.data_path = os.path.dirname(__file__) + "/data"
-
-        # Population Units here refer to processing units, where the neurons within a Population Unit
-        # might have different connectivity than neurons belonging to different population Units
-        self.network_data["PopulationUnits"] = collections.OrderedDict([])
-        self.network_data["PopulationUnits"]["nPopulationUnits"] = num_population_units
-
-        use_random_population_units = False
-
-        if use_random_population_units:
-            self.network_data["PopulationUnits"]["method"] = "random"
+        if network_path:
+            self.network_path = network_path
+        elif config_file:
+            self.network_path = os.path.dirname(config_file)
         else:
-            self.network_data["PopulationUnits"]["method"] = "populationUnitSpheres"
+            self.network_path = ""
 
-            # Centre of striatum mesh is [3540e-6,4645e-6,5081e-6]
-            # - the population units will be shifted according to this coordinate
-
-            self.network_data["PopulationUnits"]["centres"] = eval(population_unit_centres)
-            try:
-                if len(self.network_data["PopulationUnits"]["centres"]) == num_population_units:
-                    pass
-                else:
-                    raise ValueError
-            except ValueError:
-                print("The number of Population Units does not equal the number of centres.")
-                import pdb
-                pdb.set_trace()
-
-            if population_unit_radius:
-                self.network_data["PopulationUnits"]["radius"] = population_unit_radius * 1e-6
-            else:
-                self.network_data["PopulationUnits"]["radius"] = None
-
-            print("Overriding the number of population units")
-
-            self.network_data["PopulationUnits"]["nPopulationUnits"] \
-                = len(self.network_data["PopulationUnits"]["centres"])
+        if self.config_file and self.network_path:
+            assert self.network_path == os.path.dirname(self.config_file), \
+               f"network_path {self.network_path} and config_file path {self.config_file} must match"
 
         self.network_data["Connectivity"] = dict([])
         self.network_data["Neurons"] = dict([])
-
-        # self.neuronTargets = collections.OrderedDict([])
-
-        print("Using " + str(num_population_units) + " Population Units")
-
-        if num_population_units > 1:
-            from scipy import spatial
-
-            distance_between_population_units = spatial.distance.cdist(self.network_data["PopulationUnits"]["centres"],
-                                                                       self.network_data["PopulationUnits"]["centres"],
-                                                                       metric="euclidean")[
-                np.triu_indices(len(self.network_data["PopulationUnits"]["centres"]), k=1)]
-
-            print("Using radius of Population Unit Sphere " + str(
-                np.ceil(self.network_data["PopulationUnits"]["radius"] * 1e6)) + " microns")
-
-            print("Using distance between Population Unit Centres" + str(
-                distance_between_population_units * 1e6) + " microns")
-
-        self.n_population_units = num_population_units  # 5
 
         struct_func = {"Striatum": self.define_striatum,
                        "GPe": self.define_GPe,
@@ -105,15 +81,15 @@ class SnuddaInit(object):
                        "Thalamus": self.define_thalamus}
 
         if struct_def:
-
             for sn in struct_def:
                 print("Adding " + sn + " with " + str(struct_def[sn]) + " neurons")
                 struct_func[sn](num_neurons=struct_def[sn])
 
             # Only write JSON file if the structDef was not empty
-            self.write_json(self.configName)
+            self.write_json(self.config_file)
         else:
-            print("No structDef defined, not writing JSON file in init")
+            pass
+            # print("No structDef defined, not writing JSON file in init")
 
     ############################################################################
             
@@ -135,20 +111,20 @@ class SnuddaInit(object):
             assert side_len is not None, "define_structure: cube needs sideLen specified"
             assert struct_centre is not None, "define_structure: cube needs a structCentre"
 
-            struct_mesh = self.basePath + "/mesh/" + struct_name + "-cube-mesh-" + str(side_len) + ".obj"
+            struct_mesh = os.path.join(self.network_path, "mesh", f"{struct_name}-cube-mesh-{side_len}.obj")
 
             if mesh_bin_width is None:
                 mesh_bin_width = side_len / 3.0
                 print("Setting mesh_bin_width to " + str(mesh_bin_width))
 
-            CreateCubeMesh(file_name=struct_mesh,
-                           centre_point=struct_centre,
-                           side_len=side_len,
-                           description=f"{struct_name} cube mesh, centre: {struct_centre}, side: {side_len}")
+            create_cube_mesh(file_name=struct_mesh,
+                             centre_point=struct_centre,
+                             side_len=side_len,
+                             description=f"{struct_name} cube mesh, centre: {struct_centre}, side: {side_len}")
 
         elif struct_mesh == "slice":
 
-            struct_mesh = self.basePath + "/mesh/" + struct_name + "-slice-mesh-150mum-depth.obj"
+            struct_mesh = os.path.join(self.network_path, "mesh", f"{struct_name}-slice-mesh-150mum-depth.obj")
 
             # 2019-11-26 : Anya said that her sagital striatal slices
             # were 2.36 x 2.36 mm. So that can be an upper limit
@@ -165,12 +141,15 @@ class SnuddaInit(object):
                 mesh_bin_width = np.minimum(side_len, slice_depth) / 3.0
                 print("Setting meshBinWidth to " + str(mesh_bin_width))
 
-            CreateSliceMesh(fileName=struct_mesh,
-                            centrePoint=np.array([0, 0, 0]),
-                            xLen=side_len,
-                            yLen=side_len,
-                            zLen=slice_depth,
-                            description=struct_name + " slice mesh")
+            create_slice_mesh(file_name=struct_mesh,
+                              centre_point=np.array([0, 0, 0]),
+                              x_len=side_len,
+                              y_len=side_len,
+                              z_len=slice_depth,
+                              description=struct_name + " slice mesh")
+
+        if not snudda_path_exists(struct_mesh):
+            print(f"Warning struct mesh {struct_mesh} is missing!")
 
         assert struct_name not in self.network_data["Volume"], \
             "defineStruct: Volume " + struct_name + " is already defined."
@@ -182,7 +161,8 @@ class SnuddaInit(object):
 
     ############################################################################
 
-    def define_volume(self, mesh_file=None, d_min=15e-6, mesh_bin_width=1e-4):
+    @staticmethod
+    def define_volume(mesh_file=None, d_min=15e-6, mesh_bin_width=1e-4):
 
         vol = dict([])
         vol["type"] = "mesh"
@@ -210,10 +190,13 @@ class SnuddaInit(object):
                           soft_max_other=None,
                           mu2_other=None,
                           a3_other=None,
-                          conductance=[1.0e-9, 0],
+                          conductance=None,
                           mod_file=None,
                           parameter_file=None,
                           channel_param_dictionary=None):
+
+        if conductance is None:
+            conductance = [1.0e-9, 0]
 
         # if(connectionType == "GapJunction"):
         #  assert f1 is None and softMax is None and mu2 is None and a3 is None\
@@ -279,15 +262,9 @@ class SnuddaInit(object):
             if a3_other is None:
                 a3_other = a3
 
-            # pruneInfo_other = (distPruning_other,
-            #                   f1_other,
-            #                   softMax_other,
-            #                   mu2_other,
-            #                   a3_other)
-
             pruning_info_other = dict([])
             pruning_info_other["f1"] = f1_other
-            pruning_info_other["softMax"] = soft_max
+            pruning_info_other["softMax"] = soft_max_other
             pruning_info_other["mu2"] = mu2_other
             pruning_info_other["a3"] = a3_other
             pruning_info_other["distPruning"] = dist_pruning_other
@@ -295,32 +272,7 @@ class SnuddaInit(object):
             # Different pruning rules for within and between neuron units
             con_info["pruningOther"] = pruning_info_other
 
-            # targetInfo = [targetName,
-            #              [connectionType,cond,condStd,channelParamDictionary],
-            #              pruneInfo, pruneInfo_other]
-        # else:
-        #  # All targets of same type are treated equally, no channels
-        #  targetInfo = [targetName,
-        #                [connectionType,cond,condStd,channelParamDictionary],
-        #                pruneInfo]
-        #
-        # if(neuronName not in self.neuronTargets):
-        #   self.neuronTargets[neuronName] = []
-
-        # import pdb
-        # pdb.set_trace()
-
-        # Just make sure we are not specifying the same output twice
-        # Can have GJ and synapse to same target, so moved this check to
-        # Network_connect_voxel.py
-        # assert targetName not in [x[0] for x in self.neuronTargets[neuronName]], \
-        #  "Error " + neuronName + " already has output for " + targetName \
-        #   + " specified (DUPLICATE!)"
-
-        # self.neuronTargets[neuronName].append(targetInfo)
-
-        # New format for connection info, now stored as dictionary
-        # Json did not like typles in keys, so we separate by comma
+        # Json did not like tuples in keys, so we separate by comma
         nt_key = neuron_name + "," + target_name
         if nt_key not in self.network_data["Connectivity"]:
             self.network_data["Connectivity"][nt_key] = dict([])
@@ -349,26 +301,29 @@ class SnuddaInit(object):
         if axon_density is not None:
             if axon_density[0] == "r":
                 # Verify axon density function
-                r = np.linspace(0, axon_density[2], 10)
+                r = np.linspace(0, axon_density[2], 10)  # r is used in eval
                 try:
-                    eval(axon_density[1])
+                    numexpr.evaluate(axon_density[1])
                 except:
                     print("!!! Axon density failed test: " + str(axon_density))
                     print("Inparameter: r = 1-D array of radius in meter")
+                    import traceback
+                    tstr = traceback.format_exc()
+                    print(tstr)
+                    sys.exit(-1)
             elif axon_density[0] == "xyz":
-                x = np.linspace(axon_density[2][0], axon_density[2][1], 10)
+                x = np.linspace(axon_density[2][0], axon_density[2][1], 10)  # x,y,z used in eval below
                 y = np.linspace(axon_density[2][2], axon_density[2][3], 10)
                 z = np.linspace(axon_density[2][4], axon_density[2][5], 10)
                 try:
-                    eval(axon_density[1])
+                    numexpr.evaluate(axon_density[1])
                 except:
                     print("!!! Axon density failed test: " + str(axon_density))
                     print("Inparameters: x,y,z three 1-D arrays (units in meter)")
                     import traceback
                     tstr = traceback.format_exc()
-
-                    import pdb
-                    pdb.set_trace()
+                    print(tstr)
+                    sys.exit(-1)
 
                 print("Checking boundaries, to make sure P is not too high")
                 x = np.zeros((8, 1))
@@ -384,7 +339,8 @@ class SnuddaInit(object):
                             z[ctr] = zz
                             ctr += 1
 
-                p_corner = eval(axon_density[1]) * (3e-6 ** 3)
+                # axon_density function of x,y,z defined above
+                p_corner = numexpr.evaluate(axon_density[1]) * (3e-6 ** 3)
 
                 for P, xx, yy, zz in zip(p_corner, x, y, z):
                     print(name + " axon density P(" + str(xx) + "," + str(yy) + "," + str(zz) + ") = " + str(P))
@@ -398,28 +354,37 @@ class SnuddaInit(object):
                 #      + " axon points to place")
 
         print("Adding neurons: " + str(name) + " from dir " + str(neuron_dir))
+        # TODO: We should force users to use same name as the directory name
+        # ie, fs/FSN_0 directory should be named FSN_0
 
         # Find which neurons are available in neuronDir
-        dir_list = glob.glob(neuron_dir + "/*")
+        dir_list = glob.glob(snudda_parse_path(neuron_dir) + "/*")
         neuron_file_list = []
 
-        assert len(dir_list) > 0, "Neuron dir " + str(neuron_dir) + " is empty!"
+        assert len(dir_list) > 0, f"Neuron dir {snudda_parse_path(neuron_dir)} is empty!"
 
-        for d in dir_list:
+        for fd in dir_list:
 
-            if os.path.isdir(d):
-                par_file = d + "/parameters.json"
-                mech_file = d + "/mechanisms.json"
-                modulation_file = d + "/modulation.json"
-                if not os.path.exists(modulation_file):
+            d = snudda_simplify_path(fd)
+
+            if snudda_isdir(d):
+                # We want to maintain the $DATA keyword in the path so that the user can move
+                # the config file between systems and still run it.
+                par_file = os.path.join(d, "parameters.json")
+                mech_file = os.path.join(d, "mechanisms.json")
+                modulation_file = os.path.join(d, "modulation.json")
+                if not snudda_path_exists(modulation_file):
                     modulation_file = None
 
-                swc_file = glob.glob(d + "/*swc")
-                hoc_file = glob.glob(d + "/*hoc")
+                sd = snudda_parse_path(d)
+                swc_file = glob.glob(os.path.join(sd, "*swc"))
+                swc_file = [snudda_simplify_path(sf) for sf in swc_file]
+                hoc_file = glob.glob(os.path.join(sd, "*hoc"))
+                hoc_file = [snudda_simplify_path(hf) for hf in hoc_file]
 
-                assert len(swc_file) == 1, "Morph dir " + d + " should contain one swc file"
+                assert len(swc_file) == 1, f"Morph dir {sd} should contain one swc file"
 
-                assert len(hoc_file) <= 1, "Morph dir " + d + " contains more than one hoc file"
+                assert len(hoc_file) <= 1, f"Morph dir {sd} contains more than one hoc file"
 
                 if len(hoc_file) == 0:
                     hoc_file = [None]
@@ -440,7 +405,7 @@ class SnuddaInit(object):
         n_of_each_ind = np.zeros((n_ind,))
         n_of_each_ind[:] = int(num_neurons / n_ind)
         still_to_add = int(num_neurons - np.sum(n_of_each_ind))
-        add_idx = np.random.permutation(n_ind)[0:still_to_add]
+        add_idx = self.init_rng.permutation(n_ind)[0:still_to_add]
         n_of_each_ind[add_idx] += 1
 
         # Add the neurons to config
@@ -454,14 +419,14 @@ class SnuddaInit(object):
             unique_name = name + "_" + str(ctr)
             cell_data = dict([])
 
-            if not os.path.isfile(par_file) and model_type is not "virtual":
-                print("Parameter file not found: " + str(par_file))
+            if not snudda_isfile(par_file) and model_type is not "virtual":
+                print(f"Parameter file not found: {par_file}")
 
-            if not os.path.isfile(mech_file) and model_type is not "virtual":
-                print("Mechanism file not found: " + str(mech_file))
+            if not snudda_isfile(mech_file) and model_type is not "virtual":
+                print(f"Mechanism file not found: {mech_file}")
 
-            if hoc_file is not None and not os.path.isfile(hoc_file):
-                print("Hoc file not found: " + str(hoc_file))
+            if hoc_file is not None and not snudda_isfile(hoc_file):
+                print(f"Hoc file not found: {hoc_file}")
 
             cell_data["morphology"] = swc_file
             cell_data["parameters"] = par_file
@@ -485,31 +450,96 @@ class SnuddaInit(object):
 
     ############################################################################
 
-    def write_json(self, filename):
+    def write_json(self, filename=None):
 
-        # !!! Dont need to do this anymore
-        ## We need to copy over the target data to each neuron
-        # for n in self.networkData:
-        #  if(n in ["Volume","Units"]):
-        #    # Non-neuron keywords, skip
-        #    continue
-        #
-        #  nType = n.split("_")[0]
-        #  if(nType in self.neuronTargets):
-        #    self.networkData[n]["targets"] = self.neuronTargets[nType]
-        #  else:
-        #    print("No targets defined for " + str(nType))
+        if not filename:
+            filename = self.config_file
 
-        # import pdb
-        # pdb.set_trace()
+        # Create directory if it does not already exist
+        dir_name = os.path.dirname(filename)
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
 
-        print("Writing " + filename)
+        print(f"Writing {filename}")
 
         import json
         with open(filename, 'w') as f:
-            json.dump(self.network_data, f, indent=4)
+            json.dump(self.network_data, f, indent=4, cls=NumpyEncoder)
 
     ############################################################################
+
+    # Population Units here refer to processing units, where the neurons within a Population Unit
+    # might have different connectivity than neurons belonging to different population Units
+    
+    # Centre of striatum mesh is [3540e-6,4645e-6,5081e-6]
+    # Radius is now in SI units also (meters)
+
+    def add_population_unit_density(self,
+                                    structure_name,
+                                    neuron_types,
+                                    unit_centre,
+                                    probability_function,  # Function of d (distance to centre) as string
+                                    unit_id=None):
+
+        if type(neuron_types) != list:
+            neuron_types = list(neuron_types)
+
+        unit_id = self.setup_population_unit(unit_id)
+            
+        if structure_name not in self.network_data["PopulationUnits"]:
+            self.network_data["PopulationUnits"][structure_name] = collections.OrderedDict()
+            self.network_data["PopulationUnits"][structure_name]["method"] = "radialDensity"
+
+            self.network_data["PopulationUnits"][structure_name]["centres"] = [unit_centre]
+            self.network_data["PopulationUnits"][structure_name]["ProbabilityFunctions"] = [probability_function]
+            self.network_data["PopulationUnits"][structure_name]["unitID"] = [unit_id]
+            self.network_data["PopulationUnits"][structure_name]["neuronTypes"] = [neuron_types]
+        else:
+            self.network_data["PopulationUnits"][structure_name]["centres"].append(unit_centre)
+            self.network_data["PopulationUnits"][structure_name]["ProbabilityFunctions"].append(probability_function)
+            self.network_data["PopulationUnits"][structure_name]["unitID"].append(unit_id)
+            self.network_data["PopulationUnits"][structure_name]["neuronTypes"].append(neuron_types)
+
+    def add_population_unit_random(self, structure_name, neuron_types, fraction_of_neurons, unit_id=None):
+
+        if type(neuron_types) != list:
+            neuron_types = list(neuron_types)
+
+        unit_id = self.setup_population_unit(unit_id)
+
+        if structure_name not in self.network_data["PopulationUnits"]:
+            self.network_data["PopulationUnits"][structure_name] = collections.OrderedDict()
+            self.network_data["PopulationUnits"][structure_name]["method"] = "random"
+
+            self.network_data["PopulationUnits"][structure_name]["fractionOfNeurons"] = [fraction_of_neurons]
+            self.network_data["PopulationUnits"][structure_name]["unitID"] = [unit_id]
+            self.network_data["PopulationUnits"][structure_name]["neuronTypes"] = [neuron_types]
+            self.network_data["PopulationUnits"][structure_name]["structure"] = structure_name
+        else:
+            self.network_data["PopulationUnits"][structure_name]["fractionOfNeurons"].append(fraction_of_neurons)
+            self.network_data["PopulationUnits"][structure_name]["unitID"].append(unit_id)
+            self.network_data["PopulationUnits"][structure_name]["neuronTypes"].append(neuron_types)
+
+    # Helper function, returns next free unit_id and sets up data structures (user can also choose own unit_id
+    # but it must be unique and not already used
+    def setup_population_unit(self, unit_id=None):
+
+        if "PopulationUnits" not in self.network_data:
+            self.network_data["PopulationUnits"] = collections.OrderedDict([])
+            self.network_data["PopulationUnits"]["AllUnitID"] = []
+
+        if not unit_id:
+            if self.network_data["PopulationUnits"]["AllUnitID"]:
+                unit_id = np.max(self.network_data["PopulationUnits"]["AllUnitID"]) + 1
+            else:
+                unit_id = 1
+
+        assert unit_id not in self.network_data["PopulationUnits"]["AllUnitID"], f"Unit id {unit_id} already in use"
+        self.network_data["PopulationUnits"]["AllUnitID"].append(unit_id)
+
+        return unit_id
+
+    ############################################################################    
 
     # Normally: nNeurons = number of neurons set, then the fractions specified
     # fMSD1, fMSD2, fFS, fChIN, fLTS are used to  calculate the number of neurons
@@ -522,7 +552,8 @@ class SnuddaInit(object):
     # Divide by fTot since we are not including all neurons and we want the
     # proportions to sum to 1.0 (f means fraction)
 
-    def define_striatum(self, num_neurons=None,
+    def define_striatum(self,
+                        num_neurons=None,
                         f_dSPN=0.475,
                         f_iSPN=0.475,
                         f_FS=0.013,
@@ -535,9 +566,10 @@ class SnuddaInit(object):
                         num_LTS=None,
                         volume_type=None,
                         side_len=None,
-                        slice_depth=None,
-                        cell_spec_dir=None,
-                        neuron_density=80500):
+                        # slice_depth=None,
+                        neurons_dir=None,
+                        neuron_density=80500,
+                        population_unit_SPN_modifier=1):
 
         get_val = lambda x: 0 if x is None else x
         if num_neurons is None:
@@ -558,13 +590,13 @@ class SnuddaInit(object):
                 # No neurons specified, skipping structure
                 return
 
-            fTot = f_dSPN + f_iSPN + f_FS + f_ChIN + f_LTS
+            f_tot = f_dSPN + f_iSPN + f_FS + f_ChIN + f_LTS
 
-            self.num_FS = np.round(f_FS * num_neurons / fTot)
-            self.num_dSPN = np.round(f_dSPN * num_neurons / fTot)
-            self.num_iSPN = np.round(f_iSPN * num_neurons / fTot)
-            self.num_ChIN = np.round(f_ChIN * num_neurons / fTot)
-            self.num_LTS = np.round(f_LTS * num_neurons / fTot)
+            self.num_FS = np.round(f_FS * num_neurons / f_tot)
+            self.num_dSPN = np.round(f_dSPN * num_neurons / f_tot)
+            self.num_iSPN = np.round(f_iSPN * num_neurons / f_tot)
+            self.num_ChIN = np.round(f_ChIN * num_neurons / f_tot)
+            self.num_LTS = np.round(f_LTS * num_neurons / f_tot)
 
             self.num_neurons_total += self.num_FS + self.num_dSPN + self.num_iSPN + self.num_ChIN + self.num_LTS
 
@@ -574,7 +606,7 @@ class SnuddaInit(object):
 
         if volume_type == "mouseStriatum":
             self.define_structure(struct_name="Striatum",
-                                  struct_mesh=self.data_path + "/mesh/Striatum-mesh.obj",
+                                  struct_mesh=os.path.join("$DATA", "mesh", "Striatum-mesh.obj"),
                                   mesh_bin_width=1e-4)
 
         elif volume_type == "slice":
@@ -603,36 +635,33 @@ class SnuddaInit(object):
                                   side_len=striatum_side_len,
                                   mesh_bin_width=mesh_bin_width)
 
-            # meshBinWidth=5e-5)
-
-            # import pdb
-            # pdb.set_trace()
         else:
             # Default, full size striatum
             self.define_structure(struct_name="Striatum",
-                                  struct_mesh=self.data_path + "/mesh/Striatum-mesh.obj",
+                                  struct_mesh=os.path.join("$DATA", "mesh", "Striatum-mesh.obj"),
                                   mesh_bin_width=1e-4)
 
-        if cell_spec_dir is None:
-            cs_dir = self.data_path + "/cellspecs-v2"
-            # csDir = self.dataPath + "/cellspecs-var"
-        else:
-            cs_dir = cell_spec_dir
+        if neurons_dir is None:
+            neurons_dir = os.path.join("$DATA", "neurons")
 
-        FS_dir = cs_dir + "/fs"
-        dSPN_dir = cs_dir + "/dspn"
-        iSPN_dir = cs_dir + "/ispn"
-        ChIN_dir = cs_dir + "/chin"
-        LTS_dir = cs_dir + "/lts"
+        FS_dir = os.path.join(neurons_dir, "striatum", "fs")
+        dSPN_dir = os.path.join(neurons_dir, "striatum", "dspn")
+        iSPN_dir = os.path.join(neurons_dir, "striatum", "ispn")
+        ChIN_dir = os.path.join(neurons_dir, "striatum", "chin")
+        LTS_dir = os.path.join(neurons_dir, "striatum", "lts")
 
         self.reg_size = 5
 
-        if self.n_population_units == 1:
-            self.population_unit_SPN_modifier = 1
+        if "PopulationUnits" in self.network_data and "Striatum" in self.network_data["PopulationUnits"]:
+            num_population_units = len(self.network_data["PopulationUnits"]["Striatum"]["unitID"])
         else:
-            print("!!! OBS, modifying probaiblities within and between channe")
-            self.population_unit_SPN_modifier = 0.2  # 0.2 = 20% within, 2 = 2x higher within
-            print("populationUnitMSNmodifier: " + str(self.population_unit_SPN_modifier))
+            num_population_units = 1
+
+        if num_population_units <= 1:
+            # Note that the cells that do not belong to a population unit has pop unit 0
+            # TODO: Be careful, neurons with pop unit 0 will count as all being in same "unit" for connectivity purpose
+            # TODO: SHould this be reworked?
+            population_unit_SPN_modifier = 1
 
         # Add the neurons
 
@@ -674,7 +703,8 @@ class SnuddaInit(object):
         # ChINaxonDensity = ("6*5000*1e12/3*np.exp(-d/60e-6)",350e-6)
 
         # func type, density function, max axon radius
-        ChIN_axon_density = ("r", "5000*1e12/3*np.exp(-r/120e-6)", 350e-6)
+        # OLD: ChIN_axon_density = ("r", "5000*1e12/3*np.exp(-r/120e-6)", 350e-6)
+        ChIN_axon_density = ("r", "5000*1e12/3*exp(-r/120e-6)", 350e-6)
 
         self.add_neurons(name="ChIN", neuron_dir=ChIN_dir,
                          num_neurons=self.num_ChIN,
@@ -689,8 +719,15 @@ class SnuddaInit(object):
         # Func type, Density function, [[xmin,xmax,ymin,ymax,zmin,zmax]], nAxonPoints
 
         # See plotLTSdensity.py
+
+        # LTS_density_str = "12*3000*1e12*( 0.25*np.exp(-(((x-200e-6)/100e-6)**2 + ((y-0)/50e-6)**2 + ((z-0)/30e-6)**2)) + 1*np.exp(-(((x-300e-6)/300e-6)**2 + ((y-0)/15e-6)**2 + ((z-0)/10e-6)**2)) + 1*np.exp(-(((x-700e-6)/100e-6)**2 + ((y-0)/15e-6)**2 + ((z-0)/15e-6)**2)) )",
+        LTS_density_str = ("12*3000*1e12*( 0.25*exp(-(((x-200e-6)/100e-6)**2 " 
+                           "+ ((y-0)/50e-6)**2 + ((z-0)/30e-6)**2)) "
+                           "+ 1*exp(-(((x-300e-6)/300e-6)**2 + ((y-0)/15e-6)**2 + ((z-0)/10e-6)**2)) "
+                           "+ 1*exp(-(((x-700e-6)/100e-6)**2 + ((y-0)/15e-6)**2 + ((z-0)/15e-6)**2)) )")
+
         LTS_axon_density = ("xyz",
-                          "12*3000*1e12*( 0.25*np.exp(-(((x-200e-6)/100e-6)**2 + ((y-0)/50e-6)**2 + ((z-0)/30e-6)**2)) + 1*np.exp(-(((x-300e-6)/300e-6)**2 + ((y-0)/15e-6)**2 + ((z-0)/10e-6)**2)) + 1*np.exp(-(((x-700e-6)/100e-6)**2 + ((y-0)/15e-6)**2 + ((z-0)/15e-6)**2)) )",
+                            LTS_density_str,
                             [-200e-6, 900e-6, -100e-6, 100e-6, -30e-6, 30e-6])
 
         # !!! Remember to update bounding box
@@ -700,15 +737,15 @@ class SnuddaInit(object):
                          axon_density=LTS_axon_density,
                          volume_id="Striatum")
 
-        ## Define FS targets
+        # Define FS targets
 
         # Szydlowski SN, Pollak Dorocic I, Planert H, Carlen M, Meletis K,
         # Silberberg G (2013) Target selectivity of feedforward inhibition
         # by striatal fast-spiking interneurons. J Neurosci
         # --> FS does not target ChIN
 
-        # FSDistDepPruning = "np.exp(-(0.3*d/60e-6)**2)"
-        FS_dist_dep_pruning = "np.exp(-(0.5*d/60e-6)**2)"  # updated 2019-10-31
+        # FS_dist_dep_pruning = "np.exp(-(0.5*d/60e-6)**2)"  # updated 2019-10-31
+        FS_dist_dep_pruning = "exp(-(0.5*d/60e-6)**2)"  # Using numexpr.evaluate now, so no np. needed
         # Temp disable dist dep pruning
         # FSDistDepPruning = None
         FS_gGABA = [1.1e-9, 1.5e-9]  # cond (1nS Gittis et al 2010), condStd
@@ -723,8 +760,8 @@ class SnuddaInit(object):
 
         # pfFSdSPN = "synapses/v1/trace_table.txt-FD-model-parameters.json"
         # pfFSiSPN = "synapses/v1/trace_table.txt-FI-model-parameters.json"
-        pfFSdSPN = self.data_path + "/synapses/v2/PlanertFitting-FD-tmgaba-fit.json"
-        pfFSiSPN = self.data_path + "/synapses/v2/PlanertFitting-FI-tmgaba-fit.json"
+        pfFSdSPN = os.path.join("$DATA", "synapses", "striatum", "PlanertFitting-FD-tmgaba-fit.json")
+        pfFSiSPN = os.path.join("$DATA", "synapses", "striatum", "PlanertFitting-FI-tmgaba-fit.json")
 
         # Increased from a3=0.1 to a3=0.7 to match FS-FS connectivity from Gittis
         self.add_neuron_target(neuron_name="FSN",
@@ -806,15 +843,17 @@ class SnuddaInit(object):
         # OLD: Previously: 23pA * 50 receptors = 1.15e-9 -- Taverna 2008, fig3
         # OLD: std ~ +/- 8 receptors, we used before:  [1.15e-9, 0.18e-9]
 
-        P11withinUnit = MSP11 * self.population_unit_SPN_modifier
-        P11betweenUnit = MSP11 * (1 + (1 - self.population_unit_SPN_modifier) / self.n_population_units)
-        P12withinUnit = MSP12 * self.population_unit_SPN_modifier
-        P12betweenUnit = MSP12 * (1 + (1 - self.population_unit_SPN_modifier) / self.n_population_units)
+        # !!! TODO: When this runs we do not know how many population units will be added...
+
+        P11withinUnit = MSP11 * population_unit_SPN_modifier
+        P11betweenUnit = MSP11
+        P12withinUnit = MSP12 * population_unit_SPN_modifier
+        P12betweenUnit = MSP12
 
         # pfdSPNdSPN = "synapses/v1/trace_table.txt-DD-model-parameters.json"
         # pfdSPNiSPN = "synapses/v1/trace_table.txt-DI-model-parameters.json"
-        pfdSPNdSPN = self.data_path + "/synapses/v2/PlanertFitting-DD-tmgaba-fit.json"
-        pfdSPNiSPN = self.data_path + "/synapses/v2/PlanertFitting-DI-tmgaba-fit.json"
+        pfdSPNdSPN = os.path.join("$DATA", "synapses", "striatum", "PlanertFitting-DD-tmgaba-fit.json")
+        pfdSPNiSPN = os.path.join("$DATA", "synapses", "striatum", "PlanertFitting-DI-tmgaba-fit.json")
         pfdSPNChIN = None
 
         # Argument for distance dependent SPN-SPN synapses:
@@ -838,11 +877,14 @@ class SnuddaInit(object):
         # With Taverna conductances, we see that the response is much stronger than Planert 2010.
         # We try to introduce distance dependent pruning to see if removing strong proximal synapses
         # will give a better match to experimental data.
-        SPN2SPNdistDepPruning = "1-np.exp(-(0.4*d/60e-6)**2)"
+
+        # SPN2SPNdistDepPruning = "1-np.exp(-(0.4*d/60e-6)**2)"
+        SPN2SPNdistDepPruning = "1-exp(-(0.4*d/60e-6)**2)"
 
         # Chuhma about 20pA response from 10% SPN, we need to reduce activity, try dist dep pruning
         # (already so few synapses and connectivity)
-        SPN2ChINDistDepPruning = "1-np.exp(-(0.4*d/60e-6)**2)"
+        # SPN2ChINDistDepPruning = "1-np.exp(-(0.4*d/60e-6)**2)"
+        SPN2ChINDistDepPruning = "1-exp(-(0.4*d/60e-6)**2)"
 
         # old f1 = 0.15
         self.add_neuron_target(neuron_name="dSPN",
@@ -917,13 +959,13 @@ class SnuddaInit(object):
         MSD2GABAfailRate = 0.4  # Taverna 2008, 2mM
 
         # Voxel method
-        P21withinUnit = MSP21 * self.population_unit_SPN_modifier
-        P21betweenUnit = MSP21 * (1 + (1 - self.population_unit_SPN_modifier) / self.n_population_units)
-        P22withinUnit = MSP22 * self.population_unit_SPN_modifier
-        P22betweenUnit = MSP22 * (1 + (1 - self.population_unit_SPN_modifier) / self.n_population_units)
+        P21withinUnit = MSP21 * population_unit_SPN_modifier
+        P21betweenUnit = MSP21
+        P22withinUnit = MSP22 * population_unit_SPN_modifier
+        P22betweenUnit = MSP22
 
-        pfiSPNdSPN = self.data_path + "/synapses/v2/PlanertFitting-ID-tmgaba-fit.json"
-        pfiSPNiSPN = self.data_path + "/synapses/v2/PlanertFitting-II-tmgaba-fit.json"
+        pfiSPNdSPN = os.path.join("$DATA", "synapses", "striatum", "PlanertFitting-ID-tmgaba-fit.json")
+        pfiSPNiSPN = os.path.join("$DATA", "synapses", "striatum", "PlanertFitting-II-tmgaba-fit.json")
         pfiSPNChIN = None
 
         # GABA decay från Taverna 2008
@@ -1045,7 +1087,8 @@ class SnuddaInit(object):
         LTSgGABA = 1e-9  # !!! FIXME
         # LTSgNO = 1e-9
 
-        LTSDistDepPruning = "1-np.exp(-(0.4*d/60e-6)**2)"  # updated 2019-10-31
+        # LTSDistDepPruning = "1-np.exp(-(0.4*d/60e-6)**2)"  # updated 2019-10-31
+        LTSDistDepPruning = "1-exp(-(0.4*d/60e-6)**2)"  # using numexpr.evaluate now, so no np.
 
         # !!! Straub, Sabatini 2016
         # No LTS synapses within 70 micrometers of proximal MS dendrite
@@ -1096,7 +1139,7 @@ class SnuddaInit(object):
             # No neurons specified, skipping structure
             return
 
-        self.num_GPe_neurons = num_neurons
+        self.num_gpe_neurons = num_neurons
         self.num_neurons_total += num_neurons
 
         self.define_structure(struct_name="GPe",
@@ -1112,7 +1155,7 @@ class SnuddaInit(object):
             # No neurons specified, skipping structure
             return
 
-        self.num_GPi_neurons = num_neurons
+        self.num_gpi_neurons = num_neurons
         self.num_neurons_total += num_neurons
 
         self.define_structure(struct_name="GPi",
@@ -1128,7 +1171,7 @@ class SnuddaInit(object):
             # No neurons specified, skipping structure
             return
 
-        self.num_STN_neurons = num_neurons
+        self.num_stn_neurons = num_neurons
         self.num_neurons_total += num_neurons
 
         self.define_structure(struct_name="STN",
@@ -1144,7 +1187,7 @@ class SnuddaInit(object):
             # No neurons, skipping
             return
 
-        self.num_SNr_neurons = num_neurons
+        self.num_snr_neurons = num_neurons
         self.num_neurons_total += num_neurons
 
         self.define_structure(struct_name="SNr",
@@ -1325,7 +1368,7 @@ class SnuddaInit(object):
             return
 
         # Neurons with corticostriatal axons
-        self.num_Cortex_neurons = num_neurons
+        self.num_cortex_neurons = num_neurons
 
         self.num_neurons_total += num_neurons
 
@@ -1338,11 +1381,11 @@ class SnuddaInit(object):
                               side_len=200e-6,
                               mesh_bin_width=5e-5)
 
-        cortex_dir = "morphology/InputAxons/Cortex/Reg10/"
+        cortex_dir = os.path.join("$DATA", "InputAxons", "Cortex", "Reg10")
 
         # Add cortex axon
 
-        self.add_neurons("CortexAxon", cortex_dir, self.num_Cortex_neurons,
+        self.add_neurons("CortexAxon", cortex_dir, self.num_cortex_neurons,
                          model_type="virtual",
                          rotation_mode="",
                          volume_id="Cortex")
@@ -1353,10 +1396,8 @@ class SnuddaInit(object):
 
         # We should have both ipsi and contra, M1 and S1 input, for now
         # picking one
-        cortexSynParMS = self.data_path \
-                         + "/synapses/v2/M1RH_Analysis_190925.h5-parameters-MS.json"
-        cortexSynParFS = self.data_path \
-                         + "synapses/v2/M1RH_Analysis_190925.h5-parameters-FS.json"
+        cortexSynParMS = os.path.join("$DATA", "synapses", "striatum", "M1RH_Analysis_190925.h5-parameters-MS.json")
+        cortexSynParFS = os.path.join("$DATA", "synapses", "striatum", "M1RH_Analysis_190925.h5-parameters-FS.json")
 
         self.add_neuron_target(neuron_name="CortexAxon",
                                target_name="dSPN",
@@ -1412,7 +1453,7 @@ class SnuddaInit(object):
 
         # Define neurons
 
-        thalamus_dir = "morphology/InputAxons/Thalamus/Reg10/"
+        thalamus_dir = os.path.join("$DATA","morphology","InputAxons", "Thalamus", "Reg10")
 
         self.add_neurons("ThalamusAxon", thalamus_dir, self.num_thalamus_neurons,
                          model_type="virtual",
@@ -1421,10 +1462,8 @@ class SnuddaInit(object):
 
         # Define targets
 
-        thalamusSynParMS = self.data_path \
-                           + "synapses/v2/TH_Analysis_191001.h5-parameters-MS.json"
-        thalamusSynParFS = self.data_path \
-                           + "synapses/v2/TH_Analysis_191001.h5-parameters-FS.json"
+        thalamusSynParMS = os.path.join("$DATA", "synapses", "striatum", "TH_Analysis_191001.h5-parameters-MS.json")
+        thalamusSynParFS = os.path.join("$DATA", "synapses", "striatum", "TH_Analysis_191001.h5-parameters-FS.json")
 
         ThalamusGlutCond = [1e-9, 0.1e-9]
 
@@ -1461,6 +1500,28 @@ class SnuddaInit(object):
 
     ############################################################################
 
+    @staticmethod
+    def setup_random_seeds(random_seed=None):
+
+        seed_types = ["init", "place", "detect", "prune", "input", "simulate"]
+        # print(f"Seeding with rand_seed={random_seed}")
+
+        ss = np.random.SeedSequence(random_seed)
+        all_seeds = ss.generate_state(len(seed_types))
+
+        rand_seed_dict = collections.OrderedDict()
+
+        if random_seed is not None:
+            rand_seed_dict["masterseed"] = random_seed
+
+        for st, s in zip(seed_types, all_seeds):
+            rand_seed_dict[st] = s
+            # print(f"Random seed {st} to {s}")
+
+        init_rng = np.random.default_rng(rand_seed_dict["init"])
+
+        return rand_seed_dict, init_rng
+
 
 if __name__ == "__main__":
 
@@ -1487,7 +1548,7 @@ if __name__ == "__main__":
     # Nsnr=189
 
     if full_striatum:
-        structDef = {"Striatum": 1730000,
+        struct_def = {"Striatum": 1730000,
                      "GPe": 28500,
                      "GPi": 2000,
                      "SNr": 20800,
@@ -1496,7 +1557,7 @@ if __name__ == "__main__":
                      "Thalamus": 1}
 
         # !!! TEMP, only do stratium for now
-        structDef = {"Striatum": 1730000,
+        struct_def = {"Striatum": 1730000,
                      "GPe": 0,
                      "GPi": 0,
                      "SNr": 0,
@@ -1506,7 +1567,7 @@ if __name__ == "__main__":
 
 
     else:
-        structDef = {"Striatum": 100000,
+        struct_def = {"Striatum": 100000,
                      "GPe": 0,
                      "GPi": 0,
                      "SNr": 0,
@@ -1515,9 +1576,9 @@ if __name__ == "__main__":
                      "Thalamus": 0}
 
     nTotals = 0
-    for x in structDef:
-        nTotals += structDef[x]
+    for x in struct_def:
+        nTotals += struct_def[x]
 
-    fName = "config/basal-ganglia-config-" + str(nTotals) + ".json"
+    fName = os.path.join("config", f"basal-ganglia-config-{nTotals}.json")
 
-    SnuddaInit(struct_def=structDef, config_name=fName, num_population_units=1)
+    SnuddaInit(struct_def=struct_def, config_file=fName)

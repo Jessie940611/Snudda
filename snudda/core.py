@@ -7,16 +7,16 @@
 # snudda init <networkPath> --size XXX
 # -- Creates an a json config file
 #
-# snudda place <networkPath>
+# snudda place <networkPath> [--parallel]
 # -- Cell placement within volumes specified
 #
-# snudda detect <networkPath> [--hvsize hyperVoxelSize]
+# snudda detect <networkPath> [--hvsize hyperVoxelSize] [--parallel]
 # -- Touch detection of putative synapses
 #
-# snudda prune <networkPath> [--mergeonly]
+# snudda prune <networkPath> [--mergeonly] [--parallel]
 # -- Prune the synapses
 #
-# snudda input <networkPath> [--input yourInputConfig]
+# snudda input <networkPath> [--input yourInputConfig] [--parallel]
 #
 # snudda export <networkPath>
 # -- Export to SONATA format (optional)
@@ -33,7 +33,7 @@
 
 #
 # This open source software code was developed in part or in whole in
-# the Human Brain Project, funded from the European Union’s Horizon
+# the Human Brain Project, funded from the European Union's Horizon
 # 2020 Framework Programme for Research and Innovation under Specific
 # Grant Agreements No. 720270 and No. 785907 (Human Brain Project SGA1
 # and SGA2).
@@ -41,11 +41,13 @@
 
 
 import os
-import sys
+import sys  # Used in __init__
 import timeit
 import numpy as np
 import zmq
 import pkg_resources
+
+from snudda.utils.snudda_path import snudda_isfile
 
 
 def get_data_file(*dirs):
@@ -59,12 +61,13 @@ class Snudda(object):
 
     ############################################################################
 
-    def __init__(self, networkPath):
+    def __init__(self, network_path):
 
-        if networkPath[-1] == "/":
-            self.network_path = networkPath[:-1]
-        else:
-            self.network_path = networkPath
+        self.network_path = network_path
+        self.d_view = None
+        self.lb_view = None
+        self.rc = None
+        self.slurm_id = 0
 
         # Add current dir to python path
         sys.path.append(os.getcwd())
@@ -73,19 +76,18 @@ class Snudda(object):
 
     ############################################################################
 
-    def help_info(self, args):
-        from snudda.snudda_help import snudda_help_text
-        print(snudda_help_text())
+    @staticmethod
+    def help_info(args):
+        from snudda.help import snudda_help_text
 
     ############################################################################
 
     def init_config(self, args):
         # self.networkPath = args.path
         print("Creating config file")
-        print("Network path: " + str(self.network_path))
+        print(f"Network path: {self.network_path}")
 
-        assert args.size is not None, \
-            "You need to speicfy --size when initialising config for network2"
+        assert args.size is not None, "You need to specify --size when initialising config for the network"
 
         from .init import SnuddaInit
         struct_def = {"Striatum": args.size,
@@ -100,24 +102,19 @@ class Snudda(object):
 
         if not args.overwrite:
             assert not os.path.exists(self.network_path), \
-                "Network path " + str(self.network_path) + " already exists" \
-                + " (aborting to prevent accidental overwriting)"
+                "Network path {self.network_path} already exists (aborting to prevent accidental overwriting)"
 
         self.make_dir_if_needed(self.network_path)
 
-        num_population_units = args.NumPopulationUnits
-        population_unit_centres = args.PopulationUnitCentres
-        population_unit_radius = args.PopulationUnitRadius
+        random_seed = args.randomseed
 
-        config_file = self.network_path + "/network-config.json"
+        config_file = os.path.join(self.network_path, "network-config.json")
         SnuddaInit(struct_def=struct_def,
-                   config_name=config_file,
-                   num_population_units=num_population_units,
-                   population_unit_centres=population_unit_centres,
-                   population_unit_radius=population_unit_radius)
+                   config_file=config_file,
+                   random_seed=random_seed)
 
         if args.size > 1e5:
-            print("Make sure there is enough disk space in " + str(self.network_path))
+            print(f"Make sure there is enough disk space in {self.network_path}")
             print("Large networks take up ALOT of space")
 
     ############################################################################
@@ -125,14 +122,18 @@ class Snudda(object):
     def place_neurons(self, args):
         # self.networkPath = args.path
         print("Placing neurons")
-        print("Network path: " + str(self.network_path))
+        print(f"Network path: {self.network_path}")
 
-        config_file = self.network_path + "/network-config.json"
-        position_file = self.network_path + "/network-neuron-positions.hdf5"
-        log_file_name = self.network_path + "/log/logFile-place-neurons.txt"
+        config_file = os.path.join(self.network_path, "network-config.json")
+        position_file = os.path.join(self.network_path, "network-neuron-positions.hdf5")
+        log_file_name = os.path.join(self.network_path, "log", "logFile-place-neurons.txt")
+
+        random_seed = args.randomseed
 
         self.setup_log_file(log_file_name)  # sets self.logFile
-        self.setup_parallel()  # sets self.dView and self.lbView
+
+        if args.parallel:
+            self.setup_parallel()  # sets self.d_view and self.lb_view
 
         from .place import SnuddaPlace
 
@@ -141,13 +142,16 @@ class Snudda(object):
         else:
             h5libver = "latest"  # default
 
-        npn = SnuddaPlace(config_file=config_file,
-                          log_file=self.logfile,
-                          verbose=True,
-                          d_view=self.d_view,
-                          h5libver=h5libver)
+        sp = SnuddaPlace(config_file=config_file,
+                         log_file=self.logfile,
+                         verbose=True,
+                         d_view=self.d_view,
+                         h5libver=h5libver,
+                         raytrace_borders=args.raytrace_borders,
+                         random_seed=random_seed)
 
-        npn.write_data_HDF5(position_file)
+        sp.parse_config()
+        sp.write_data(position_file)
 
         self.stop_parallel()
         self.close_log_file()
@@ -169,18 +173,25 @@ class Snudda(object):
         else:
             volume_id = None
 
-        log_dir = self.network_path + "/log"
+        log_dir = os.path.join(self.network_path, "log")
+        if not os.path.exists(log_dir):
+            print(f"Creating directory {log_dir}")
+            os.makedirs(log_dir, exist_ok=True)
 
-        config_file = self.network_path + "/network-config.json"
-        position_file = self.network_path + "/network-neuron-positions.hdf5"
-        log_filename = self.network_path + "/log/logFile-touch-detection.txt"
-        save_file = self.network_path + "/voxels/network-putative-synapses.hdf5"
+        config_file = os.path.join(self.network_path, "network-config.json")
+        position_file = os.path.join(self.network_path, "network-neuron-positions.hdf5")
+        log_filename = os.path.join(self.network_path, "log", "logFile-touch-detection.txt")
+        save_file = os.path.join(self.network_path, "voxels", "network-putative-synapses.hdf5")
 
-        voxel_dir = self.network_path + "/voxels"
+        random_seed = args.randomseed
+
+        voxel_dir = os.path.join(self.network_path, "voxels")
         self.make_dir_if_needed(voxel_dir)
 
-        self.setup_log_file(log_filename)  # sets self.logFile
-        self.setup_parallel()  # sets self.dView and self.lbView
+        self.setup_log_file(log_filename)  # sets self.logfile
+
+        if args.parallel:
+            self.setup_parallel()  # sets self.d_view and self.lb_view
 
         if args.h5legacy:
             h5libver = "earliest"
@@ -189,30 +200,25 @@ class Snudda(object):
 
         from .detect import SnuddaDetect
 
+        # You can now setup SnuddaDetect with only network_path and it will use default values
+        # for config_file, position_file, logfile, save_file
+        sd = SnuddaDetect(config_file=config_file,
+                          position_file=position_file,
+                          logfile=self.logfile,
+                          save_file=save_file,
+                          slurm_id=self.slurm_id,
+                          volume_id=volume_id,
+                          rc=self.rc,
+                          hyper_voxel_size=hyper_voxel_size,
+                          h5libver=h5libver,
+                          random_seed=random_seed)
+
         if args.cont:
             # Continue previous run
             print("Continuing previous touch detection")
-
-            ncv = SnuddaDetect(config_file=config_file,
-                               position_file=position_file,
-                               logfile=self.logfile,
-                               save_file=save_file,
-                               slurm_id=self.SlurmID,
-                               volume_id=volume_id,
-                               rc=self.rc,
-                               hyper_voxel_size=hyper_voxel_size,
-                               h5libver=h5libver,
-                               restart_detection_flag=False)
+            sd.detect(restart_detection_flag=False)
         else:
-            ncv = SnuddaDetect(config_file=config_file,
-                               position_file=position_file,
-                               logfile=self.logfile,
-                               save_file=save_file,
-                               slurm_id=self.SlurmID,
-                               volume_id=volume_id,
-                               rc=self.rc,
-                               h5libver=h5libver,
-                               hyper_voxel_size=hyper_voxel_size)
+            sd.detect(restart_detection_flag=True)
 
         self.stop_parallel()
         self.close_log_file()
@@ -226,35 +232,40 @@ class Snudda(object):
 
         from .prune import SnuddaPrune
 
-        log_filename = self.network_path + "/log/logFile-synapse-pruning.txt"
+        log_filename = os.path.join(self.network_path, "log", "logFile-synapse-pruning.txt")
 
-        work_log = self.network_path + "/log/network-detect-worklog.hdf5"
+        random_seed = args.randomseed
 
-        self.setup_log_file(log_filename)  # sets self.logFile
-        self.setup_parallel()  # sets self.dView and self.lbView
+        self.setup_log_file(log_filename)  # sets self.logfile
+
+        if args.parallel:
+            self.setup_parallel()  # sets self.d_view and self.lb_view
 
         # Optionally set this
         scratch_path = None
 
-        if args.mergeonly:
+        if args.merge_only:
             pre_merge_only = True
         else:
             pre_merge_only = False
 
-        print("preMergeOnly : " + str(pre_merge_only))
+        print(f"preMergeOnly : {pre_merge_only}")
 
         if args.h5legacy:
             h5libver = "earliest"
         else:
             h5libver = "latest"  # default
 
-        ncvp = SnuddaPrune(work_history_file=work_log,
-                           logfile=self.logfile,
-                           logfile_name=log_filename,
-                           d_view=self.d_view, lb_view=self.lb_view,
-                           scratch_path=scratch_path,
-                           h5libver=h5libver,
-                           pre_merge_only=pre_merge_only)
+        sp = SnuddaPrune(network_path=self.network_path,
+                         logfile=self.logfile,
+                         logfile_name=log_filename,
+                         config_file=args.config_file,
+                         d_view=self.d_view, lb_view=self.lb_view,
+                         scratch_path=scratch_path,
+                         h5libver=h5libver,
+                         random_seed=random_seed)
+
+        sp.prune(pre_merge_only=pre_merge_only)
 
         self.stop_parallel()
         self.close_log_file()
@@ -266,40 +277,54 @@ class Snudda(object):
         from .input import SnuddaInput
 
         print("Setting up inputs, assuming input.json exists")
-        log_filename = self.network_path + "/log/logFile-setup-input.log"
-        self.setup_log_file(log_filename)  # sets self.logFile
-        self.setup_parallel()  # sets self.dView and self.lbView
+        log_filename = os.path.join(self.network_path, "log", "logFile-setup-input.log")
+        self.setup_log_file(log_filename)  # sets self.logfile
 
-        if "input" in args:
+        if args.parallel:
+            self.setup_parallel()  # sets self.d_view and self.lb_view
+
+        if "input" in args and args.input:
             input_config = args.input
         else:
-            input_config = self.network_path + "/input.json"
+            input_config = os.path.join(self.network_path, "input.json")
 
-        if not os.path.isfile(input_config):
-            print("Missing input config file: " + str(input_config))
+        if not snudda_isfile(input_config):
+            print(f"Missing input config file: {input_config}")
             return
 
-        if args.networkFile:
-            network_file = args.networkFile
+        if args.network_file:
+            network_file = args.network_file
         else:
-            network_file = self.network_path \
-                          + "/network-pruned-synapses.hdf5"
+            network_file = os.path.join(self.network_path, "network-pruned-synapses.hdf5")
 
-        if args.inputFile:
-            spike_file = args.inputFile
+        if args.input_file:
+            spike_file = args.input_file
         else:
-            spike_file = self.network_path + "/input-spikes.hdf5"
+            spike_file = os.path.join(self.network_path, "input-spikes.hdf5")
 
         if args.time:
             input_time = args.time
+        else:
+            input_time = None
 
-        print("Writing input spikes to " + spike_file)
+        random_seed = args.randomseed
 
-        ni = SnuddaInput(input_config_file=input_config,
+        if args.h5legacy:
+            h5libver = "earliest"
+        else:
+            h5libver = "latest"  # default
+
+        print(f"Writing input spikes to {spike_file}")
+
+        si = SnuddaInput(input_config_file=input_config,
                          hdf5_network_file=network_file,
                          spike_data_filename=spike_file,
                          time=input_time,
-                         logfile=self.logfile)
+                         logfile=self.logfile,
+                         rc=self.rc,
+                         random_seed=random_seed,
+                         h5libver=h5libver)
+        si.generate()
 
         self.stop_parallel()
         self.close_log_file()
@@ -311,20 +336,19 @@ class Snudda(object):
         from snudda.ConvertNetwork import ConvertNetwork
 
         print("Exporting to SONATA format")
-        print("Network path: " + str(self.network_path))
+        print(f"Network path: {self.network_path}")
 
-        if args.networkFile:
-            network_file = args.networkFile
+        if args.network_file:
+            network_file = args.network_file
         else:
-            network_file = self.network_path \
-                          + "/network-pruned-synapses.hdf5"
+            network_file = os.path.join(self.network_path, "network-pruned-synapses.hdf5")
 
         if args.input_file:
             input_file = args.input_file
         else:
-            input_file = self.network_path + "/input-spikes.hdf5"
+            input_file = os.path.join(self.network_path, "input-spikes.hdf5")
 
-        out_dir = self.network_path + "/SONATA/"
+        out_dir = os.path.join(self.network_path, "SONATA")
 
         cn = ConvertNetwork(networkFile=network_file,
                             inputFile=input_file,
@@ -338,54 +362,58 @@ class Snudda(object):
 
         from .simulate import SnuddaSimulate
 
-        if args.networkFile:
-            network_file = args.networkFile
+        if args.network_file:
+            network_file = args.network_file
         else:
-            network_file = self.network_path \
-                          + "/network-pruned-synapses.hdf5"
+            network_file = os.path.join(self.network_path, "network-pruned-synapses.hdf5")
 
-        if args.inputFile:
-            input_file = args.inputFile
+        if args.input_file:
+            input_file = args.input_file
         else:
-            input_file = self.network_path + "/input-spikes.hdf5"
+            input_file = os.path.join(self.network_path, "input-spikes.hdf5")
 
-        self.make_dir_if_needed(self.network_path + "/simulation")
+        self.make_dir_if_needed(os.path.join(self.network_path, "simulation"))
 
-        print("Using input file " + input_file)
+        print(f"Using input file {input_file}")
 
         # nWorkers = args.ncores
         # print("Using " + str(nWorkers) + " workers for neuron")
 
         # Problems with nested symbolic links when the second one is a relative
         # path going beyond the original base path
-        if args.mechDir is None:
-            mech_dir = os.path.dirname(network_file) + "/mechanisms"
+        if args.mech_dir is None:
+            # mech_dir = os.path.join(os.path.dirname(network_file), "mechanisms")
 
-            # !!! problem with paths, testing to create mechanism dir in current dir
+            # TODO!!! problem with paths, testing to create mechanism dir in current dir
             mech_dir = "mechanisms"
 
             if not os.path.exists(mech_dir):
-                m_dir = os.path.dirname(__file__) + "/data/cellspecs-v2/mechanisms"
-                os.symlink(m_dir, mech_dir)
+                try:
+                    m_dir = os.path.join(os.path.dirname(__file__), "data", "neurons", "mechanisms")
+                    os.symlink(m_dir, mech_dir)
+                except:
+                    print(f"Failed to create symlink {mech_dir} -> {m_dir}")
         else:
-            mech_dir = args.mechDir
+            mech_dir = args.mech_dir
 
         # !!! These are saved in current directory x86_64
         # --- problem since nrnivmodl seems to want a relative path...
 
-        make_mods_str = "nrnivmodl " + mech_dir
-        if not os.path.exists('x86_64'):
-            print("Please first run: " + make_mods_str)
-            exit(-1)
+        make_mods_str = f"nrnivmodl {mech_dir}"
+
+        # x86_64 on linux, nrnmech.dll on windows...
+        if not os.path.exists("x86_64") and not os.path.exists("nrnmech.dll"):
+            print(f"Please first run: {make_mods_str}")
+            os.sys.exit(-1)
             # I was having problems when running nrnivmodl in the script, but
             # running it manually in bash works... WHY?!!
 
         # os.system(makeModsStr)
 
-        save_dir = os.path.dirname(network_file) + "/simulation/"
+        save_dir = os.path.join(os.path.dirname(network_file), "simulation")
 
         if not os.path.exists(save_dir):
-            print("Creating directory " + save_dir)
+            print(f"Creating directory {save_dir}")
             os.makedirs(save_dir, exist_ok=True)
 
         # Get the SlurmID, used in default file names
@@ -394,32 +422,31 @@ class Snudda(object):
         if slurm_id is None:
             slurm_id = str(666)
 
-        print("args: " + str(args))
+        print(f"args: {args}")
 
-        if args.voltOut is not None:
+        if args.volt_out is not None:
             # Save neuron voltage
-            if args.voltOut == "default":
-                volt_file = save_dir + 'network-voltage-' + slurm_id + '.csv'
+            if args.volt_out == "default":
+                volt_file = os.path.join(save_dir, f"network-voltage-{slurm_id}.csv")
             else:
-                volt_file = args.voltOut
+                volt_file = args.volt_out
         else:
             volt_file = None
 
-        if args.spikesOut is None or args.spikesOut == "default":
-            spikes_file = save_dir + 'network-output-spikes-' + slurm_id + '.txt'
+        if args.spikes_out is None or args.spikes_out == "default":
+            spikes_file = os.path.join(save_dir, f"network-output-spikes-{slurm_id}.txt")
         else:
-            spikes_file = args.spikesOut
+            spikes_file = args.spikes_out
 
-        disable_gj = args.disableGJ
+        disable_gj = args.disable_gj
         if disable_gj:
             print("!!! WE HAVE DISABLED GAP JUNCTIONS !!!")
 
-        log_file = os.path.dirname(network_file) \
-                  + "/log/network-simulation-log.txt"
+        log_file = os.path.join(os.path.dirname(network_file), "log", "network-simulation-log.txt")
 
-        log_dir = os.path.dirname(network_file) + "/log"
+        log_dir = os.path.join(os.path.dirname(network_file), "log")
         if not os.path.exists(log_dir):
-            print("Creating directory " + log_dir)
+            print(f"Creating directory {log_dir}")
             os.makedirs(log_dir, exist_ok=True)
 
         from mpi4py import MPI  # This must be imported before neuron, to run parallel
@@ -427,6 +454,7 @@ class Snudda(object):
 
         pc = h.ParallelContext()
 
+        # Simulate is deterministic, no random seed.
         sim = SnuddaSimulate(network_file=network_file,
                              input_file=input_file,
                              disable_gap_junctions=disable_gj,
@@ -443,11 +471,11 @@ class Snudda(object):
             sim.add_recording(side_len=None)  # Side len let you record from a subset
             # sim.addRecordingOfType("dSPN",5) # Side len let you record from a subset
 
-        tSim = args.time * 1000  # Convert from s to ms for Neuron simulator
+        t_sim = args.time * 1000  # Convert from s to ms for Neuron simulator
 
         sim.check_memory_status()
-        print("Running simulation for " + str(tSim) + " ms.")
-        sim.run(tSim)  # In milliseconds
+        print("Running simulation for " + str(t_sim) + " ms.")
+        sim.run(t_sim)  # In milliseconds
 
         print("Simulation done, saving output")
         if spikes_file is not None:
@@ -461,14 +489,6 @@ class Snudda(object):
             print("Program run time: " + str(stop - start))
 
         # sim.plot()
-        exit(0)
-
-        # cmdStr = "nrnivmodl " + mechDir + " && mpiexec -n " + str(nWorkers) + " -map-by socket:OVERSUBSCRIBE python3 " + os.path.dirname(__file__) + " simulate.py " + networkFile + " " + inputFile + " --time " + str(args.time)
-
-        # if(args.voltOut is not None):
-        #  cmdStr += " --voltOut " + args.voltOut
-
-        # os.system(cmdStr)
 
     ############################################################################
 
@@ -479,42 +499,37 @@ class Snudda(object):
     ############################################################################
 
     def setup_parallel(self):
-        self.SlurmID = os.getenv('SLURM_JOBID')
 
-        if self.SlurmID is None:
-            self.SlurmID = self.next_run_id()
+        self.slurm_id = os.getenv('SLURM_JOBID')
+
+        if self.slurm_id is None:
+            self.slurm_id = self.next_run_id()
         else:
-            self.SlurmID = int(self.SlurmID)
+            self.slurm_id = int(self.slurm_id)
 
-        self.logfile.write("Using SlurmID: " + str(self.SlurmID))
+        self.logfile.write(f"Using slurm_id: {self.slurm_id}")
 
-        if os.getenv('IPYTHON_PROFILE') is not None:
+        ipython_profile = os.getenv('IPYTHON_PROFILE')
+        if not ipython_profile:
+            ipython_profile = "default"
 
-            self.logfile.write('Creating ipyparallel client\n')
+        ipython_dir = os.getenv('IPYTHONDIR')
+        if not ipython_dir:
+            ipython_dir = os.path.join(os.path.abspath(os.getcwd()), ".ipython")
 
-            from ipyparallel import Client
-            # self.rc = Client(profile=os.getenv('IPYTHON_PROFILE'),
-            #            # sshserver='127.0.0.1',
-            #            debug=False)
+        self.logfile.write('Creating ipyparallel client\n')
 
-            u_file = os.getenv('IPYTHONDIR') + "/profile_" + os.getenv('IPYTHON_PROFILE') \
-                      + "/security/ipcontroller-client.json"
-            self.rc = Client(url_file=u_file, timeout=120, debug=False)
+        from ipyparallel import Client
 
-            self.logfile.write('Client IDs: ' + str(self.rc.ids))
+        u_file = os.path.join(ipython_dir, f"profile_{ipython_profile}", "security", "ipcontroller-client.json")
+        self.rc = Client(url_file=u_file, timeout=120, debug=False)
 
-            # http://davidmasad.com/blog/simulation-with-ipyparallel/
-            # http://people.duke.edu/~ccc14/sta-663-2016/19C_IPyParallel.html
-            self.d_view = self.rc.direct_view(targets='all')  # rc[:] # Direct view into clients
-            self.lb_view = self.rc.load_balanced_view(targets='all')
+        self.logfile.write(f'Client IDs: {self.rc.ids}')
 
-            # Define nc globally
-            # self.dView.execute("nc = None",block=True)
-        else:
-            self.logfile.write("No IPYTHON_PROFILE enviroment variable set, running in serial")
-            self.d_view = None
-            self.lb_view = None
-            self.rc = None
+        # http://davidmasad.com/blog/simulation-with-ipyparallel/
+        # http://people.duke.edu/~ccc14/sta-663-2016/19C_IPyParallel.html
+        self.d_view = self.rc.direct_view(targets='all')  # rc[:] # Direct view into clients
+        self.lb_view = self.rc.load_balanced_view(targets='all')
 
     ############################################################################
 
@@ -523,22 +538,22 @@ class Snudda(object):
         # Disable this function, keep the pool running for now
         return
 
-        if self.rc is not None:
-            print("Stopping ipyparallel")
-            self.rc.shutdown(hub=True)
+        # if self.rc is not None:
+        #    print("Stopping ipyparallel")
+        #    self.rc.shutdown(hub=True)
 
     ############################################################################
 
-    def setup_log_file(self, logFileName):
-        data_dir = os.path.dirname(logFileName)
+    def setup_log_file(self, log_file_name):
+        data_dir = os.path.dirname(log_file_name)
 
         self.make_dir_if_needed(data_dir)
 
         try:
-            self.logfile = open(logFileName, 'w')
+            self.logfile = open(log_file_name, 'w')
             self.logfile.write('Starting log file\n')
         except:
-            print("Unable to set up log file " + str(logFileName))
+            print("Unable to set up log file " + str(log_file_name))
 
     ############################################################################
 
@@ -583,10 +598,7 @@ class Snudda(object):
             import traceback
             tstr = traceback.format_exc()
             print(tstr)
-
             print("Problem reading .runID.pickle file, setting runID to 0")
-            import pdb
-            pdb.set_trace()
             return 0
 
         print("Using runID = " + str(next_id))
@@ -595,7 +607,8 @@ class Snudda(object):
 
     ############################################################################
 
-    def make_dir_if_needed(self, dir_path):
+    @staticmethod
+    def make_dir_if_needed(dir_path):
 
         if not os.path.exists(dir_path):
             print("Creating missing directory " + dir_path)

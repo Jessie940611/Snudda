@@ -9,11 +9,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Init custom network")
     parser.add_argument("network", type=str, help="Network path")
-    parser.add_argument("-cellspec", type=str, help="Cell spec directory", default=None)
+    parser.add_argument("--neurons", "--cellspec", type=str, help="Neurons directory", default=None)
+    # TODO: Add cell number parameters
     args = parser.parse_args()
 
     sim_name = args.network
-    cell_spec = args.cellspec
+    neurons_dir = args.neurons
 
     connect_neurons = False
 
@@ -22,12 +23,12 @@ if __name__ == "__main__":
     # simName = "LTStest"
     # simName = "networks/twoFS"
     # simName = "networks/FSmorphTest4"
-    # simName = "networks/3types-v2"
+    # simName = "networks/3types-striatum"
     # simName = "networks/SynTest-v6" # MSMS tuning
     # simName = "networks/SynTest-v15"
 
-    config_name = sim_name + "/network-config.json"
-    cnc = SnuddaInit(struct_def={}, config_name=config_name, num_population_units=1)
+    config_name = os.path.join(sim_name, "network-config.json")
+    cnc = SnuddaInit(struct_def={}, config_file=config_name, num_population_units=1)
     # cnc.defineStriatum(nMSD1=500,nMSD2=500,nFS=0,nLTS=0,nChIN=30,volumeType="cube")
     # cnc.defineStriatum(nMSD1=120,nMSD2=120,nFS=20,nLTS=0,nChIN=0,volumeType="slice")
     # cnc.defineStriatum(nMSD1=0,nMSD2=0,nFS=10000,nLTS=0,nChIN=0,volumeType="slice")
@@ -36,14 +37,10 @@ if __name__ == "__main__":
     # cnc.defineStriatum(nMSD1=10,nMSD2=10,nFS=10,nLTS=10,nChIN=10,volumeType="slice")
 
     # cnc.defineStriatum(nMSD1=500,nMSD2=500,nFS=0,nLTS=0,nChIN=500,volumeType="cube")
+#    cnc.define_striatum(num_dSPN=1500, num_iSPN=1500, num_FS=0, num_LTS=0, num_ChIN=0,
+#                        volume_type="cube", neurons_dir=neurons_dir)
     cnc.define_striatum(num_dSPN=47500, num_iSPN=47500, num_FS=1300, num_LTS=0, num_ChIN=0,
-                        volume_type="cube", cell_spec_dir=cell_spec)
-
-    dir_name = os.path.dirname(config_name)
-
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
-
+                        volume_type="cube", neurons_dir=neurons_dir)
     cnc.write_json(config_name)
 
     if not connect_neurons:

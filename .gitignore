@@ -1,5 +1,6 @@
 .ipython
 *.pickle
+*.hdf5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -11,6 +12,12 @@ __pycache__/
 *.eps
 *cache
 *~
+
+*.txt
+*.csv
+*.csv-meta
+*.swc
+*.bz2
 
 # C extensions
 *.so
