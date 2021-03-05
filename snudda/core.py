@@ -94,7 +94,6 @@ class Snudda(object):
                       "GPe": 0,
                       "GPi": 0,
                       "SNr": 0,
-                      "SNc": 10,
                       "STN": 0,
                       "Cortex": 0,
                       "Thalamus": 0}
@@ -459,12 +458,10 @@ class Snudda(object):
                              input_file=input_file,
                              disable_gap_junctions=disable_gj,
                              log_file=log_file,
-                             verbose=args.verbose,
-                             neuromodulation=True)
+                             verbose=args.verbose)
 
         sim.add_external_input()
-        #sim.apply_neuromodulation()
-        #sim.neuromodulation_network_wide()
+
         sim.check_memory_status()
 
         if volt_file is not None:

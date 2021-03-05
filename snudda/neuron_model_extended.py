@@ -9,7 +9,7 @@ import bluepyopt.ephys as ephys
 
 
 class NeuronModel(ephys.models.CellModel):
-    
+
     def __init__(self,
                  cell_name="Unknown",
                  morph_file=None,
