@@ -161,32 +161,6 @@ class SnuddaSimulate(object):
 
         self.pc = h.ParallelContext()
 
-        # self.writeLog("I am node " + str(int(self.pc.id())))
-
-        # We need to initialise random streams, see Lytton el at 2016 (p2072)
-
-        self.load_network_info(self.network_file)
-
-        self.check_memory_status()
-        self.distribute_neurons()
-        self.setup_neurons()
-        self.check_memory_status()
-        self.pc.barrier()
-
-        #    for i in range(0,self.nNeurons):
-        #      print("Node : " + str(int(self.pc.id())) + " cell " + str(i) + " status " + str(self.pc.gid_exists(i)))
-
-        self.connect_network()
-        self.check_memory_status()
-        self.pc.barrier()
-
-        # Do we need blocking call here, to make sure all neurons are setup
-        # before we try and connect them
-
-        # READ ABOUT PARALLEL NEURON
-
-    # https://www.neuron.yale.edu/neuron/static/new_doc/modelspec/programmatic/network/parcon.html#paralleltransfer
-
     ############################################################################
 
     def load_network_info(self, network_file=None, config_file=None):
@@ -1549,44 +1523,6 @@ class SnuddaSimulate(object):
 
         return memory_ratio < threshold
 
-    ############################################################################
-
-    def set_dopamine_modulation(self, sec, transient_vector=None):
-
-        if not transient_vector:
-            transient_vector = []
-
-        channel_list = {'spn': ['naf_ms', 'kas_ms', 'kaf_ms', 'kir_ms', 'cal12_ms', 'cal13_ms', 'can_ms', 'car_ms'],
-                        'fs': ['kir_fs', 'kas_fs', 'kaf_fs', 'naf_fs'],
-                        'chin': ['na_ch', 'na2_ch', 'kv4_ch', 'kir2_ch', 'hcn12_ch', 'cap_ch'],
-                        'lts': ['na3_lts', 'hd_lts']}
-
-        for cell_type in channel_list:
-            for seg in sec:
-                for mech in seg:
-                    if mech.name in channel_list[cell_type]:
-                        if len(transient_vector) == 0:
-                            mech.damod = 1
-                        else:
-                            transient_vector.play(mech._ref_damod,
-                                                  self.sim.neuron.h.dt)
-
-    ############################################################################
-
-    def apply_dopamine(self, cell_id=None, transient_vector=None):
-
-        if not transient_vector:
-            transient_vector = []
-
-        if cell_id is None:
-            cell_id = self.neuron_id
-
-        cells = dict((k, self.neurons[k]) for k in cell_id if not self.is_virtual_neuron[k])
-
-        for c in cells.values():
-            for comp in [c.icell.dend, c.icell.axon, c.icell.soma]:
-                for sec in comp:
-                    self.set_dopamine_modulation(sec, transient_vector)
 
     ############################################################################
 
