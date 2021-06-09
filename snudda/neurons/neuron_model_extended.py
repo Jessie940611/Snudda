@@ -72,6 +72,7 @@ class NeuronModel(ephys.models.CellModel):
             if section_list == "modpath":
                 continue
 
+
             seclist_loc = \
                 ephys.locations.NrnSeclistLocation(section_list,
                                                    seclist_name=section_list)
@@ -186,6 +187,7 @@ class NeuronModel(ephys.models.CellModel):
     def define_morphology(self, replace_axon=True, morph_file=None):
         """Define morphology. Handles SWC and ASC."""
 
+        #print("morph_file:", morph_file)  # MD
         assert (morph_file is not None)
 
         # print("Using morphology: " + morph_file)
@@ -332,6 +334,9 @@ class NeuronModel(ephys.models.CellModel):
             mechanism.instantiate(sim=sim, icell=self.icell)
         for param in self.params.values():
             param.instantiate(sim=sim, icell=self.icell)
+
+        #print("self.seclist_names:", self.seclist_names)  # MD
+        #print("self.icell:", self.icell)  # MD
 
     ############################################################################
 

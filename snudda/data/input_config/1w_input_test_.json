@@ -1,0 +1,290 @@
+{
+	"dSPN": {
+		"CorticalBase" : {
+			"start": 0,
+			"end": 1,
+			"generator" : "poisson",
+			"type" : "AMPA_NMDA",
+			"synapseDensity" : "1.15*0.05/(1+exp(-(d-30e-6)/5e-6))",
+			"frequency" : 1,
+			"channelCorrelation" : 0.0,
+			"jitter" : 0.002,
+			"conductance" : 0.5e-9,
+			"modFile": "tmGlut",
+			"parameterFile": "$DATA/synapses/striatum/M1RH_Analysis_190925.h5-parameters-MS.json"
+		}
+	},
+
+	"iSPN": {
+		"CorticalBase" : {
+			"start": 0,
+			"end": 1,
+			"generator" : "poisson",
+			"type" : "AMPA_NMDA",
+			"synapseDensity": "0.75*0.052/(1+exp(-(d-30e-6)/5e-6))",
+			"frequency" : 1,
+			"channelCorrelation" : 0.0,
+			"jitter" : 0.003,
+			"conductance" : 0.5e-9,
+			"modFile":"tmGlut",
+			"parameterFile": "$DATA/synapses/striatum/M1RH_Analysis_190925.h5-parameters-MS.json"
+		}
+	},
+
+	"FSN": {
+		"Cortical" : {
+			"start": 0,
+			"end": 1,
+			"generator" : "poisson",	    
+			"type" : "AMPA_NMDA",
+			"synapseDensity": "0.092*(1-exp(-d/200e-6))",	    
+			"frequency" : 1,
+			"channelCorrelation" : 0.0,
+			"jitter" : 0.001,
+			"conductance" : 1.5e-9,	    
+			"modFile": "tmGlut",
+			"parameterFile": "$DATA/synapses/striatum/M1RH_Analysis_190925.h5-parameters-FS.json"
+		}
+	},
+
+	"0": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+
+	"1": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"2": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"3": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"4": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"5": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"6": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"7": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"8": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"9": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"10": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"11": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"12": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"13": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"14": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"15": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"16": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"17": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"18": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"19": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	}
+}

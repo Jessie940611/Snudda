@@ -24,6 +24,7 @@ import bluepyopt.ephys as ephys
 import h5py
 import json
 import timeit
+from matplotlib import pyplot as plt
 
 from snudda.neurons.neuron_model_extended import NeuronModel
 # from Network_place_neurons import NetworkPlaceNeurons
@@ -33,6 +34,7 @@ from snudda.simulate.nrn_simulator_parallel import NrnSimulatorParallel
 from glob import glob
 import re
 import os
+import sys
 
 import snudda.utils.memory
 
@@ -93,6 +95,10 @@ class SnuddaSimulate(object):
         self.is_virtual_neuron = None
         self.neuron_id = None
         self.synapse_parameters = None
+
+
+        if args.configFile:
+            self.config_file = args.configFile
 
         self.sim_start_time = 0
         self.fih_time = None
@@ -166,7 +172,7 @@ class SnuddaSimulate(object):
 
         # We need to initialise random streams, see Lytton el at 2016 (p2072)
 
-        self.load_network_info(self.network_file)
+        self.load_network_info(self.network_file, self.config_file)
 
         self.check_memory_status()
         self.distribute_neurons()
@@ -467,6 +473,7 @@ class SnuddaSimulate(object):
     def connect_network(self):
 
         self.pc.barrier()
+        print("connecting network")
 
         # Add synapses
         self.connect_network_synapses()
@@ -1208,7 +1215,7 @@ class SnuddaSimulate(object):
 
     ############################################################################
 
-    def add_recording(self, cell_id=None, side_len=None):
+    def add_recording(self, cell_id=None, side_len=None, record_mode='soma', time = 1000):   # mode = 'soma' or 'all'
         self.write_log("Adding somatic recordings")
 
         if cell_id is None:
@@ -1227,20 +1234,43 @@ class SnuddaSimulate(object):
         if len(self.t_save) == 0 or self.t_save is None:
             self.t_save = self.sim.neuron.h.Vector()
             self.t_save.record(self.sim.neuron.h._ref_t)
+        
+        dt = self.sim.neuron.h.dt
+        print(dt, int(time / dt))
 
-        for cellKey in cells:
-            cell = cells[cellKey]
-            try:
-                v = self.sim.neuron.h.Vector()
-                # import pdb
-                # pdb.set_trace()
-                v.record(getattr(cell.icell.soma[0](0.5), '_ref_v'))
-                self.v_save.append(v)
-                self.v_key.append(cellKey)
-            except Exception as e:
-                self.write_log(f"Error: {e}", is_error=True)
-                import pdb
-                pdb.set_trace()
+        if record_mode == 'soma':
+            for cellKey in cells:
+                if not self.neurons[cellKey].section_lookup:
+                    self.neurons[cellKey].map_id_to_compartment([0])
+                for sec_id, sec in self.neurons[cellKey].section_lookup.items():
+                    if sec_id == 0:
+                        for seg_id, seg in enumerate(sec):
+                            try:
+                                v = self.sim.neuron.h.Vector(int(time / dt), 20.00001)
+                                v.record(getattr(seg, '_ref_v'))
+                                self.v_save.append(v)
+                                self.v_key.append((cellKey, sec_id, seg_id))
+                            except Exception as e:
+                                self.write_log(f"Error: {e}", is_error=True)
+                                import pdb
+                                pdb.set_trace()
+        elif record_mode == 'all':
+            for cellKey in cells:
+                if not self.neurons[cellKey].section_lookup:
+                    self.neurons[cellKey].map_id_to_compartment([0])
+                for sec_id, sec in self.neurons[cellKey].section_lookup.items():
+                    for seg_id, seg in enumerate(sec):
+                        try:
+                            v = self.sim.neuron.h.Vector(int(time / dt), 20.00001)
+                            v.record(getattr(seg, '_ref_v'))
+                            self.v_save.append(v)
+                            self.v_key.append((cellKey, sec_id, seg_id))
+                        except Exception as e:
+                            self.write_log(f"Error: {e}", is_error=True)
+                            import pdb
+                            pdb.set_trace()
+        else:
+            self.write_log("Error: wrong record mode", is_error=True)
 
     ############################################################################
 
@@ -1253,7 +1283,7 @@ class SnuddaSimulate(object):
         # If we want to use a non-default initialisation voltage, we need to
         # explicitly set: h.v_init
         # self.sim.neuron.h.v_init = -78
-        # self.sim.neuron.h.finitialize(-78)
+        self.sim.neuron.h.finitialize(-78)
         if hold_v is None:
             self.sim.neuron.h.finitialize()
         else:
@@ -1267,7 +1297,9 @@ class SnuddaSimulate(object):
         self.pc.barrier()
         self.write_log(f"Running simulation for {t / 1000} s", force_print=True)
         # self.sim.psolve(t)
-        self.sim.run(t, dt=0.025)
+        #self.sim.run(t, dt=0.025)
+        h.stdinit()
+        self.pc.psolve(t)
         self.pc.barrier()
         self.write_log("Simulation done.")
 
@@ -1426,30 +1458,41 @@ class SnuddaSimulate(object):
 
     def write_voltage(self,
                       output_file="save/traces/network-voltage",
-                      down_sampling=20):
+                      down_sampling=10,
+                      record_mode='soma'):
+        with open(output_file, 'w') as voltageFile:
+            voltageFile.write('-1,-1,-1')  # Indiciate that first column is time
+            for tIdx in range(0, len(self.t_save), down_sampling):
+                voltageFile.write(',%.4f' % self.t_save[tIdx])
+            voltageFile.write('\n')
+        max_v = -1000
+        min_v = 1000
         for i in range(int(self.pc.nhost())):
+            sys.stdout.flush()
             self.pc.barrier()
-
             if i == int(self.pc.id()):
-                if i == 0:
-                    mode = 'w'
-                else:
-                    mode = 'a'
-
-                with open(output_file, mode) as voltageFile:
-                    if mode == 'w':
-                        voltageFile.write('-1')  # Indiciate that first column is time
-
-                        for tIdx in range(0, len(self.t_save), down_sampling):
-                            voltageFile.write(',%.4f' % self.t_save[tIdx])
-
-                    for vID, voltage in zip(self.v_key, self.v_save):
-                        voltageFile.write('\n%d' % vID)
-
-                        for vIdx in range(0, len(voltage), down_sampling):
-                            voltageFile.write(',%.4f' % voltage[vIdx])
-
+                #if record_mode == 'soma':
+                #    for vID, voltage in zip(self.v_key, self.v_save):
+                #        with open(output_file, 'a') as voltageFile:
+                #            voltageFile.write('\n%d' % vID)
+                #            for vIdx in range(0, len(voltage), down_sampling):
+                #                voltageFile.write(',%.4f' % voltage[vIdx])
+                #elif record_mode == 'all':
+                for (cell_id, sec_id, seg_id), voltage in zip(self.v_key, self.v_save):
+                    with open(output_file, 'a') as voltageFile:
+                        st = '%d,%d,%d' % (cell_id, sec_id, seg_id)
+                        for vIdx in range(1, len(voltage), down_sampling):
+                            st +=',%.4f' % voltage[vIdx]
+                            if voltage[vIdx] > max_v:
+                                max_v = voltage[vIdx]
+                            if voltage[vIdx] < min_v:
+                                min_v = voltage[vIdx]
+                        st += '\n'
+                        voltageFile.write(st)
+                        st = ''
             self.pc.barrier()
+        print("max_v, min_v",max_v, min_v)
+        self.write_log(f"Writing voltage to {output_file}", force_print=True)
 
     ############################################################################
 
@@ -1630,6 +1673,55 @@ class SnuddaSimulate(object):
 
     ############################################################################
 
+    # record the 3d point location
+    def write_location(self, output_file = "neuron_morph.txt", mode = 'all'):
+        point_info = []
+        nhost = int(self.pc.nhost())
+        with open(output_file, "w") as f:  # to clear the file
+            pass
+        for pc_i in range(nhost):
+            self.pc.barrier()  # sync all processes
+            if pc_i == int(self.pc.id()):
+                for nrn_id in self.neuron_id: #MD
+                    ipoint = 0
+                    neuron_position = np.array(self.network_info["neurons"][nrn_id]["position"])*1000000
+                    neuron_rotation = np.array(self.network_info["neurons"][nrn_id]["rotation"])
+                    if not self.neurons[nrn_id].section_lookup:
+                        self.neurons[nrn_id].map_id_to_compartment([0])
+                    for sec_id, sec in self.neurons[nrn_id].section_lookup.items():
+                        if mode == 'all' or (mode == 'soma' and sec_id == 0):
+                            npt3d = sec.n3d()
+                            rg = range(npt3d)
+                            if mode == 'soma':
+                                rg = [0,1,2]
+                            for p3d_i in rg:
+                                x = sec.x3d(p3d_i)
+                                y = sec.y3d(p3d_i)
+                                z = sec.z3d(p3d_i)
+                                x,y,z = np.transpose(np.matmul(neuron_rotation, np.transpose([x,y,z])))
+                                x,y,z = [x,y,z] + neuron_position
+                                diam = sec.diam3d(p3d_i)
+                                parent_id = -1  # parent point id
+                                if p3d_i > 0:
+                                    parent_id = ipoint - 1
+                                ipoint += 1
+                            
+                                arc = sec.arc3d(p3d_i)
+                                
+                                seg_id = int(arc//(sec.L/sec.nseg))
+                                if arc == sec.L:
+                                    seg_id -= 1
+                                point_info.append("%f %f %f %f %d %d %d %d\n"%(x, y, z, diam, parent_id, seg_id, sec_id, nrn_id))
+
+                                if len(point_info) > 5000:
+                                    with open(output_file, "a") as f:
+                                        f.writelines(point_info)
+                                        point_info = []
+                if len(point_info) > 0:
+                    with open(output_file, "a") as f:
+                        f.writelines(point_info)
+            self.pc.barrier()
+
 
 def find_latest_file(file_mask):
     files = glob(file_mask)
@@ -1676,6 +1768,22 @@ if __name__ == "__main__":
     parser.add_argument("--time", type=float, default=1.5,
                         help="Duration of simulation in seconds")
     parser.add_argument("--verbose", action="store_true")
+
+
+    parser.add_argument("--filemode",
+                    dest='filemode',
+                    action='store_true',
+                    help="Run CoreNEURON with file mode",
+                    default=False)
+    parser.add_argument("--gpu",
+                    dest='gpu',
+                    action='store_true',
+                    help="Run CoreNEURON on GPU",
+                    default=False)
+    parser.add_argument("--coreneuron", action='store_true', help="run coreneuron", default=False)
+    parser.add_argument("--configFile", help="Network config file (HDF5)")
+    parser.add_argument("--recordMode", default="soma", help="recording all 3d points or soma only")
+
 
     # If called through "nrniv -python Network_simulate.py ..." then argparse
     # gets confused by -python flag, and we need to ignore it
@@ -1736,17 +1844,23 @@ if __name__ == "__main__":
 
     #pc = h.ParallelContext()
 
+    print("simulate initiation")
+    sys.stdout.flush()
     sim = SnuddaSimulate(network_file=network_data_file,
                          input_file=input_file,
                          disable_gap_junctions=disableGJ,
                          log_file=log_file,
                          verbose=args.verbose)
 
+    #print("add_external input")
     sim.add_external_input()
     sim.check_memory_status()
 
+    print("add recording")
+    sys.stdout.flush()
+    tSim = args.time * 1000  # Convert from s to ms for Neuron simulator
     if volt_file is not None:
-        sim.add_recording(side_len=None)  # Side len let you record from a subset
+        sim.add_recording(side_len=None, record_mode=args.recordMode, time = tSim)  # Side len let you record from a subset
         # sim.addRecordingOfType("dSPN",5) # Side len let you record from a subset
         # sim.addRecordingOfType("dSPN",2)
         # sim.addRecordingOfType("iSPN",2)
@@ -1754,7 +1868,7 @@ if __name__ == "__main__":
         # sim.addRecordingOfType("LTS",2)
         # sim.addRecordingOfType("ChIN",2)
 
-    
+    '''
     coredatPath = "coredata"
     rank = sim.pc.id()
     print("id:", sim.pc.id())
@@ -1773,28 +1887,87 @@ if __name__ == "__main__":
     sim.pc.nrnbbcore_write(coredatPath)
     print("finish writing cores")
     sim.pc.barrier()
-    
+    '''
 
-    tSim = args.time * 1000  # Convert from s to ms for Neuron simulator
+
+
+    # whether to run via in-memory transfer mode or file mode
+    # Of filemode is true then model is dumped to file and then
+    # passed to coreneuron. In in-memory mode model is passed to
+    # coreneuron via in-memory copy.
+    coreneuron_file_mode = args.filemode
+    # whether to run coreneuron or neuron
+    use_coreneuron = args.coreneuron
+    # whether to run coreneuron on GPU
+    coreneuron_gpu = args.gpu
+
+    if use_coreneuron:
+        from neuron import coreneuron
+        coreneuron.enable = True
+        coreneuron.file_mode = coreneuron_file_mode
+        coreneuron.gpu = coreneuron_gpu
+    h.secondorder = 2
+    h.cvode.cache_efficient(1)
+    '''
+    print("start writing location info ...")
+    sys.stdout.flush()
+    sim.write_location(save_dir + "3d_point_location.txt", mode=args.recordMode)
+    print("written location info in " + save_dir + "3d_point_location.txt")
+    sys.stdout.flush()
+    '''
+    '''
+    print("start writing connection info ...")
+    if sim.pc.id() == 0:
+        from snudda.analyse import SnuddaAnalyse
+        connection_file = save_dir + "connection_file.txt"
+        dist3D = False
+        y_max_H = None
+        sa = SnuddaAnalyse(network_data_file)
+        n_con_in, n_syn_in, n_con_out, n_syn_out = sa.plot_all_connections()
+        connections = []
+        for nrn_id, (ci, si, co, so) in enumerate(zip(n_con_in, n_syn_in, n_con_out, n_syn_out)):
+            connections.append("%d %d %d %d %d\n"%(nrn_id, ci, si, co, so))
+        with open(connection_file, "w") as f:
+            f.writelines(connections)
+        print("written connenction info in " + connection_file)
+    '''
+
+    '''
+    v_rec = None
+    if 9897 in sim.neurons:
+        v_rec = h.Vector().record(sim.neurons[9897].icell.axon[0](0.5)._ref_v, sec = sim.neurons[9897].icell.axon[0])
+
+    if 1408 in sim.neurons:
+        v_rec = h.Vector().record(sim.neurons[1408].icell.axon[0](0.5)._ref_v, sec = sim.neurons[1408].icell.axon[0])
+    '''
 
     sim.check_memory_status()
     print("Running simulation for " + str(tSim) + " ms.")
+    sys.stdout.flush()
     sim.run(tSim)  # In milliseconds
 
     print("Simulation done, saving output")
-    if spikes_file is not None:
-        sim.write_spikes(spikes_file)
+    sys.stdout.flush()
+    #if spikes_file is not None:
+    #    sim.write_spikes(spikes_file)
 
     if volt_file is not None:
-        sim.write_voltage(volt_file)
-
+        sim.write_voltage(volt_file, down_sampling=10, record_mode=args.recordMode)
+        print("writing voltage done")
+        sys.stdout.flush()
+    '''
+    if v_rec is not None:
+        plt.plot(np.array(v_rec))
+        plt.savefig("soma_v_in_10000cell%d.png"%(sim.pc.id()))
+    '''
+    '''
     stop = timeit.default_timer()
     if sim.pc.id() == 0:
         print("Program run time: " + str(stop - start))
 
     # sim.plot()
     exit(0)
-
+    '''
 # Check this code example
 # Why are spikes not propagated from one neuron to another
 # https://senselab.med.yale.edu/modeldb/ShowModel.cshtml?model=188544&file=%2FLyttonEtAl2016%2FREADME.html#tabs-2

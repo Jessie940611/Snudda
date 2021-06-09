@@ -67,7 +67,10 @@ class PlotTraces:
     ############################################################################
 
     def plot_traces(self, trace_id=None, offset=150e-3, colours=None, skip_time=None,
-                    title=None, fig_name=None):
+                    title=None, fig_name=None, figsize=None):
+
+        if not figsize:
+            figsize = (6, 4)
 
         if skip_time is not None:
             print("!!! Excluding first " + str(skip_time) + "s from the plot")
@@ -75,8 +78,8 @@ class PlotTraces:
         if colours is None:
             colours = {"dSPN": (77. / 255, 151. / 255, 1.0),
                        "iSPN": (67. / 255, 55. / 255, 181. / 255),
-                       "FSN": (6. / 255, 31. / 255, 85. / 255),
-                       "ChIN": [252. / 255, 102. / 255, 0],
+                       "ChIN": (6. / 255, 31. / 255, 85. / 255),
+                       "FSN": [252. / 255, 102. / 255, 0],
                        "LTS": [150. / 255, 63. / 255, 212. / 255]}
 
         print(f"Plotting traces: {trace_id}")
@@ -102,7 +105,7 @@ class PlotTraces:
 
             cols = [colours[c] if c in colours else [0, 0, 0] for c in cell_types]
 
-        fig = plt.figure()
+        fig = plt.figure(figsize=figsize)
 
         ofs = 0
 

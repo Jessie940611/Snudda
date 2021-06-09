@@ -1,0 +1,13 @@
+{
+	"0": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.5,
+			"end": 0.8,
+			"frequency": 30,
+			"conductance": 0.5e-15,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	}
+}

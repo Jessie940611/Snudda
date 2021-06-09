@@ -1577,6 +1577,48 @@ class SnuddaAnalyse(object):
             n_syn[i] = np.sum(cons)
 
         return n_con, n_syn
+    
+    ############ MD ############
+    def plot_all_connections(self, side_len=None,
+                                 volume_id="Striatum",
+                                 connection_type="synapses"):
+
+        if side_len is None:
+            side_len = 100e-6
+
+        print("Calculating number of " + connection_type + "connections")
+
+        # Only use post synaptic cell in central part of structure,
+        # to minimize edge effect
+        # neuronID = self.centreNeurons(neuronID=self.populations[neuronType],
+        #                              sideLen=sideLen)
+
+        neuron_id = self.populations['dSPN'] + self.populations['iSPN'] + self.populations['FSN']
+
+        if connection_type == "synapses":
+            con_mat = self.connection_matrix
+        elif connection_type == "gapjunctions":
+            con_mat = self.connection_matrix_gj
+        else:
+            assert "Unknown connection_type: " + str(connection_type)
+            con_mat = None  # To get pycharm to shut up ;)
+
+        n_con_in = np.zeros((len(neuron_id), 1))
+        n_syn_in = np.zeros((len(neuron_id), 1))
+        n_con_out = np.zeros((len(neuron_id), 1))
+        n_syn_out = np.zeros((len(neuron_id), 1))
+
+        for i, nID in enumerate(neuron_id):
+            cons_in = con_mat[:, nID][:, :]
+            n_con_in[i] = np.sum(cons_in > 0)
+            n_syn_in[i] = np.sum(cons_in)
+            cons_out = con_mat[nID, :][:, :]
+            n_con_out[i] = np.sum(cons_out > 0)
+            n_syn_out[i] = np.sum(cons_out)
+        
+        return n_con_in, n_syn_in, n_con_out, n_syn_out
+
+
 
     ############################################################################
 

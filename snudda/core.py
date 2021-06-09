@@ -322,11 +322,29 @@ class Snudda(object):
         else:
             h5libver = "latest"  # default
 
+        if args.position_file:
+            position_file = args.position_file
+        else:
+            position_file=None
+
+        if args.network_config:
+            network_config = args.network_config
+        else:
+            network_config=None
+
+        if args.network_path:
+            network_path = args.network_path
+        else:
+            network_path=None
+
         print(f"Writing input spikes to {spike_file}")
 
-        si = SnuddaInput(input_config_file=input_config,
+        si = SnuddaInput(network_path=network_path,
+                         network_config_file=network_config,
+                         input_config_file=input_config,
                          hdf5_network_file=network_file,
                          spike_data_filename=spike_file,
+                         position_file=position_file,
                          time=input_time,
                          logfile=self.logfile,
                          rc=self.rc,

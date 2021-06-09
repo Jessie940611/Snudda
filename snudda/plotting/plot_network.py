@@ -38,7 +38,8 @@ class PlotNetwork(object):
         assert len(plot_axon) == len(plot_dendrite) == len(self.sl.data["neurons"])
 
         fig = plt.figure(figsize=(6, 6.5))
-        ax = fig.gca(projection='3d')
+        #ax = fig.gca(projection='3d')      ############ MD ############
+        ax = plt.axes(projection='3d')       ############ MD ############
 
         if "simulationOrigo" in self.sl.data:
             simulation_origo = self.sl.data["simulationOrigo"]
@@ -72,7 +73,7 @@ class PlotNetwork(object):
                                soma_colour=soma_colour,
                                axon_colour="darksalmon",  #"maroon",
                                dend_colour="silver")   # Can also write colours as (0, 0, 0) -- rgb
-
+        print("3")    ############ MD ############
         # Plot synapses
         if plot_synapses and "synapseCoords" in self.sl.data:
             ax.scatter(self.sl.data["synapseCoords"][:, 0],

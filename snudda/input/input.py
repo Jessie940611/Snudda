@@ -37,9 +37,11 @@ class SnuddaInput(object):
 
     def __init__(self,
                  network_path=None,
+                 network_config_file=None,
                  input_config_file=None,
                  spike_data_filename=None,
                  hdf5_network_file=None,
+                 position_file=None,
                  time=10.0,
                  is_master=True,
                  h5libver="latest",
@@ -65,6 +67,11 @@ class SnuddaInput(object):
             self.network_path = os.path.dirname(input_config_file)
         else:
             self.network_path = ""
+        if position_file:
+            self.position_file = position_file
+        
+        if network_config_file:
+            self.network_config_file = network_config_file
 
         if input_config_file:
             self.input_config_file = input_config_file
@@ -848,7 +855,7 @@ class SnuddaInput(object):
         #    pdb.set_trace()
 
         # Make sure the position file matches the network config file
-        assert (pos_info["configFile"] == self.network_config_file)
+        #assert (pos_info["configFile"] == self.network_config_file)
 
         self.population_unit_id = pos_info["populationUnit"]
 
@@ -1092,8 +1099,10 @@ class SnuddaInput(object):
 
         try:
             with h5py.File(hdf5_file, 'r') as f:
-                self.network_config_file = SnuddaLoad.to_str(f["meta"]["configFile"][()])
-                self.position_file = SnuddaLoad.to_str(f["meta"]["positionFile"][()])
+                if not self.network_config_file:
+                    self.network_config_file = SnuddaLoad.to_str(f["meta"]["configFile"][()])
+                if not self.position_file:
+                    self.position_file = SnuddaLoad.to_str(f["meta"]["positionFile"][()])
                 self.network_slurm_id = int(f["meta/SlurmID"][()])
 
                 self.axon_stump_id_flag = f["meta/axonStumpIDFlag"][()]

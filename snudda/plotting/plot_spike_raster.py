@@ -43,12 +43,12 @@ class PlotSpikeRaster(object):
 
         if self.network_info is None:
             print("If you also give network file, then the plot shows neuron types")
-            self.plot_raster(skip_time=skip_time)
+            self.plot_raster(skip_time=skip_time, figsize=figsize)
             time.sleep(1)
         else:
 
             self.sort_traces()
-            self.plot_colour_raster(skip_time=skip_time, type_order=type_order)
+            self.plot_colour_raster(skip_time=skip_time, type_order=type_order, figsize=figsize)
             time.sleep(1)
 
     ############################################################################

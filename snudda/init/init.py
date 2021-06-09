@@ -651,9 +651,9 @@ class SnuddaInit(object):
                         num_neurons=None,
                         f_dSPN=0.475,
                         f_iSPN=0.475,
-                        f_FS=0.013,
-                        f_ChIN=0.011,
-                        f_LTS=0.007,
+                        f_FS=0.05,
+                        f_ChIN=0,#0.011,
+                        f_LTS=0,#0.007,
                         num_dSPN=None,
                         num_iSPN=None,
                         num_FS=None,
@@ -721,7 +721,7 @@ class SnuddaInit(object):
                                   struct_mesh="slice",
                                   side_len=side_len)
 
-        elif num_neurons <= 1e6:  # 1e6
+        elif num_neurons <= 1e6:  # 1e6    ################ MD ###############
             print("Using cube for striatum")
             # 1.73 million neurons, volume of allen striatal mesh is 21.5mm3
             striatum_volume = 1e-9 * num_neurons / neuron_density  # 80.5e3

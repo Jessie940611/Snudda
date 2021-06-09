@@ -1,0 +1,2402 @@
+{
+	"0": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+
+	"1": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"2": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"3": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"4": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"5": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"6": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"7": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"8": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"9": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"10": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"11": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"12": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"13": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"14": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"15": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"16": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"17": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"18": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"19": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"20": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"21": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"22": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"23": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"24": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"25": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"26": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"27": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"28": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"29": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"30": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"31": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"32": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"33": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"34": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"35": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"36": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"37": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"38": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"39": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"40": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"41": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"42": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"43": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"44": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"45": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"46": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"47": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"48": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"49": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"50": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"51": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"52": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"53": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"54": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"55": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"56": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"57": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"58": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"59": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"60": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"61": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"62": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"63": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"64": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"65": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"66": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"67": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"68": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"69": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"70": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"71": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"72": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"73": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"74": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"75": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"76": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"77": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"78": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"79": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"80": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"81": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"82": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"83": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"84": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"85": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"86": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"87": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"88": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"89": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"90": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"91": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"92": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"93": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"94": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"95": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"96": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"97": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"98": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"99": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"100": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"101": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"102": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"103": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"104": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"105": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"106": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"107": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"108": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"109": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"110": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"111": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"112": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"113": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"114": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"115": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"116": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"117": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"118": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"119": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"120": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"121": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"122": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"123": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"124": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"125": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"126": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"127": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"128": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"129": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"130": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"131": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"132": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"133": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"134": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"135": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"136": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"137": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"138": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"139": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"140": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"141": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"142": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"143": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"144": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"145": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"146": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"147": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"148": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"149": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"150": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"151": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"152": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"153": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"154": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"155": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"156": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"157": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"158": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"159": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"160": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"161": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"162": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"163": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"164": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"165": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"166": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"167": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"168": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"169": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"170": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"171": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"172": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"173": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"174": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"175": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"176": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"177": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"178": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"179": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"180": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"181": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"182": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"183": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"184": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"185": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"186": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"187": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"188": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"189": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"190": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"191": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"192": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"193": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"194": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"195": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"196": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"197": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"198": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	},	
+
+	"199": {
+		"Ctx": {
+			"generator": "poisson",
+			"start": 0.4,
+			"end": 0.6,
+			"frequency": 10,
+			"conductance": 0.5e-9,
+			"nInputs": 25,
+			"modFile": "tmGlut"
+		}
+	}
+}	
